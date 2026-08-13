@@ -1,0 +1,6 @@
+pandas
+numpy
+scikit-learn
+faiss-cpu
+flask
+flask-cors

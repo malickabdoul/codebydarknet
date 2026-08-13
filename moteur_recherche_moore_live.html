@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gʋlsg — Moteur de recherche sémantique mooré</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#221912;
+    --ink-soft:#3a2c20;
+    --sand:#f2e8d5;
+    --sand-dim:#e6d8bd;
+    --rust:#c1552f;
+    --rust-dim:#9c4325;
+    --millet:#e3a857;
+    --sage:#7c8459;
+    --paper:#f7f0e2;
+    --line: rgba(34,25,18,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--ink);
+    color: var(--paper);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  /* subtle bogolan-inspired line texture */
+  .texture{
+    position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:0;
+    background-image:
+      repeating-linear-gradient(115deg, var(--rust) 0px, var(--rust) 1px, transparent 1px, transparent 42px),
+      repeating-linear-gradient(25deg, var(--millet) 0px, var(--millet) 1px, transparent 1px, transparent 58px);
+  }
+  .wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding: 48px 24px 90px;}
+
+  header{margin-bottom:44px;}
+  .eyebrow{
+    font-family:'Noto Sans', sans-serif; font-weight:600; font-size:12.5px;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--millet);
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--millet);}
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(34px,5.5vw,54px);
+    line-height:1.04; margin:0 0 14px; color:var(--paper);
+  }
+  h1 em{ font-style:italic; font-weight:500; color:var(--rust); }
+  .sub{
+    font-size:16.5px; line-height:1.6; color:rgba(247,240,226,0.72); max-width:56ch;
+  }
+
+  /* SEARCH — the signature / hero element */
+  .search-card{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 30px 30px 26px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    border: 1px solid rgba(34,25,18,0.06);
+  }
+  .search-row{
+    display:flex; align-items:center; gap:12px;
+    background: white;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 6px 8px 6px 18px;
+  }
+  .search-row:focus-within{ border-color: var(--rust); }
+  .search-row input{
+    flex:1; border:none; outline:none; background:transparent;
+    font-family:'Noto Sans', sans-serif; font-size:19px; font-weight:600;
+    color: var(--ink); padding: 12px 0;
+  }
+  .search-row input::placeholder{ color:#8c7f6d; font-weight:400; }
+  .search-row .lang-pill{
+    font-family:'Work Sans'; font-size:12px; font-weight:600; color:#8c7f6d;
+    border:1px solid var(--line); padding:6px 10px; border-radius:100px; white-space:nowrap;
+  }
+  .go-btn{
+    background: var(--rust); color:white; border:none; border-radius:9px;
+    padding: 12px 20px; font-family:'Work Sans'; font-weight:600; font-size:14.5px;
+    cursor:pointer; transition: background .15s ease;
+  }
+  .go-btn:hover{ background: var(--rust-dim); }
+
+  /* virtual keyboard */
+  .kb-label{
+    margin-top:22px; margin-bottom:10px; font-size:12.5px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase; color:#8c7f6d;
+    display:flex; align-items:center; gap:8px;
+  }
+  .kb-label .hint{ font-weight:400; text-transform:none; letter-spacing:0; color:#a89a83; }
+  .keyboard{
+    display:flex; flex-wrap:wrap; gap:7px;
+  }
+  .key{
+    font-family:'Noto Sans', sans-serif; font-size:18px; font-weight:600;
+    background: var(--sand); border:1px solid var(--line); color: var(--ink-soft);
+    width:42px; height:42px; border-radius:9px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .1s ease, background .1s ease, color .1s ease;
+  }
+  .key:hover{ background: var(--rust); color:white; transform: translateY(-2px); border-color:var(--rust); }
+  .key.wide{ width:auto; padding:0 16px; font-size:13px; font-family:'Work Sans'; font-weight:600; }
+
+  /* domain filter chips */
+  .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip{
+    font-family:'Work Sans'; font-size:12.5px; font-weight:500; color:var(--ink-soft);
+    background:transparent; border:1px solid var(--line); border-radius:100px;
+    padding:6px 13px; cursor:pointer; transition:.12s ease;
+  }
+  .chip.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  /* results */
+  .results-meta{
+    margin-top:36px; margin-bottom:16px; font-size:13px; color:rgba(247,240,226,0.55);
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;
+  }
+  .results-meta strong{ color: var(--millet); font-weight:600; }
+  .results{ display:flex; flex-direction:column; gap:10px; }
+  .card{
+    background: var(--paper); color: var(--ink); border-radius:14px;
+    padding: 18px 22px; display:flex; gap:20px; align-items:flex-start;
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  .card .mot-col{ min-width:160px; }
+  .mot{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:20px; color:var(--rust-dim); }
+  .pron{ font-size:12.5px; color:#a89a83; margin-top:2px; }
+  .cat{
+    display:inline-block; margin-top:8px; font-size:10.5px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--sage);
+    background: rgba(124,132,89,0.12); padding:3px 8px; border-radius:5px;
+  }
+  .defs{ flex:1; }
+  .defs .fr{ font-size:15.5px; line-height:1.5; color:var(--ink); }
+  .defs .en{ font-size:13.5px; line-height:1.5; color:#8c7f6d; margin-top:4px; font-style:italic; }
+  .domaine-tag{
+    margin-top:9px; font-size:11px; color:var(--millet); font-weight:600;
+    display: inline-flex; align-items:center; gap:5px;
+  }
+  .domaine-tag::before{ content:"◆"; font-size:8px; }
+
+  .empty{
+    text-align:center; padding: 50px 20px; color:rgba(247,240,226,0.45); font-size:14.5px;
+  }
+
+  footer{
+    margin-top:56px; padding-top:24px; border-top:1px solid rgba(247,240,226,0.12);
+    font-size:12.5px; line-height:1.7; color:rgba(247,240,226,0.45);
+  }
+  footer b{ color:rgba(247,240,226,0.7); }
+
+  @media (max-width: 560px){
+    .card{ flex-direction:column; gap:8px; }
+    .search-row{ flex-wrap:wrap; }
+    .key{ width:38px; height:38px; font-size:16px; }
+  }
+</style>
+</head>
+<body>
+<div class="texture"></div>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Projet IBAM · Web sémantique</div>
+    <h1>Gʋls-n bao <em>rat woto</em></h1>
+    <p class="sub">Moteur de recherche sémantique pour le mooré. Tapez un mot en mooré, en français ou en anglais — le moteur cherche par sens, pas seulement par orthographe exacte.</p>
+  </header>
+
+  <div class="search-card">
+    <div class="search-row">
+      <input id="searchInput" type="text" placeholder="Gʋls f gomd la f bao a võorem…" autocomplete="off" oninput="debouncedSearch()" onkeydown="if(event.key==='Enter') runSearch()">
+      <span class="lang-pill" id="langPill">moore · fr · en</span>
+      <button class="go-btn" onclick="runSearch()">Baoo</button>
+    </div>
+
+    <div class="kb-label">Caractères mooré <span class="hint">— cliquez pour insérer, absents du clavier standard</span></div>
+    <div class="keyboard" id="keyboard"></div>
+
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <div class="results-meta">
+    <span id="resultsCount">Base vectorielle connectée — 10 566 entrées</span>
+    <span>Corpus complet : <strong>10 566 entrées</strong> · Webonary Moore</span>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <footer>
+    <b>À propos de cette page.</b> Interface branchée sur l'API locale (<code>api.py</code>), qui interroge une vraie base de données vectorielle (index FAISS + vecteurs TF-IDF/LSA) construite sur les 10 566 entrées du corpus Webonary Moore. La recherche se fait par proximité de sens, pas seulement par correspondance de texte exact. Lancez <code>python3 api.py</code> avant d'ouvrir cette page.
+  </footer>
+</div>
+
+<script>
+const API_URL = "http://127.0.0.1:5000/api/search";
+const DOMAINES_CONNUS = ["Agriculture","Animal","Bird","Body","Building","Bush, shrub","Colour","Container","Food","Grammar","Grass, herb, vine","Insect","Mammal","Mathematics","Money","Relationships","Sky","Tree","Weather","Worker","computer / digital"];
+
+const specialChars = ["ã","ẽ","ĩ","õ","ũ","ɛ","ɩ","ʋ","ŋ","ɲ"];
+const kb = document.getElementById('keyboard');
+specialChars.forEach(ch=>{
+  const b = document.createElement('button');
+  b.className='key'; b.textContent=ch; b.type='button';
+  b.onclick=()=>{
+    const input = document.getElementById('searchInput');
+    const start = input.selectionStart ?? input.value.length;
+    const end = input.selectionEnd ?? input.value.length;
+    input.value = input.value.slice(0,start) + ch + input.value.slice(end);
+    input.focus();
+    input.selectionStart = input.selectionEnd = start + ch.length;
+    runSearch();
+  };
+  kb.appendChild(b);
+});
+const clearBtn = document.createElement('button');
+clearBtn.className='key wide'; clearBtn.textContent='Effacer'; clearBtn.type='button';
+clearBtn.onclick=()=>{ document.getElementById('searchInput').value=''; runSearch(); };
+kb.appendChild(clearBtn);
+
+// domain filter chips (liste connue à l'avance ; filtrage appliqué côté client
+// sur les résultats renvoyés par l'API, car l'API renvoie les k plus proches
+// par le sens, pas tout le corpus)
+let activeDomaine = null;
+const filtersEl = document.getElementById('filters');
+function renderChips(){
+  filtersEl.innerHTML='';
+  const allChip = document.createElement('button');
+  allChip.className = 'chip' + (activeDomaine===null?' active':'');
+  allChip.textContent = 'Tous les domaines';
+  allChip.onclick = ()=>{ activeDomaine=null; renderChips(); runSearch(); };
+  filtersEl.appendChild(allChip);
+  DOMAINES_CONNUS.forEach(d=>{
+    const c = document.createElement('button');
+    c.className = 'chip' + (activeDomaine===d?' active':'');
+    c.textContent = d;
+    c.onclick = ()=>{ activeDomaine = (activeDomaine===d? null : d); renderChips(); runSearch(); };
+    filtersEl.appendChild(c);
+  });
+}
+renderChips();
+
+let searchToken = 0; // évite d'afficher une réponse d'API arrivée en retard
+let debounceTimer = null;
+function debouncedSearch(){
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(runSearch, 300);
+}
+
+async function runSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  const resultsEl = document.getElementById('results');
+  const countEl = document.getElementById('resultsCount');
+
+  if(!q){
+    countEl.textContent = 'Base vectorielle connectée — 10 566 entrées';
+    resultsEl.innerHTML = '<div class="empty">Tapez un mot en mooré, en français ou en anglais pour lancer la recherche par sens.</div>';
+    return;
+  }
+
+  const myToken = ++searchToken;
+  countEl.textContent = 'Recherche en cours…';
+
+  let data;
+  try{
+    const resp = await fetch(`${API_URL}?q=${encodeURIComponent(q)}&k=20`);
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    data = await resp.json();
+  }catch(err){
+    if(myToken !== searchToken) return;
+    countEl.textContent = 'Impossible de joindre l\'API';
+    resultsEl.innerHTML = `<div class="empty">L'API de recherche n'est pas accessible (${API_URL}).<br>Lancez <code>python3 api.py</code> dans le dossier vectordb_moore, puis réessayez.</div>`;
+    return;
+  }
+  if(myToken !== searchToken) return;
+
+  let matches = data;
+  if(activeDomaine){
+    matches = matches.filter(d => d.domaine === activeDomaine);
+  }
+
+  countEl.textContent = matches.length + ' résultat' + (matches.length!==1?'s':'') + ' pour « ' + q + ' » (triés par proximité de sens)';
+
+  if(matches.length===0){
+    resultsEl.innerHTML = '<div class="empty">Aucun résultat proche trouvé dans la base vectorielle.</div>';
+    return;
+  }
+
+  resultsEl.innerHTML = matches.map(d=>`
+    <div class="card">
+      <div class="mot-col">
+        <div class="mot">${d.mot_moore}</div>
+        ${d.prononciation ? `<div class="pron">/${d.prononciation}/</div>` : ''}
+        <div class="cat">${d.categorie}</div>
+      </div>
+      <div class="defs">
+        <div class="fr">${d.definition_francais}</div>
+        ${d.definition_english ? `<div class="en">${d.definition_english}</div>` : ''}
+        ${d.domaine ? `<div class="domaine-tag">${d.domaine}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('resultsCount').textContent = 'Base vectorielle connectée — 10 566 entrées';
+document.getElementById('results').innerHTML = '<div class="empty">Tapez un mot en mooré, en français ou en anglais pour lancer la recherche par sens.</div>';
+</script>
+</body>
+</html>

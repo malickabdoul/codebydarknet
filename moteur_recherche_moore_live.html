@@ -110,6 +110,9 @@
 
   /* domain filter chips */
   .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  /* display:flex l'emporte sur le style navigateur de [hidden] : il faut
+     neutraliser explicitement, sinon les puces restent visibles. */
+  .filters[hidden], .mode-note[hidden]{ display:none; }
   .chip{
     font-family:'Work Sans'; font-size:12.5px; font-weight:500; color:var(--ink-soft);
     background:transparent; border:1px solid var(--line); border-radius:100px;
@@ -156,6 +159,142 @@
   }
   footer b{ color:rgba(247,240,226,0.7); }
 
+
+  /* mode tabs */
+  .modes{ display:flex; gap:6px; margin-bottom:16px; }
+  .mode{
+    font-family:'Work Sans'; font-size:13px; font-weight:600; color:#8c7f6d;
+    background:transparent; border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; cursor:pointer; transition:.12s ease;
+  }
+  .mode:hover{ border-color:var(--rust); color:var(--rust); }
+  .mode.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .mode-note{ margin-top:14px; font-size:12.5px; color:#8c7f6d; line-height:1.5; }
+
+  /* glose */
+  .glose-card{
+    background:var(--paper); color:var(--ink); border-radius:14px;
+    padding:22px; border:1px solid rgba(0,0,0,0.04);
+  }
+  .glose-line{
+    font-family:'Noto Sans', sans-serif; font-weight:700; font-size:22px;
+    color:var(--rust-dim); line-height:1.45; margin-bottom:4px;
+  }
+  .glose-cov{ font-size:12.5px; color:#8c7f6d; margin-bottom:18px; }
+  .seg-table{ display:flex; flex-wrap:wrap; gap:8px; }
+  .seg{
+    border:1px solid var(--line); border-radius:10px; padding:9px 12px;
+    min-width:120px; background:white;
+  }
+  .seg.expr{ border-color:var(--sage); background:rgba(124,132,89,0.07); }
+  .seg.ignore{ opacity:.5; }
+  .seg.inconnu{ border-color:var(--rust); background:rgba(193,85,47,0.06); }
+  .seg .src{ font-size:12px; color:#8c7f6d; }
+  .seg .dst{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:16px; color:var(--ink); }
+  .seg .alt{ font-size:11.5px; color:#a89a83; margin-top:3px; }
+  .seg .badge{
+    display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--sage); margin-bottom:3px;
+  }
+  .seg.inconnu .badge{ color:var(--rust); }
+  .avert{
+    margin-top:18px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12px; line-height:1.55; color:#8c7f6d;
+  }
+
+
+  /* tournures idiomatiques */
+  .idiomes{
+    margin-top:18px; padding-top:16px; border-top:1px dashed var(--line);
+  }
+  .idiomes h4{
+    margin:0 0 4px; font-family:'Work Sans'; font-size:11.5px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--sage);
+  }
+  .idiomes .hint2{ font-size:11.5px; color:#a89a83; margin-bottom:10px; }
+  .idiome{
+    display:flex; align-items:baseline; gap:10px; padding:7px 0;
+    border-bottom:1px solid rgba(34,25,18,0.06);
+  }
+  .idiome:last-child{ border-bottom:none; }
+  .idiome .sc{
+    font-family:'Work Sans'; font-size:11px; font-weight:600; color:var(--millet);
+    min-width:34px;
+  }
+  .idiome .mo{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:15px; color:var(--rust-dim); }
+  .idiome .df{ font-size:13px; color:#8c7f6d; }
+
+
+  /* selecteur d'index */
+  .modes{ align-items:center; }
+  .backend-box{ margin-left:auto; display:flex; align-items:center; gap:7px; }
+  .backend-box[hidden]{ display:none; }
+  .backend-box label{
+    font-family:'Work Sans'; font-size:11px; font-weight:600; letter-spacing:.06em;
+    text-transform:uppercase; color:#a89a83;
+  }
+  .backend-box select{
+    font-family:'Work Sans'; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+    background:white; border:1px solid var(--line); border-radius:8px;
+    padding:7px 9px; cursor:pointer;
+  }
+
+
+  /* renvois : synonymes, antonymes, variantes, autres sens */
+  .renvois{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; align-items:center; }
+  .renvoi-label{
+    font-family:'Work Sans'; font-size:10.5px; font-weight:600; letter-spacing:.05em;
+    text-transform:uppercase; color:#a89a83; margin-right:2px;
+  }
+  .renvoi{
+    font-family:'Noto Sans', sans-serif; font-size:13px; font-weight:600;
+    background:var(--sand); border:1px solid var(--line); color:var(--ink-soft);
+    border-radius:100px; padding:3px 10px; cursor:pointer; transition:.12s ease;
+  }
+  .renvoi:hover{ background:var(--rust); color:white; border-color:var(--rust); }
+  .renvoi.ant{ background:transparent; border-style:dashed; }
+  .renvoi.sens{ background:transparent; color:var(--sage); border-color:var(--sage); }
+  .renvoi-fixe{
+    font-family:'Noto Sans', sans-serif; font-size:12.5px; color:#8c7f6d;
+    padding:3px 0;
+  }
+
+  /* liens externes, facon page de resultats */
+  .web{ margin-top:34px; }
+  .web h3{
+    font-family:'Work Sans'; font-size:12.5px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--millet); margin:0 0 4px;
+  }
+  .web .web-hint{ font-size:12.5px; color:rgba(247,240,226,0.45); margin-bottom:16px; }
+  .lien{ margin-bottom:18px; max-width:70ch; }
+  .lien .src{ font-size:12px; color:rgba(247,240,226,0.45); margin-bottom:2px; }
+  .lien a{
+    font-family:'Fraunces', serif; font-size:19px; color:var(--millet);
+    text-decoration:none; line-height:1.3;
+  }
+  .lien a:hover{ text-decoration:underline; }
+  .lien .desc{ font-size:13.5px; line-height:1.5; color:rgba(247,240,226,0.62); margin-top:3px; }
+  .lien .note{
+    font-size:12px; color:var(--rust); margin-top:4px;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .lien .note::before{ content:"!"; font-weight:700; }
+
+
+  /* avertissement quand l'index choisi ne convient pas a la requete */
+  .mismatch{
+    background: rgba(193,85,47,0.14); border:1px solid var(--rust);
+    border-radius:10px; padding:12px 15px; margin-bottom:14px;
+    font-size:13.5px; line-height:1.55; color:var(--paper);
+  }
+  .mismatch b{ color:var(--millet); }
+  .mismatch button{
+    background:var(--rust); color:white; border:none; border-radius:7px;
+    padding:5px 11px; font-family:'Work Sans'; font-weight:600; font-size:12.5px;
+    cursor:pointer; margin-left:8px;
+  }
+  .mismatch button:hover{ background:var(--rust-dim); }
+
   @media (max-width: 560px){
     .card{ flex-direction:column; gap:8px; }
     .search-row{ flex-wrap:wrap; }
@@ -174,24 +313,36 @@
   </header>
 
   <div class="search-card">
+    <div class="modes" id="modes">
+      <button class="mode active" data-mode="recherche">Recherche</button>
+      <button class="mode" data-mode="traduction">Traduction FR &rarr; mooré</button>
+      <span class="backend-box" id="backendBox" hidden>
+        <label for="backendSel">Index</label>
+        <select id="backendSel"></select>
+      </span>
+    </div>
     <div class="search-row">
-      <input id="searchInput" type="text" placeholder="Gʋls f gomd la f bao a võorem…" autocomplete="off" oninput="debouncedSearch()" onkeydown="if(event.key==='Enter') runSearch()">
-      <span class="lang-pill" id="langPill">moore · fr · en</span>
-      <button class="go-btn" onclick="runSearch()">Baoo</button>
+      <input id="searchInput" type="text" placeholder="Gʋls f gomd la f bao a võorem…" autocomplete="off" oninput="debouncedLancer()" onkeydown="if(event.key==='Enter') lancer()">
+      <span class="lang-pill">moore · fr · en</span>
+      <button class="go-btn" onclick="lancer()">Baoo</button>
     </div>
 
     <div class="kb-label">Caractères mooré <span class="hint">— cliquez pour insérer, absents du clavier standard</span></div>
     <div class="keyboard" id="keyboard"></div>
 
     <div class="filters" id="filters"></div>
+    <div class="mode-note" id="modeNote" hidden>Tapez une phrase entière : elle est découpée, et les expressions connues du corpus sont reconnues d'un bloc.</div>
   </div>
 
   <div class="results-meta">
     <span id="resultsCount">Base vectorielle connectée — 10 566 entrées</span>
-    <span>Corpus complet : <strong>10 566 entrées</strong> · Webonary Moore</span>
+    <span>Corpus complet : <strong id="corpusCount">10 566 entrées</strong> · Webonary Moore</span>
   </div>
 
+  <div class="mismatch" id="mismatch" hidden></div>
   <div class="results" id="results"></div>
+
+  <div class="web" id="web" hidden></div>
 
   <footer>
     <b>À propos de cette page.</b> Interface branchée sur l'API locale (<code>api.py</code>), qui interroge une vraie base de données vectorielle (index FAISS + vecteurs TF-IDF/LSA) construite sur les 10 566 entrées du corpus Webonary Moore. La recherche se fait par proximité de sens, pas seulement par correspondance de texte exact. Lancez <code>python3 api.py</code> avant d'ouvrir cette page.
@@ -199,8 +350,20 @@
 </div>
 
 <script>
-const API_URL = "http://127.0.0.1:5000/api/search";
-const DOMAINES_CONNUS = ["Agriculture","Animal","Bird","Body","Building","Bush, shrub","Colour","Container","Food","Grammar","Grass, herb, vine","Insect","Mammal","Mathematics","Money","Relationships","Sky","Tree","Weather","Worker","computer / digital"];
+// L'interface marche dans les deux cas : servie par api.py (même origine) ou
+// ouverte en double-clic depuis le disque (file:// -> API locale).
+const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:5000' : '';
+const API_SEARCH   = API_BASE + '/api/search';
+const API_DOMAINES = API_BASE + '/api/domaines';
+const API_HEALTH   = API_BASE + '/api/health';
+
+// Les définitions viennent du corpus et peuvent contenir des caractères qui
+// cassent le HTML (le corpus contient déjà « Copyright & Contact »).
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
 
 const specialChars = ["ã","ẽ","ĩ","õ","ũ","ɛ","ɩ","ʋ","ŋ","ɲ"];
 const kb = document.getElementById('keyboard');
@@ -214,42 +377,73 @@ specialChars.forEach(ch=>{
     input.value = input.value.slice(0,start) + ch + input.value.slice(end);
     input.focus();
     input.selectionStart = input.selectionEnd = start + ch.length;
-    runSearch();
+    lancer();
   };
   kb.appendChild(b);
 });
 const clearBtn = document.createElement('button');
 clearBtn.className='key wide'; clearBtn.textContent='Effacer'; clearBtn.type='button';
-clearBtn.onclick=()=>{ document.getElementById('searchInput').value=''; runSearch(); };
+clearBtn.onclick=()=>{ document.getElementById('searchInput').value=''; lancer(); };
 kb.appendChild(clearBtn);
 
-// domain filter chips (liste connue à l'avance ; filtrage appliqué côté client
-// sur les résultats renvoyés par l'API, car l'API renvoie les k plus proches
-// par le sens, pas tout le corpus)
+// Puces de domaine : la liste est déduite du corpus par l'API (/api/domaines),
+// et le filtrage est fait côté serveur avant le top-k. Une liste figée côté
+// client ratait 109 des 130 valeurs du corpus, et filtrer après coup les k
+// résultats déjà renvoyés affichait souvent 0 carte.
 let activeDomaine = null;
+let DOMAINES = [];
 const filtersEl = document.getElementById('filters');
+
 function renderChips(){
   filtersEl.innerHTML='';
   const allChip = document.createElement('button');
   allChip.className = 'chip' + (activeDomaine===null?' active':'');
   allChip.textContent = 'Tous les domaines';
-  allChip.onclick = ()=>{ activeDomaine=null; renderChips(); runSearch(); };
+  allChip.onclick = ()=>{ activeDomaine=null; renderChips(); lancer(); };
   filtersEl.appendChild(allChip);
-  DOMAINES_CONNUS.forEach(d=>{
+  DOMAINES.forEach(d=>{
     const c = document.createElement('button');
     c.className = 'chip' + (activeDomaine===d?' active':'');
     c.textContent = d;
-    c.onclick = ()=>{ activeDomaine = (activeDomaine===d? null : d); renderChips(); runSearch(); };
+    c.onclick = ()=>{ activeDomaine = (activeDomaine===d? null : d); renderChips(); lancer(); };
     filtersEl.appendChild(c);
   });
 }
-renderChips();
+
+async function initFromApi(){
+  try{
+    const [dom, health] = await Promise.all([
+      fetch(API_DOMAINES).then(r=>r.ok?r.json():[]),
+      fetch(API_HEALTH).then(r=>r.ok?r.json():null)
+    ]);
+    DOMAINES = dom;
+    if(health && health.backends && health.backends.length > 1){
+      BACKEND = health.backend_defaut;
+      const sel = document.getElementById('backendSel');
+      const LIB = {auto:'Auto (selon la langue)', entrees:'Mots mooré (en-têtes)', tfidf:'TF-IDF seul', semantique:'Sémantique seul', hybride:'Hybride (RRF)'};
+      sel.innerHTML = health.backends
+        .map(b=>`<option value="${esc(b)}"${b===BACKEND?' selected':''}>${esc(LIB[b]||b)}</option>`)
+        .join('');
+      sel.onchange = ()=>{ BACKEND = sel.value; lancer(); };
+      document.getElementById('backendBox').hidden = false;
+    }
+    if(health && health.entrees){
+      const n = health.entrees.toLocaleString('fr-FR');
+      document.getElementById('resultsCount').textContent =
+        'Base vectorielle connectée — ' + n + ' entrées';
+      document.getElementById('corpusCount').textContent = n + ' entrées';
+    }
+  }catch(err){
+    document.getElementById('resultsCount').textContent = 'API non joignable';
+  }
+  renderChips();
+}
 
 let searchToken = 0; // évite d'afficher une réponse d'API arrivée en retard
 let debounceTimer = null;
-function debouncedSearch(){
+function debouncedLancer(){
   clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(runSearch, 300);
+  debounceTimer = setTimeout(lancer, 300);
 }
 
 async function runSearch(){
@@ -258,7 +452,8 @@ async function runSearch(){
   const countEl = document.getElementById('resultsCount');
 
   if(!q){
-    countEl.textContent = 'Base vectorielle connectée — 10 566 entrées';
+    document.getElementById('web').hidden = true;
+    document.getElementById('mismatch').hidden = true;
     resultsEl.innerHTML = '<div class="empty">Tapez un mot en mooré, en français ou en anglais pour lancer la recherche par sens.</div>';
     return;
   }
@@ -266,49 +461,281 @@ async function runSearch(){
   const myToken = ++searchToken;
   countEl.textContent = 'Recherche en cours…';
 
+  let url = `${API_SEARCH}?q=${encodeURIComponent(q)}&k=20`;
+  if(activeDomaine) url += `&domaine=${encodeURIComponent(activeDomaine)}`;
+  if(BACKEND) url += `&backend=${encodeURIComponent(BACKEND)}`;
+
   let data;
   try{
-    const resp = await fetch(`${API_URL}?q=${encodeURIComponent(q)}&k=20`);
-    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    const resp = await fetch(url);
+    if(!resp.ok){
+      let msg = 'HTTP ' + resp.status;
+      try{ const j = await resp.json(); if(j && j.error) msg = j.error; }catch(_){}
+      throw new Error(msg);
+    }
     data = await resp.json();
   }catch(err){
     if(myToken !== searchToken) return;
-    countEl.textContent = 'Impossible de joindre l\'API';
-    resultsEl.innerHTML = `<div class="empty">L'API de recherche n'est pas accessible (${API_URL}).<br>Lancez <code>python3 api.py</code> dans le dossier vectordb_moore, puis réessayez.</div>`;
+    countEl.textContent = 'Erreur de recherche';
+    resultsEl.innerHTML = `<div class="empty">${esc(err.message)}<br>Vérifiez que <code>python3 api.py</code> tourne (${esc(API_BASE || location.origin)}), puis réessayez.</div>`;
     return;
   }
   if(myToken !== searchToken) return;
 
-  let matches = data;
-  if(activeDomaine){
-    matches = matches.filter(d => d.domaine === activeDomaine);
-  }
+  const suffixe = activeDomaine ? ` dans « ${activeDomaine} »` : '';
+  countEl.textContent = data.length + ' résultat' + (data.length!==1?'s':'')
+    + ' pour « ' + q + ' »' + suffixe + ' (triés par proximité de sens)';
 
-  countEl.textContent = matches.length + ' résultat' + (matches.length!==1?'s':'') + ' pour « ' + q + ' » (triés par proximité de sens)';
-
-  if(matches.length===0){
+  if(data.length===0){
+    document.getElementById('web').hidden = true;
+    document.getElementById('mismatch').hidden = true;
     resultsEl.innerHTML = '<div class="empty">Aucun résultat proche trouvé dans la base vectorielle.</div>';
     return;
   }
 
-  resultsEl.innerHTML = matches.map(d=>`
+  resultsEl.innerHTML = data.map(d=>`
     <div class="card">
       <div class="mot-col">
-        <div class="mot">${d.mot_moore}</div>
-        ${d.prononciation ? `<div class="pron">/${d.prononciation}/</div>` : ''}
-        <div class="cat">${d.categorie}</div>
+        <div class="mot">${esc(d.mot_moore)}</div>
+        ${d.prononciation ? `<div class="pron">/${esc(d.prononciation)}/</div>` : ''}
+        <div class="cat">${esc(d.categorie)}</div>
       </div>
       <div class="defs">
-        <div class="fr">${d.definition_francais}</div>
-        ${d.definition_english ? `<div class="en">${d.definition_english}</div>` : ''}
-        ${d.domaine ? `<div class="domaine-tag">${d.domaine}</div>` : ''}
+        <div class="fr">${esc(d.definition_francais)}</div>
+        ${d.definition_english ? `<div class="en">${esc(d.definition_english)}</div>` : ''}
+        ${d.domaine ? `<div class="domaine-tag">${esc(d.domaine)}</div>` : ''}
+        ${renvois(d)}
       </div>
     </div>
   `).join('');
+
+  avertirBackend(data[0]);
+  chargerLiens(data[0]);
 }
 
-document.getElementById('resultsCount').textContent = 'Base vectorielle connectée — 10 566 entrées';
+// --- renvois et liens externes -------------------------------------------
+
+// Les colonnes synonymes / antonymes / variante / pluriel existaient dans le
+// corpus depuis le debut sans etre affichees : 2 600 entrees ont un synonyme,
+// 3 209 un pluriel. Les synonymes sont cliquables — ce sont des entrees du
+// corpus (96,7 % d'entre eux s'y resolvent).
+function renvois(d){
+  // data-mot plutot qu'un onclick inline : le navigateur HTML-decode les
+  // attributs avant d'evaluer le JS, donc un mot a apostrophe casserait la
+  // chaine. Et 14 en-tetes du corpus en contiennent une (fẽ', gũ', ha').
+  const puce = (mot, cls) =>
+    `<button class="renvoi ${cls}" data-mot="${esc(mot)}">${esc(mot)}</button>`;
+  const morceaux = [];
+
+  if(d.synonymes && d.synonymes.length)
+    morceaux.push(`<span class="renvoi-label">syn.</span>` + d.synonymes.map(m=>puce(m,'syn')).join(''));
+  if(d.antonymes && d.antonymes.length)
+    morceaux.push(`<span class="renvoi-label">contraire</span>` + d.antonymes.map(m=>puce(m,'ant')).join(''));
+  if(d.variantes && d.variantes.length)
+    morceaux.push(`<span class="renvoi-label">variante</span>` + d.variantes.map(m=>puce(m,'syn')).join(''));
+  if(d.pluriel)
+    morceaux.push(`<span class="renvoi-label">pluriel</span><span class="renvoi-fixe">${esc(d.pluriel)}</span>`);
+  if(d.autres_sens > 0)
+    morceaux.push(`<button class="renvoi sens" data-mot="${esc(d.mot_moore)}">`
+      + `${d.autres_sens} autre${d.autres_sens>1?'s':''} sens</button>`);
+
+  return morceaux.length ? `<div class="renvois">${morceaux.join('')}</div>` : '';
+}
+
+// Delegation : les puces sont recreees a chaque recherche.
+document.getElementById('results').addEventListener('click', e=>{
+  const btn = e.target.closest('.renvoi');
+  if(btn && btn.dataset.mot) chercherMot(btn.dataset.mot);
+});
+
+function chercherMot(mot){
+  MODE = 'recherche';
+  document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active', b.dataset.mode==='recherche'));
+  document.getElementById('filters').hidden = false;
+  document.getElementById('modeNote').hidden = true;
+  document.getElementById('searchInput').value = mot;
+  activeDomaine = null;
+  renderChips();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  lancer();
+}
+
+async function chargerLiens(premier){
+  const webEl = document.getElementById('web');
+  if(!premier || !premier.mot_moore){ webEl.hidden = true; return; }
+
+  const monToken = searchToken;
+  let url = `${API_BASE}/api/liens?q=${encodeURIComponent(premier.mot_moore)}`;
+  if(premier.definition_francais) url += `&fr=${encodeURIComponent(premier.definition_francais)}`;
+
+  let liens;
+  try{
+    const resp = await fetch(url);
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    liens = await resp.json();
+  }catch(err){ webEl.hidden = true; return; }
+  if(monToken !== searchToken || !Array.isArray(liens) || !liens.length){ webEl.hidden = true; return; }
+
+  webEl.innerHTML = `
+    <h3>Sur le web</h3>
+    <div class="web-hint">Ressources externes pour « ${esc(premier.mot_moore)} ». Ces pages ne font pas partie du corpus.</div>
+    ${liens.map(l=>`
+      <div class="lien">
+        <div class="src">${esc(l.source)}</div>
+        <a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.nom)}</a>
+        <div class="desc">${esc(l.description)}</div>
+        ${l.note ? `<div class="note">${esc(l.note)}</div>` : ''}
+      </div>`).join('')}`;
+  webEl.hidden = false;
+}
+
+// Le selecteur laisse forcer un index inadapte a la requete : « Semantique
+// seul » sur un mot moore donne 0,0 % au benchmark, parce que le modele ne
+// connait pas la langue. Plutot que de rendre du bruit sans rien dire, on
+// previent — et on propose le retour a « Auto » en un clic.
+const INADAPTE = {
+  moore: {
+    semantique: "l'index sémantique ne connaît pas le mooré",
+    hybride:    "l'index sémantique, qui pèse la moitié de la fusion, ne connaît pas le mooré"
+  },
+  fr_en: {
+    entrees:    "l'index des en-têtes ne regarde que les mots mooré, jamais les définitions"
+  }
+};
+
+function avertirBackend(premier){
+  const el = document.getElementById('mismatch');
+  const langue = premier && premier.langue_detectee;
+  const raison = (BACKEND && BACKEND !== 'auto' && langue)
+    ? (INADAPTE[langue] || {})[BACKEND] : null;
+
+  if(!raison){ el.hidden = true; return; }
+  const nom = langue === 'moore' ? 'mooré' : 'français / anglais';
+  el.innerHTML = `Requête détectée comme <b>${esc(nom)}</b> — mais ${esc(raison)}.`
+    + ` Au-delà des correspondances exactes, ces résultats ne veulent pas dire grand-chose.`
+    + `<button id="btnAuto">Repasser en Auto</button>`;
+  el.hidden = false;
+  document.getElementById('btnAuto').onclick = ()=>{
+    BACKEND = 'auto';
+    const sel = document.getElementById('backendSel');
+    if(sel) sel.value = 'auto';
+    lancer();
+  };
+}
+
+// --- modes ---------------------------------------------------------------
+// « Recherche » interroge la base vectorielle (un mot -> les entrées les plus
+// proches par le sens). « Traduction » découpe une phrase et glose segment
+// par segment : encoder une phrase entière en un seul vecteur n'a pas de sens.
+let MODE = 'recherche';
+// Backend de recherche. « hybride » fusionne l'index TF-IDF (qui gère le
+// mooré) et l'index d'embeddings (qui comprend le français) ; il n'existe que
+// si build_st_index.py a été lancé. Le sélecteur reste caché sinon.
+let BACKEND = null;
+const PLACEHOLDERS = {
+  recherche:  'Gʋls f gomd la f bao a võorem…',
+  traduction: "Tapez une phrase en français : je veux boire de l'eau"
+};
+
+document.getElementById('modes').addEventListener('click', e=>{
+  const btn = e.target.closest('.mode');
+  if(!btn) return;
+  MODE = btn.dataset.mode;
+  document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active', b===btn));
+  document.getElementById('filters').hidden   = (MODE !== 'recherche');
+  document.getElementById('modeNote').hidden  = (MODE !== 'traduction');
+  document.getElementById('searchInput').placeholder = PLACEHOLDERS[MODE];
+  lancer();
+});
+
+function lancer(){ return MODE === 'traduction' ? runTranslate() : runSearch(); }
+
+async function runTranslate(){
+  const q = document.getElementById('searchInput').value.trim();
+  const resultsEl = document.getElementById('results');
+  const countEl = document.getElementById('resultsCount');
+
+  if(!q){
+    document.getElementById('web').hidden = true;
+    resultsEl.innerHTML = '<div class="empty">Tapez une phrase en français pour la gloser en mooré.</div>';
+    return;
+  }
+
+  const myToken = ++searchToken;
+  document.getElementById('mismatch').hidden = true;  // sans objet en traduction
+  countEl.textContent = 'Analyse de la phrase…';
+
+  let d;
+  try{
+    const resp = await fetch(`${API_BASE}/api/translate?q=${encodeURIComponent(q)}`);
+    if(!resp.ok){
+      let msg = 'HTTP ' + resp.status;
+      try{ const j = await resp.json(); if(j && j.error) msg = j.error; }catch(_){}
+      throw new Error(msg);
+    }
+    d = await resp.json();
+  }catch(err){
+    if(myToken !== searchToken) return;
+    countEl.textContent = 'Erreur de traduction';
+    resultsEl.innerHTML = `<div class="empty">${esc(err.message)}<br>Vérifiez que <code>python3 api.py</code> tourne, puis réessayez.</div>`;
+    return;
+  }
+  if(myToken !== searchToken) return;
+
+  const expr = d.n_expressions;
+  countEl.textContent = Math.round(d.couverture*100) + ' % des mots reconnus'
+    + (expr ? ` · ${expr} expression${expr>1?'s':''} du corpus` : '');
+
+  const LIBELLE = {expression:'expression', mot:'', ignore:'non traduit', inconnu:'absent du corpus'};
+
+  const segs = d.segments.map(s=>{
+    const tete = s.candidats.length ? esc(s.candidats[0].mot_moore) : '—';
+    const alts = s.candidats.slice(1).map(c=>esc(c.mot_moore)).join(', ');
+    const badge = LIBELLE[s.type] ? `<div class="badge">${LIBELLE[s.type]}</div>` : '';
+    const lemme = s.lemme ? ` <span class="alt">via « ${esc(s.lemme)} »</span>` : '';
+    return `<div class="seg ${esc(s.type)}">
+      ${badge}
+      <div class="src">${esc(s.source)}${lemme}</div>
+      <div class="dst">${tete}</div>
+      ${alts ? `<div class="alt">ou ${alts}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Tournures toutes faites trouvées par proximité de sens dans la base
+  // vectorielle. La glose est littérale et ne peut pas les produire : « tu vas
+  // bien » se dit « laafɩ bala ». Les scores sont affichés parce qu'ils sont
+  // bruités sur les phrases descriptives — c'est à valider, pas une réponse.
+  const idiomes = (d.idiomes && d.idiomes.length) ? `
+    <div class="idiomes">
+      <h4>Tournures idiomatiques proches</h4>
+      <div class="hint2">Classées par accord entre les deux index ; le nombre est la proximité de sens (il n'est donc pas toujours décroissant). À valider par un locuteur.</div>
+      ${d.idiomes.map(i=>`
+        <div class="idiome">
+          <span class="sc">${i.score.toFixed(2)}</span>
+          <span class="mo">${esc(i.mot_moore)}</span>
+          <span class="df">${esc(i.definition_francais)}</span>
+        </div>`).join('')}
+    </div>` : '';
+
+  resultsEl.innerHTML = `
+    <div class="glose-card">
+      <div class="glose-line">${esc(d.glose) || '—'}</div>
+      <div class="glose-cov">Glose de « ${esc(d.phrase)} »</div>
+      <div class="seg-table">${segs}</div>
+      ${idiomes}
+      <div class="avert">${esc(d.avertissement)}</div>
+    </div>`;
+
+  // Liens externes aussi en traduction, sur le premier mot mooré trouvé.
+  const premier = d.segments.find(s=>s.candidats && s.candidats.length);
+  chargerLiens(premier ? {
+    mot_moore: premier.candidats[0].mot_moore,
+    definition_francais: premier.candidats[0].definition_francais
+  } : null);
+}
+
 document.getElementById('results').innerHTML = '<div class="empty">Tapez un mot en mooré, en français ou en anglais pour lancer la recherche par sens.</div>';
+initFromApi();
 </script>
 </body>
 </html>

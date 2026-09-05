@@ -18,7 +18,7 @@ Choix technique :
      sans changer l'architecture (même API de recherche).
 
 Sorties :
-  - tfidf_vectorizer.pkl : le vectoriseur entraîné
+  - vectorizers.pkl       : les vectoriseurs TF-IDF + le SVD entraînés
   - vectors.index         : index FAISS (recherche par similarité cosinus)
   - corpus_meta.pkl       : métadonnées alignées avec les vecteurs (mot,
                             définitions, catégorie, etc.)
@@ -34,7 +34,13 @@ from scipy.sparse import hstack
 
 import os
 
-CORPUS_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "corpus_moore_webonary.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CORPUS_CSV = os.path.join(BASE_DIR, "data", "corpus_moore_webonary.csv")
+# Sorties en chemin absolu : sinon elles atterrissent dans le répertoire
+# courant et search.py ne les retrouve pas.
+INDEX_PATH = os.path.join(BASE_DIR, "vectors.index")
+VECTORIZERS_PATH = os.path.join(BASE_DIR, "vectorizers.pkl")
+META_PATH = os.path.join(BASE_DIR, "corpus_meta.pkl")
 
 
 def load_corpus() -> pd.DataFrame:
@@ -96,10 +102,12 @@ def main():
     index.add(dense.astype(np.float32))
 
     print("Sauvegarde...")
-    faiss.write_index(index, "vectors.index")
-    with open("vectorizers.pkl", "wb") as f:
+    faiss.write_index(index, INDEX_PATH)
+    with open(VECTORIZERS_PATH, "wb") as f:
         pickle.dump({**vectorizers, "svd": svd}, f)
-    df.to_pickle("corpus_meta.pkl")
+    # doc_text ne sert qu'à la vectorisation : inutile de l'embarquer dans
+    # les métadonnées (le CSV source la reconstruit).
+    df.drop(columns=["doc_text"]).to_pickle(META_PATH)
 
     print("Terminé. Fichiers générés : vectors.index, vectorizers.pkl, corpus_meta.pkl")
 

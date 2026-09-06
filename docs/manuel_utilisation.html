@@ -15,7 +15,7 @@
 
   html,body{ margin:0; padding:0; }
   body{
-    font-family: "Cambria", "Georgia", "Times New Roman", serif;
+    font-family: "Times New Roman", Times, serif;
     font-size: 10.8pt;
     line-height: 1.5;
     color: var(--encre);
@@ -34,7 +34,7 @@
     line-height:1.4; white-space:pre-wrap; margin:.6em 0 1em;
   }
 
-  h1,h2,h3,h4{ font-family:"Calibri","Helvetica",sans-serif; color:var(--titre); }
+  h1,h2,h3,h4{ font-family:"Times New Roman", Times, serif; color:var(--titre); }
   h1{ font-size:20pt; margin:0 0 .2em; }
   h2{
     font-size:15pt; margin:1.6em 0 .5em; padding-bottom:.15em;
@@ -51,10 +51,12 @@
   .garde{ text-align:center; page-break-after:always; padding-top:6mm; }
   .garde .etab{ font-size:13pt; font-weight:bold; letter-spacing:.02em; }
   .garde .sous{ font-size:11pt; }
+  .garde .logo-ujkz{ width:26mm; margin-bottom:6px; }
+  .garde .logo-ibam{ width:38mm; margin-top:10px; }
   .garde .etoiles{ color:var(--accent); letter-spacing:.5em; margin:.5em 0 1.2em; }
   .garde .cours{ margin-top:1.4em; font-size:11pt; font-style:italic; }
   .garde .type{
-    margin-top:2.4em; font-family:"Calibri",sans-serif; font-size:22pt;
+    margin-top:2.2em; font-size:22pt;
     font-weight:bold; color:var(--titre); letter-spacing:.04em;
   }
   .garde .theme{ margin-top:.6em; font-size:13.5pt; font-weight:bold; }
@@ -78,7 +80,7 @@
   caption b{ color:var(--encre); }
   th{
     background:var(--titre); color:#fff; text-align:left;
-    padding:5px 8px; font-family:"Calibri",sans-serif; font-weight:600;
+    padding:5px 8px; font-family:"Times New Roman", Times, serif; font-weight:bold;
   }
   td{ border-bottom:1px solid var(--filet); padding:4px 8px; vertical-align:top; }
   tr:nth-child(even) td{ background:#fafafa; }
@@ -108,15 +110,15 @@
   .toc .n2{ padding-left:1.4em; }
   .toc .n3{ padding-left:2.8em; font-size:10pt; }
 
-  .encadre{
-    border-left:3px solid var(--accent); background:#fdf6f3;
-    padding:8px 12px; margin:.8em 0 1.1em; font-size:10.2pt;
+  /* Encadres sans filet vertical : un simple cadre fin suffit a les
+     distinguer du corps du texte. */
+  .encadre, .note{
+    border:1px solid var(--filet); background:#f7f7f7;
+    padding:9px 13px; margin:.8em 0 1.1em; font-size:10.4pt;
+    border-radius:2px;
   }
-  .encadre b{ color:var(--accent); }
-  .note{
-    border-left:3px solid var(--titre); background:#f5f7fb;
-    padding:8px 12px; margin:.8em 0 1.1em; font-size:10.2pt;
-  }
+  .encadre b{ color:var(--encre); }
+  .note b{ color:var(--encre); }
   ul,ol{ margin:.2em 0 .8em; padding-left:1.4em; }
   li{ margin:.15em 0; }
   .petit{ font-size:9.6pt; color:var(--gris); }
@@ -124,11 +126,13 @@
 
 <!-- ================= PAGE DE GARDE ================= -->
 <div class="garde">
+  <img class="logo-ujkz" src="logos/ujkz.jpg" alt="Armoiries de l'Université Joseph KI-ZERBO">
   <div class="etab">UNIVERSITÉ JOSEPH KI-ZERBO</div>
   <div class="sous">(UJKZ)</div>
   <div class="etoiles">★ ★ ★ ★ ★</div>
   <div class="etab">INSTITUT BURKINABÈ DES ARTS ET MÉTIERS</div>
   <div class="sous">(IBAM)</div>
+  <img class="logo-ibam" src="logos/ibam.png" alt="Logo de l'IBAM">
 
   <div class="cours">Cours : Web Sémantique et Web de Données</div>
 
@@ -155,54 +159,56 @@
 <!-- ================= SOMMAIRE ================= -->
 <h2 style="margin-top:0">Sommaire</h2>
 <div class="toc">
-  <div><span class="t">Liste des sigles et abréviations</span><span class="pointille"></span><span class="n">3</span></div>
-  <div><span class="t"><b>1. Introduction</b></span><span class="pointille"></span><span class="n">3</span></div>
-  <div class="n2"><span class="t">1.1 Présentation de l'application</span><span class="pointille"></span><span class="n">3</span></div>
-  <div class="n2"><span class="t">1.2 Architecture technique</span><span class="pointille"></span><span class="n">3</span></div>
-  <div class="n2"><span class="t">1.3 Contenu du dossier livré</span><span class="pointille"></span><span class="n">4</span></div>
-  <div><span class="t"><b>2. Prérequis</b></span><span class="pointille"></span><span class="n">5</span></div>
-  <div><span class="t"><b>3. Installation</b></span><span class="pointille"></span><span class="n">5</span></div>
-  <div class="n2"><span class="t">3.1 Récupérer le projet</span><span class="pointille"></span><span class="n">5</span></div>
-  <div class="n2"><span class="t">3.2 Environnement virtuel et dépendances</span><span class="pointille"></span><span class="n">5</span></div>
-  <div class="n2"><span class="t">3.3 (Optionnel) Index sémantique</span><span class="pointille"></span><span class="n">6</span></div>
-  <div class="n2"><span class="t">3.4 Vérifier l'installation</span><span class="pointille"></span><span class="n">6</span></div>
-  <div><span class="t"><b>4. Lancement de l'application</b></span><span class="pointille"></span><span class="n">6</span></div>
-  <div><span class="t"><b>5. Guide d'utilisation</b></span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">5.1 L'écran de recherche</span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">5.2 Onglet « Web » — chercher des pages</span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">5.3 Onglet « Dictionnaire »</span><span class="pointille"></span><span class="n">10</span></div>
-  <div class="n2"><span class="t">5.4 Onglet « Traduction FR → mooré »</span><span class="pointille"></span><span class="n">12</span></div>
-  <div class="n2"><span class="t">5.5 Utilisation en ligne de commande</span><span class="pointille"></span><span class="n">13</span></div>
-  <div><span class="t"><b>6. Résolution des problèmes</b></span><span class="pointille"></span><span class="n">14</span></div>
-  <div><span class="t"><b>7. Limites connues</b></span><span class="pointille"></span><span class="n">14</span></div>
-  <div><span class="t"><b>8. Conclusion</b></span><span class="pointille"></span><span class="n">15</span></div>
-  <div><span class="t"><b>Annexe A — Arborescence et adresses</b></span><span class="pointille"></span><span class="n">16</span></div>
-  <div><span class="t"><b>Annexe B — Conformité au cahier des charges</b></span><span class="pointille"></span><span class="n">17</span></div>
+  <div><span class="t">Liste des sigles et abréviations</span><span class="pointille"></span><span class="n">5</span></div>
+  <div><span class="t"><b>1. Introduction</b></span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.1 Présentation de l'application</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.2 Architecture technique</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.3 Contenu du dossier livré</span><span class="pointille"></span><span class="n">6</span></div>
+  <div><span class="t"><b>2. Prérequis</b></span><span class="pointille"></span><span class="n">7</span></div>
+  <div><span class="t"><b>3. Installation</b></span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">3.1 Récupérer le projet</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">3.2 Environnement virtuel et dépendances</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">3.3 (Optionnel) Index sémantique</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">3.4 Vérifier l'installation</span><span class="pointille"></span><span class="n">8</span></div>
+  <div><span class="t"><b>4. Lancement de l'application</b></span><span class="pointille"></span><span class="n">8</span></div>
+  <div><span class="t"><b>5. Guide d'utilisation</b></span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">5.1 L'écran de recherche</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">5.2 Onglet « Web » — chercher des pages</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">5.3 Onglet « Dictionnaire »</span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">5.4 Onglet « Traduction FR → mooré »</span><span class="pointille"></span><span class="n">14</span></div>
+  <div class="n2"><span class="t">5.5 Utilisation en ligne de commande</span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t"><b>6. Résolution des problèmes</b></span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t"><b>7. Limites connues</b></span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t"><b>8. Conclusion</b></span><span class="pointille"></span><span class="n">17</span></div>
+  <div><span class="t"><b>Annexe A — Arborescence et adresses</b></span><span class="pointille"></span><span class="n">18</span></div>
+  <div><span class="t"><b>Annexe B — Conformité au cahier des charges</b></span><span class="pointille"></span><span class="n">19</span></div>
 </div>
 
-<h3 class="serre">Liste des figures</h3>
-<div class="toc petit">
-  <div><span class="t">5.1 Le panneau de recherche et ses trois onglets</span><span class="pointille"></span><span class="n">8</span></div>
-  <div><span class="t">5.2 Le pont de traduction affiché au-dessus des résultats</span><span class="pointille"></span><span class="n">8</span></div>
-  <div><span class="t">5.3 Pages Web trouvées pour la requête mooré « koom »</span><span class="pointille"></span><span class="n">9</span></div>
-  <div><span class="t">5.4 L'onglet Dictionnaire : filtres et sélecteur d'index</span><span class="pointille"></span><span class="n">10</span></div>
-  <div><span class="t">5.5 Une entrée et ses renvois</span><span class="pointille"></span><span class="n">10</span></div>
-  <div><span class="t">5.6 Le compteur rappelle le filtre de domaine actif</span><span class="pointille"></span><span class="n">10</span></div>
-  <div><span class="t">5.7 Avertissement lorsque l'index choisi ne convient pas</span><span class="pointille"></span><span class="n">11</span></div>
-  <div><span class="t">5.8 Ressources externes proposées pour un mot</span><span class="pointille"></span><span class="n">12</span></div>
-  <div><span class="t">5.9 Glose d'une phrase française</span><span class="pointille"></span><span class="n">12</span></div>
-  <div><span class="t">5.10 Tournures idiomatiques proposées</span><span class="pointille"></span><span class="n">13</span></div>
+<div class="saut"></div>
+<h2>Liste des figures</h2>
+<div class="toc">
+  <div><span class="t">5.1 Le panneau de recherche et ses trois onglets</span><span class="pointille"></span><span class="n">10</span></div>
+  <div><span class="t">5.2 Le pont de traduction affiché au-dessus des résultats</span><span class="pointille"></span><span class="n">10</span></div>
+  <div><span class="t">5.3 Pages Web trouvées pour la requête mooré « koom »</span><span class="pointille"></span><span class="n">11</span></div>
+  <div><span class="t">5.4 L'onglet Dictionnaire : filtres et sélecteur d'index</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t">5.5 Une entrée et ses renvois</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t">5.6 Le compteur rappelle le filtre de domaine actif</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t">5.7 Avertissement lorsque l'index choisi ne convient pas</span><span class="pointille"></span><span class="n">13</span></div>
+  <div><span class="t">5.8 Ressources externes proposées pour un mot</span><span class="pointille"></span><span class="n">13</span></div>
+  <div><span class="t">5.9 Glose d'une phrase française</span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t">5.10 Tournures idiomatiques proposées</span><span class="pointille"></span><span class="n">14</span></div>
 </div>
 
-<h3 class="serre">Liste des tableaux</h3>
-<div class="toc petit">
-  <div><span class="t">1 Sigles et abréviations</span><span class="pointille"></span><span class="n">3</span></div>
-  <div><span class="t">1.1 Contenu du dossier livré</span><span class="pointille"></span><span class="n">4</span></div>
-  <div><span class="t">2.1 Prérequis matériels et logiciels</span><span class="pointille"></span><span class="n">5</span></div>
-  <div><span class="t">5.1 Les cinq index de recherche</span><span class="pointille"></span><span class="n">11</span></div>
-  <div><span class="t">6.1 Problèmes fréquents et solutions</span><span class="pointille"></span><span class="n">14</span></div>
-  <div><span class="t">A.1 Récapitulatif des adresses</span><span class="pointille"></span><span class="n">16</span></div>
-  <div><span class="t">B.1 Conformité aux exigences fonctionnelles</span><span class="pointille"></span><span class="n">17</span></div>
+<div class="saut"></div>
+<h2>Liste des tableaux</h2>
+<div class="toc">
+  <div><span class="t">1 Sigles et abréviations</span><span class="pointille"></span><span class="n">5</span></div>
+  <div><span class="t">1.1 Contenu du dossier livré</span><span class="pointille"></span><span class="n">6</span></div>
+  <div><span class="t">2.1 Prérequis matériels et logiciels</span><span class="pointille"></span><span class="n">7</span></div>
+  <div><span class="t">5.1 Les cinq index de recherche</span><span class="pointille"></span><span class="n">13</span></div>
+  <div><span class="t">6.1 Problèmes fréquents et solutions</span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t">A.1 Récapitulatif des adresses</span><span class="pointille"></span><span class="n">18</span></div>
+  <div><span class="t">B.1 Conformité aux exigences fonctionnelles</span><span class="pointille"></span><span class="n">19</span></div>
 </div>
 
 <!-- ================= SIGLES ================= -->

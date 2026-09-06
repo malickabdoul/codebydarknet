@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Cahier des charges technique — Moteur de recherche sémantique pour le mooré</title>
+<title>Cahier des charges technique : Moteur de recherche sémantique pour le mooré</title>
 <style>
   @page { size: A4; margin: 20mm 18mm 18mm 18mm; }
 
@@ -99,10 +99,10 @@
 
   <div class="type">CAHIER DES CHARGES TECHNIQUE</div>
   <div class="theme">Moteur de recherche sémantique pour le mooré</div>
-  <div class="lot">Recherche Web multilingue mooré – français – anglais</div>
+  <div class="lot">Recherche Web multilingue : mooré, français, anglais</div>
 
   <div class="equipe">
-    <b>Groupe N° 9</b>
+    <b>Présenté par</b>
     <table>
       <tr><td>SAVADOGO Adjaratou</td></tr>
       <tr><td>KOMPAORE Malick</td></tr>
@@ -149,8 +149,9 @@
   <div class="n2"><span class="t">6.4 Tests et validation</span><span class="pointille"></span><span class="n">15</span></div>
   <div class="n2"><span class="t">6.5 Gestion de versions et dépendances</span><span class="pointille"></span><span class="n">15</span></div>
   <div><span class="t"><b>7. Choix techniques et alternatives écartées</b></span><span class="pointille"></span><span class="n">16</span></div>
-  <div><span class="t"><b>Annexe A — Résultats du banc d'essai</b></span><span class="pointille"></span><span class="n">17</span></div>
-  <div><span class="t"><b>Annexe B — Contrats des points d'entrée</b></span><span class="pointille"></span><span class="n">18</span></div>
+  <div><span class="t"><b>Annexe A : Résultats du banc d'essai</b></span><span class="pointille"></span><span class="n">17</span></div>
+  <div><span class="t"><b>Annexe B : Contrats des points d'entrée</b></span><span class="pointille"></span><span class="n">18</span></div>
+  <div><span class="t"><b>Références bibliographiques</b></span><span class="pointille"></span><span class="n">20</span></div>
 </div>
 
 <!-- ============ INTRODUCTION ============ -->
@@ -173,7 +174,7 @@
   Le mooré est une langue à faibles ressources : peu de contenus numériques,
   peu d'outils de traitement automatique, et des caractères absents des
   claviers courants. La difficulté centrale du projet n'est donc pas de
-  chercher sur le Web — les moteurs existants le font — mais de <b>franchir la
+  chercher sur le Web (les moteurs existants le font), mais de <b>franchir la
   barrière de langue</b> entre une requête en mooré et un Web
   majoritairement francophone ou anglophone.
 </p>
@@ -214,19 +215,19 @@
 <h3>1.2 Architecture en couches</h3>
 <div class="couches">
   <div class="couche">
-    <span class="nom">Couche présentation</span> — page HTML/CSS/JavaScript sans framework
+    <span class="nom">Couche présentation</span> : page HTML/CSS/JavaScript sans framework
     <div class="det">Trois modes : recherche Web, consultation du dictionnaire, glossage de phrases.
     Clavier virtuel pour les dix caractères propres au mooré.</div>
   </div>
   <div class="fleche">▲ JSON ▼</div>
   <div class="couche">
-    <span class="nom">Couche service</span> — API Flask (<span class="mono">api.py</span>)
+    <span class="nom">Couche service</span> : API Flask (<span class="mono">api.py</span>)
     <div class="det">Validation des paramètres, restriction des origines, sérialisation JSON,
     service de la page d'interface.</div>
   </div>
   <div class="fleche">▲ ▼</div>
   <div class="couche">
-    <span class="nom">Couche métier</span> — quatre modules Python
+    <span class="nom">Couche métier</span> : quatre modules Python
     <div class="det"><span class="mono">search.py</span> (cinq index et leur routage) ·
     <span class="mono">translate.py</span> (segmentation et glossage) ·
     <span class="mono">recherche_web.py</span> (pont et sources externes) ·
@@ -234,13 +235,13 @@
   </div>
   <div class="fleche">▲ ▼</div>
   <div class="couche">
-    <span class="nom">Couche données</span> — corpus et index
+    <span class="nom">Couche données</span> : corpus et index
     <div class="det">Corpus CSV (10 566 entrées) · index FAISS TF-IDF/LSA ·
     index de caractères sur les en-têtes · index d'embeddings (optionnel).</div>
   </div>
   <div class="fleche">▲ HTTPS ▼</div>
   <div class="couche">
-    <span class="nom">Sources externes</span> — API MediaWiki
+    <span class="nom">Sources externes</span> : API MediaWiki
     <div class="det">Wikipédia en mooré · Wikipédia en français · Wiktionnaire.
     Interrogées en parallèle, sans clé d'API.</div>
   </div>
@@ -265,7 +266,7 @@
 6.  Normalisation   suppression du balisage &lt;span class="searchmatch"&gt;,
                     décodage des entités HTML, reconstruction des URL
 7.  Reclassement    encodage de « eau » et de chaque couple titre+extrait,
-                    tri par similarité cosinus — SAUF les pages en mooré
+                    tri par similarité cosinus, SAUF les pages en mooré
 8.  Entrelacement   une page en mooré toutes les trois positions
 9.  Réponse JSON    { pont, sources, resultats: [{titre, extrait, url, ...}] }
 10. Affichage       titre cliquable, extrait, source, terme interrogé</pre>
@@ -280,7 +281,7 @@
 
 <h3>2.1 Glossaire des notions employées</h3>
 <table>
-  <caption><b>Tableau 2.1</b> — Notions techniques employées dans ce document.</caption>
+  <caption><b>Tableau 2.1</b> : Notions techniques employées dans ce document.</caption>
   <tr><th style="width:24%">Notion</th><th>Définition retenue</th></tr>
   <tr><td>Vecteur</td><td>Représentation numérique d'un texte, permettant de mesurer une proximité entre textes</td></tr>
   <tr><td>TF-IDF</td><td>Pondération donnant du poids aux termes fréquents dans un document et rares dans le corpus</td></tr>
@@ -300,7 +301,7 @@
   <b>10 566 entrées</b> réparties en onze colonnes.
 </p>
 <table>
-  <caption><b>Tableau 2.2</b> — Colonnes du corpus et taux de remplissage mesurés.</caption>
+  <caption><b>Tableau 2.2</b> : Colonnes du corpus et taux de remplissage mesurés.</caption>
   <tr><th style="width:30%">Colonne</th><th style="width:18%">Remplissage</th><th>Usage dans le moteur</th></tr>
   <tr><td class="mono">mot_moore</td><td>100 %</td><td>En-tête indexé ; sert de terme mooré au pont</td></tr>
   <tr><td class="mono">definition_francais</td><td>100 %</td><td>Index inverse français ; terme envoyé au Web</td></tr>
@@ -317,8 +318,7 @@
 <p class="petit">
   Le cahier des charges fonctionnel anticipait que les champs secondaires
   seraient peu renseignés et proposait de traiter leur exploitation comme une
-  évolution. La mesure confirme le diagnostic — 1,5 % pour les antonymes — mais
-  ces champs ont malgré tout été exploités, l'interface se contentant de les
+  évolution. La mesure confirme le diagnostic (1,5 % pour les antonymes), mais ces champs ont malgré tout été exploités, l'interface se contentant de les
   omettre lorsqu'ils sont vides.
 </p>
 
@@ -353,7 +353,7 @@
   projet. Cinq sont donc disponibles, dont un mode automatique.
 </p>
 <table>
-  <caption><b>Tableau 2.3</b> — Les cinq index de recherche.</caption>
+  <caption><b>Tableau 2.3</b> : Les cinq index de recherche.</caption>
   <tr><th style="width:16%">Index</th><th style="width:32%">Ce qu'il indexe</th><th>Point fort / limite</th></tr>
   <tr>
     <td class="mono">entrees</td>
@@ -388,8 +388,7 @@
   ressources, ne figure pas. Son tokenizer découpe les mots mooré en sous-mots
   dépourvus de signification pour lui. Mesuré, l'index sémantique obtient
   <b>0,0 %</b> de réussite sur une requête mooré. C'est la raison pour laquelle
-  le remplacement pur du TF-IDF par des embeddings — solution qui paraissait
-  naturelle — a été écarté.
+  le remplacement pur du TF-IDF par des embeddings, solution qui paraissait naturelle, a été écarté.
 </div>
 
 <h3>2.5 Fusion par les rangs</h3>
@@ -428,7 +427,7 @@ score(document) =  Σ  ───────────────────
 </ol>
 <p>
   L'aiguillage envoie ensuite le mooré vers <code>entrees</code> et le français
-  ou l'anglais vers <code>hybride</code> — ou vers <code>tfidf</code> lorsque
+  ou l'anglais vers <code>hybride</code>, ou vers <code>tfidf</code> lorsque
   l'index sémantique n'a pas été construit.
 </p>
 
@@ -495,7 +494,7 @@ score(document) =  Σ  ───────────────────
   La segmentation procède ensuite par correspondance la plus longue : sur une
   suite de mots, les expressions figées sont cherchées avant les mots isolés.
   Le corpus contient 504 expressions et 5 753 gloses françaises de plus d'un
-  mot, ce qui rend cette priorité déterminante — « n'importe comment » doit
+  mot, ce qui rend cette priorité déterminante : « n'importe comment » doit
   rendre <i>a bal</i> d'un bloc et non « n'importe » suivi de « comment ».
 </p>
 
@@ -511,7 +510,7 @@ score(document) =  Σ  ───────────────────
   par une préposition y sont exprimés par postposition ou par simple
   juxtaposition. Les chercher produit des faux amis : <b>« la » rendait
   <i>ka</i>, qui est la particule de négation</b>. Un garde-fou complémentaire
-  filtre par catégorie grammaticale les mots-outils ambigus — sans lui, « pas »
+  filtre par catégorie grammaticale les mots-outils ambigus : sans lui, « pas »
   rendait <i>kẽndre</i>, le nom « enjambée », et « est » rendait
   <i>yaanga</i>, le point cardinal.
 </p>
@@ -529,12 +528,12 @@ score(document) =  Σ  ───────────────────
   combiner :
 </p>
 <table>
-  <caption><b>Tableau 3.1</b> — Comportement des index sur la recherche de tournures.</caption>
+  <caption><b>Tableau 3.1</b> : Comportement des index sur la recherche de tournures.</caption>
   <tr><th style="width:22%">Index</th><th>Comportement observé</th></tr>
   <tr><td class="mono">tfidf</td>
       <td>Classe bien (<i>laafɩ bala</i> au rang 1) mais invente sur les phrases descriptives : « la maison de mon père » lui inspirait une tournure sans rapport, à 0,72.</td></tr>
   <tr><td class="mono">semantique</td>
-      <td>Ne propose rien sur ces mêmes phrases — le bruit y tombe entre 0,03 et 0,35 — mais classe mal : les définitions d'un ou deux mots obtiennent des scores élevés partout, et <i>laafɩ bala</i> ne sortait qu'au rang 3.</td></tr>
+      <td>Ne propose rien sur ces mêmes phrases (le bruit y tombe entre 0,03 et 0,35), mais classe mal : les définitions d'un ou deux mots obtiennent des scores élevés partout, et <i>laafɩ bala</i> ne sortait qu'au rang 3.</td></tr>
   <tr><td><b>retenu</b></td>
       <td><b>Ordre par fusion RRF</b>, qui exige l'accord des deux index et remet <i>laafɩ bala</i> au rang 1, <b>et filtre par le cosinus sémantique</b> (seuil 0,55), qui élimine le bruit lexical. Le score affiché est ce cosinus, seul interprétable.</td></tr>
 </table>
@@ -573,7 +572,7 @@ score(document) =  Σ  ───────────────────
   quel membre du groupe ou par l'enseignant.
 </p>
 <table>
-  <caption><b>Tableau 4.1</b> — Sources Web interrogées.</caption>
+  <caption><b>Tableau 4.1</b> : Sources Web interrogées.</caption>
   <tr><th style="width:26%">Source</th><th style="width:18%">Langue interrogée</th><th>Apport</th></tr>
   <tr><td>Wikipédia en mooré</td><td>mooré</td><td>Contenus rédigés en mooré (1 326 articles)</td></tr>
   <tr><td>Wikipédia en français</td><td>français</td><td>Couverture encyclopédique large</td></tr>
@@ -650,7 +649,7 @@ score(document) =  Σ  ───────────────────
   fichier CSV, afin que celui-ci reste identique à sa source.
 </p>
 <table>
-  <caption><b>Tableau 5.1</b> — Défauts relevés et traitements appliqués.</caption>
+  <caption><b>Tableau 5.1</b> : Défauts relevés et traitements appliqués.</caption>
   <tr><th style="width:30%">Défaut</th><th style="width:12%">Ampleur</th><th>Traitement</th></tr>
   <tr>
     <td>En-têtes mêlant le mot mooré et sa traduction : <span class="mono">'Come! y'</span>, <span class="mono">'why? bõeedga'</span></td>
@@ -699,7 +698,7 @@ score(document) =  Σ  ───────────────────
   d'interface. Les contrats détaillés figurent en annexe B.
 </p>
 <table>
-  <caption><b>Tableau 6.1</b> — Points d'entrée de l'API.</caption>
+  <caption><b>Tableau 6.1</b> : Points d'entrée de l'API.</caption>
   <tr><th style="width:34%">Route</th><th>Rôle</th></tr>
   <tr><td class="mono">GET /</td><td>Sert l'interface web</td></tr>
   <tr><td class="mono">GET /api/web</td><td>Recherche de pages sur le Web (pont, sources, reclassement)</td></tr>
@@ -740,7 +739,7 @@ score(document) =  Σ  ───────────────────
   requête, ce qui coûtait plus d'une demi-seconde par recherche.
 </p>
 <table>
-  <caption><b>Tableau 6.2</b> — Latences mesurées, modèle chargé, k = 20.</caption>
+  <caption><b>Tableau 6.2</b> : Latences mesurées, modèle chargé, k = 20.</caption>
   <tr><th style="width:30%">Index</th><th style="width:24%">Latence</th><th>Observation</th></tr>
   <tr><td class="mono">entrees</td><td>20 – 25 ms</td><td>Le plus rapide</td></tr>
   <tr><td class="mono">semantique</td><td>96 – 115 ms</td><td>Plus rapide que TF-IDF</td></tr>
@@ -762,19 +761,19 @@ score(document) =  Σ  ───────────────────
   La validation repose sur trois dispositifs complémentaires.
 </p>
 <ol>
-  <li><b>Tests de non-régression</b> — <code>test_moteur.py</code>, 66 tests,
+  <li><b>Tests de non-régression</b> : <code>test_moteur.py</code>, 66 tests,
       sans dépendance supplémentaire. Les tests exigeant l'index sémantique ou
       un accès réseau se sautent d'eux-mêmes. Ils couvrent les points où le
       corpus piège : domaines composés, en-têtes corrompus, colonnes
       contaminées, élisions et ligatures, fragments de définition, bornes des
       paramètres, restriction des origines.</li>
-  <li><b>Validation par mutation</b> — cinq régressions ont été introduites
+  <li><b>Validation par mutation</b> : cinq régressions ont été introduites
       volontairement dans le code pour vérifier que la suite les détecte :
       découpage naïf des domaines, arrêt du démêlage des renvois, article « la »
       de nouveau traduit, fragments réindexés, en-tête corrompu mal réparé.
       <b>Les cinq ont été détectées.</b> Une suite verte ne prouvant rien par
       elle-même, cette étape établit qu'elle mesure bien quelque chose.</li>
-  <li><b>Banc d'essai chiffré</b> — <code>benchmark.py</code> compare les cinq
+  <li><b>Banc d'essai chiffré</b> : <code>benchmark.py</code> compare les cinq
       index sur trois tâches, le corpus servant de vérité terrain. Les résultats
       figurent en annexe A.</li>
 </ol>
@@ -787,7 +786,7 @@ score(document) =  Σ  ───────────────────
   <code>main</code>, afin que le groupe puisse relire.
 </p>
 <table>
-  <caption><b>Tableau 6.3</b> — Dépendances.</caption>
+  <caption><b>Tableau 6.3</b> : Dépendances.</caption>
   <tr><th style="width:30%">Bibliothèque</th><th style="width:18%">Statut</th><th>Rôle</th></tr>
   <tr><td>pandas, numpy, scipy</td><td>requise</td><td>Manipulation du corpus et des matrices</td></tr>
   <tr><td>scikit-learn</td><td>requise</td><td>TF-IDF et réduction LSA</td></tr>
@@ -811,7 +810,7 @@ score(document) =  Σ  ───────────────────
   avec la raison de l'arbitrage. Chaque écartement s'appuie sur une mesure.
 </p>
 <table>
-  <caption><b>Tableau 7.1</b> — Alternatives envisagées puis écartées.</caption>
+  <caption><b>Tableau 7.1</b> : Alternatives envisagées puis écartées.</caption>
   <tr><th style="width:32%">Alternative</th><th>Raison de l'écartement</th></tr>
   <tr>
     <td>Remplacer le TF-IDF par des embeddings pré-entraînés</td>
@@ -845,14 +844,14 @@ score(document) =  Σ  ───────────────────
 
 <!-- ============ ANNEXE A ============ -->
 <div class="saut"></div>
-<h2>Annexe A — Résultats du banc d'essai</h2>
+<h2>Annexe A : Résultats du banc d'essai</h2>
 <p>
   Mesures obtenues par <code>python3 benchmark.py</code>. La vérité terrain est
   le corpus lui-même ; ces chiffres évaluent donc la qualité de
   <b>récupération</b> et non la généralisation à des formulations inédites.
 </p>
 <table>
-  <caption><b>Tableau A.1</b> — Comparaison des cinq index sur deux tâches.</caption>
+  <caption><b>Tableau A.1</b> : Comparaison des cinq index sur deux tâches.</caption>
   <tr>
     <th style="width:20%">Index</th>
     <th colspan="2">Expression retrouvée depuis sa définition française <span class="petit">(306 cas)</span></th>
@@ -870,13 +869,13 @@ score(document) =  Σ  ───────────────────
   l'autre. Le mode <code>auto</code> est le seul à obtenir de bons résultats
   dans les deux colonnes, ce qui justifie le routage par langue plutôt que le
   choix d'un index unique. L'écart entre <code>auto</code> et
-  <code>entrees</code> sur le mooré — 57,4 % contre 59,1 % — est le coût des
+  <code>entrees</code> sur le mooré (57,4 % contre 59,1 %) est le coût des
   requêtes mal aiguillées : un mot déformé ressemble parfois assez à du
   français pour partir du mauvais côté.
 </p>
 <h3>Gain apporté par la segmentation</h3>
 <table>
-  <caption><b>Tableau A.2</b> — Retrouver une expression mooré depuis sa définition (306 cas).</caption>
+  <caption><b>Tableau A.2</b> : Retrouver une expression mooré depuis sa définition (306 cas).</caption>
   <tr><th style="width:46%">Méthode</th><th style="width:22%">top-1</th><th>top-3</th></tr>
   <tr><td>Vecteur unique sur la phrase entière</td><td>52,3 %</td><td>72,9 %</td></tr>
   <tr><td><b>Segmentation, expressions d'abord</b></td><td class="ok">82,4 %</td><td class="ok">93,5 %</td></tr>
@@ -889,7 +888,7 @@ score(document) =  Σ  ───────────────────
 
 <!-- ============ ANNEXE B ============ -->
 <div class="saut"></div>
-<h2>Annexe B — Contrats des points d'entrée</h2>
+<h2>Annexe B : Contrats des points d'entrée</h2>
 
 <h4>GET /api/web</h4>
 <pre>Paramètres  q  requête (obligatoire, 200 caractères maxi)
@@ -953,3 +952,70 @@ Note        type vaut « expression », « mot », « ignore » ou « inconnu »
               "backends": ["tfidf", "entrees", "semantique", "hybride", "auto"],
               "backend_defaut": "auto",
               "semantique_disponible": true }</pre>
+
+<!-- ============ RÉFÉRENCES ============ -->
+<div class="saut"></div>
+<h2>Références bibliographiques</h2>
+
+<h3>Ressources linguistiques</h3>
+<ol>
+  <li>SIL International. <i>Webonary Moore</i>, dictionnaire mooré, français et
+      anglais en ligne. Source du corpus employé dans ce projet.
+      <span class="mono">https://www.webonary.org/moore/</span></li>
+  <li>EBERHARD, D. M., SIMONS, G. F., FENNIG, C. D. (dir.).
+      <i>Ethnologue : Languages of the World</i>, notice « Mooré (mos) ».
+      SIL International.
+      <span class="mono">https://www.ethnologue.com/language/mos/</span></li>
+  <li>Wikimedia Foundation. <i>Wikipidiya</i>, Wikipédia en langue mooré.
+      <span class="mono">https://mos.wikipedia.org/</span></li>
+</ol>
+
+<h3>Recherche d'information et représentation vectorielle</h3>
+<ol start="4">
+  <li>SALTON, G., BUCKLEY, C. <i>Term-weighting approaches in automatic text
+      retrieval</i>. Information Processing and Management, vol. 24, n° 5,
+      1988, p. 513 à 523.</li>
+  <li>DEERWESTER, S., DUMAIS, S. T., FURNAS, G. W., LANDAUER, T. K.,
+      HARSHMAN, R. <i>Indexing by Latent Semantic Analysis</i>. Journal of the
+      American Society for Information Science, vol. 41, n° 6, 1990,
+      p. 391 à 407.</li>
+  <li>CORMACK, G. V., CLARKE, C. L. A., BUETTCHER, S. <i>Reciprocal Rank
+      Fusion outperforms Condorcet and individual rank learning methods</i>.
+      Actes de la conférence SIGIR, 2009, p. 758 à 759.</li>
+  <li>JOHNSON, J., DOUZE, M., JÉGOU, H. <i>Billion-scale similarity search with
+      GPUs</i>. IEEE Transactions on Big Data, 2019.
+      <span class="mono">https://arxiv.org/abs/1702.08734</span></li>
+</ol>
+
+<h3>Modèles de langue et plongements lexicaux</h3>
+<ol start="8">
+  <li>REIMERS, N., GUREVYCH, I. <i>Sentence-BERT : Sentence Embeddings using
+      Siamese BERT-Networks</i>. Actes de la conférence EMNLP-IJCNLP, 2019.
+      <span class="mono">https://arxiv.org/abs/1908.10084</span></li>
+  <li>REIMERS, N., GUREVYCH, I. <i>Making Monolingual Sentence Embeddings
+      Multilingual using Knowledge Distillation</i>. Actes de la conférence
+      EMNLP, 2020. Article décrivant la méthode dont est issu le modèle
+      <span class="mono">paraphrase-multilingual-MiniLM-L12-v2</span> employé
+      ici. <span class="mono">https://arxiv.org/abs/2004.09813</span></li>
+</ol>
+
+<h3>Outils et bibliothèques</h3>
+<ol start="10">
+  <li>PEDREGOSA, F. et coll. <i>Scikit-learn : Machine Learning in Python</i>.
+      Journal of Machine Learning Research, vol. 12, 2011, p. 2825 à 2830.
+      <span class="mono">https://jmlr.org/papers/v12/pedregosa11a.html</span></li>
+  <li>Facebook AI Research. <i>FAISS, a library for efficient similarity search
+      and clustering of dense vectors</i>.
+      <span class="mono">https://github.com/facebookresearch/faiss</span></li>
+  <li>Pallets. <i>Flask, documentation officielle</i>.
+      <span class="mono">https://flask.palletsprojects.com/</span></li>
+  <li>Wikimedia Foundation. <i>MediaWiki Action API : module de recherche</i>.
+      Interface employée pour interroger les trois sources Web du projet.
+      <span class="mono">https://www.mediawiki.org/wiki/API:Search</span></li>
+</ol>
+
+<p class="petit">
+  Les ressources en ligne ont été consultées le 6 septembre 2026. Le site
+  Webonary est protégé par un dispositif anti-robot : son accès est possible
+  depuis un navigateur ordinaire mais refusé aux requêtes automatisées.
+</p>

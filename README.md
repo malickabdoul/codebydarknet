@@ -10,7 +10,9 @@ Le corpus Webonary Moore (10 566 entrées), indexé dans une base vectorielle
 complémentaires donnent accès au dictionnaire lui-même et au glossage de
 phrases.
 
-**Manuel d'utilisation** : [`docs/manuel_utilisation.pdf`](docs/manuel_utilisation.pdf)
+**Documents du projet**
+- [`docs/manuel_utilisation.pdf`](docs/manuel_utilisation.pdf) — manuel d'utilisation (20 pages)
+- [`docs/cahier_charges_technique.pdf`](docs/cahier_charges_technique.pdf) — cahier des charges technique (19 pages)
 
 ---
 

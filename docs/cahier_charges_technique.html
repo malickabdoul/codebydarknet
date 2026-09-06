@@ -119,39 +119,42 @@
 <h2 style="margin-top:0">Table des matières</h2>
 <div class="toc">
   <div><span class="t"><b>Introduction générale</b></span><span class="pointille"></span><span class="n">3</span></div>
-  <div><span class="t"><b>1. Architecture générale de la plateforme</b></span><span class="pointille"></span><span class="n">4</span></div>
-  <div class="n2"><span class="t">1.1 Rappel du besoin et principe de conception</span><span class="pointille"></span><span class="n">4</span></div>
-  <div class="n2"><span class="t">1.2 Architecture en couches</span><span class="pointille"></span><span class="n">4</span></div>
-  <div class="n2"><span class="t">1.3 Trajet d'une requête utilisateur</span><span class="pointille"></span><span class="n">4</span></div>
-  <div><span class="t"><b>2. Conception de la base vectorielle</b></span><span class="pointille"></span><span class="n">6</span></div>
-  <div class="n2"><span class="t">2.1 Glossaire des notions employées</span><span class="pointille"></span><span class="n">6</span></div>
-  <div class="n2"><span class="t">2.2 Le corpus source et sa structure</span><span class="pointille"></span><span class="n">6</span></div>
-  <div class="n2"><span class="t">2.3 Démarche de vectorisation</span><span class="pointille"></span><span class="n">6</span></div>
-  <div class="n2"><span class="t">2.4 Les cinq index et leur rôle</span><span class="pointille"></span><span class="n">7</span></div>
-  <div class="n2"><span class="t">2.5 Fusion par les rangs</span><span class="pointille"></span><span class="n">7</span></div>
-  <div class="n2"><span class="t">2.6 Routage automatique selon la langue</span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">2.7 Priorité de la correspondance exacte</span><span class="pointille"></span><span class="n">8</span></div>
-  <div><span class="t"><b>3. Traitement automatique de la langue</b></span><span class="pointille"></span><span class="n">9</span></div>
-  <div class="n2"><span class="t">3.1 Normalisation du français</span><span class="pointille"></span><span class="n">9</span></div>
-  <div class="n2"><span class="t">3.2 Index inverse et segmentation</span><span class="pointille"></span><span class="n">9</span></div>
-  <div class="n2"><span class="t">3.3 Lemmatisation et mots-outils</span><span class="pointille"></span><span class="n">9</span></div>
-  <div class="n2"><span class="t">3.4 Tournures idiomatiques</span><span class="pointille"></span><span class="n">9</span></div>
-  <div class="n2"><span class="t">3.5 Découpage des domaines</span><span class="pointille"></span><span class="n">10</span></div>
-  <div><span class="t"><b>4. Recherche sur le Web</b></span><span class="pointille"></span><span class="n">11</span></div>
-  <div class="n2"><span class="t">4.1 Sources retenues et critères de choix</span><span class="pointille"></span><span class="n">11</span></div>
-  <div class="n2"><span class="t">4.2 Le pont de traduction</span><span class="pointille"></span><span class="n">11</span></div>
-  <div class="n2"><span class="t">4.3 Reclassement et exposition du mooré</span><span class="pointille"></span><span class="n">11</span></div>
-  <div><span class="t"><b>5. Qualité des données du corpus</b></span><span class="pointille"></span><span class="n">13</span></div>
-  <div><span class="t"><b>6. Spécifications techniques de mise en œuvre</b></span><span class="pointille"></span><span class="n">14</span></div>
-  <div class="n2"><span class="t">6.1 Exposition par une API applicative</span><span class="pointille"></span><span class="n">14</span></div>
-  <div class="n2"><span class="t">6.2 Sécurité et droits d'accès</span><span class="pointille"></span><span class="n">14</span></div>
-  <div class="n2"><span class="t">6.3 Qualité, performance et compatibilité</span><span class="pointille"></span><span class="n">14</span></div>
-  <div class="n2"><span class="t">6.4 Tests et validation</span><span class="pointille"></span><span class="n">15</span></div>
-  <div class="n2"><span class="t">6.5 Gestion de versions et dépendances</span><span class="pointille"></span><span class="n">15</span></div>
-  <div><span class="t"><b>7. Choix techniques et alternatives écartées</b></span><span class="pointille"></span><span class="n">16</span></div>
-  <div><span class="t"><b>Annexe A : Résultats du banc d'essai</b></span><span class="pointille"></span><span class="n">17</span></div>
-  <div><span class="t"><b>Annexe B : Contrats des points d'entrée</b></span><span class="pointille"></span><span class="n">18</span></div>
-  <div><span class="t"><b>Références bibliographiques</b></span><span class="pointille"></span><span class="n">20</span></div>
+  <div class="n2"><span class="t">Le problème n'était pas celui que nous pensions</span><span class="pointille"></span><span class="n">3</span></div>
+  <div class="n2"><span class="t">Notre démarche de travail</span><span class="pointille"></span><span class="n">3</span></div>
+  <div><span class="t"><b>1. Architecture générale de la plateforme</b></span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.1 Rappel du besoin et principe de conception</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.2 Architecture en couches</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.3 Trajet d'une requête utilisateur</span><span class="pointille"></span><span class="n">5</span></div>
+  <div><span class="t"><b>2. Conception de la base vectorielle</b></span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.1 Glossaire des notions employées</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.2 Le corpus source et sa structure</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.3 Démarche de vectorisation</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.4 Les cinq index et leur rôle</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.5 Fusion par les rangs</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.6 Routage automatique selon la langue</span><span class="pointille"></span><span class="n">9</span></div>
+  <div class="n2"><span class="t">2.7 Priorité de la correspondance exacte</span><span class="pointille"></span><span class="n">9</span></div>
+  <div><span class="t"><b>3. Traitement automatique de la langue</b></span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.1 Normalisation du français</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.2 Index inverse et segmentation</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.3 Lemmatisation et mots-outils</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.4 Tournures idiomatiques</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.5 Découpage des domaines</span><span class="pointille"></span><span class="n">11</span></div>
+  <div><span class="t"><b>4. Recherche sur le Web</b></span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">4.1 Sources retenues et critères de choix</span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">4.2 Le pont de traduction</span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">4.3 Reclassement et exposition du mooré</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t"><b>5. Qualité des données du corpus</b></span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t"><b>6. Spécifications techniques de mise en œuvre</b></span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.1 Exposition par une API applicative</span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.2 Sécurité et droits d'accès</span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.3 Qualité, performance et compatibilité</span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.4 Tests et validation</span><span class="pointille"></span><span class="n">16</span></div>
+  <div class="n2"><span class="t">6.5 Gestion de versions et dépendances</span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t"><b>7. Choix techniques et alternatives écartées</b></span><span class="pointille"></span><span class="n">17</span></div>
+  <div><span class="t"><b>Conclusion</b></span><span class="pointille"></span><span class="n">18</span></div>
+  <div><span class="t"><b>Annexe A : Résultats du banc d'essai</b></span><span class="pointille"></span><span class="n">19</span></div>
+  <div><span class="t"><b>Annexe B : Contrats des points d'entrée</b></span><span class="pointille"></span><span class="n">20</span></div>
+  <div><span class="t"><b>Références bibliographiques</b></span><span class="pointille"></span><span class="n">22</span></div>
 </div>
 
 <!-- ============ INTRODUCTION ============ -->
@@ -165,25 +168,84 @@
 </p>
 <p>
   Dans le cadre du cours de Web sémantique et web de données, ce document porte
-  sur le thème <b>Moteur de recherche sémantique pour le mooré</b>. L'objectif
-  est de permettre à un utilisateur de formuler une requête en mooré, en
-  français ou en anglais, et d'obtenir des pages Web accompagnées de leur
-  titre, d'un extrait et d'un lien.
+  sur le thème « Moteur de recherche sémantique pour le mooré ». Il s'agit de
+  permettre à un utilisateur de formuler une requête en mooré, en français ou
+  en anglais, et d'obtenir des pages Web accompagnées de leur titre, d'un
+  extrait et d'un lien.
+</p>
+
+<h3>Le problème n'était pas celui que nous pensions</h3>
+<p>
+  Nous avons abordé le sujet en croyant que la difficulté serait de chercher
+  sur le Web. Elle est ailleurs. Les moteurs de recherche existent, ils
+  fonctionnent bien, et rien ne justifierait d'en réécrire un pour un projet
+  d'étudiants.
 </p>
 <p>
-  Le mooré est une langue à faibles ressources : peu de contenus numériques,
-  peu d'outils de traitement automatique, et des caractères absents des
-  claviers courants. La difficulté centrale du projet n'est donc pas de
-  chercher sur le Web (les moteurs existants le font), mais de <b>franchir la
-  barrière de langue</b> entre une requête en mooré et un Web
-  majoritairement francophone ou anglophone.
+  La vraie difficulté vient de la langue. Le mooré est une langue à faibles
+  ressources : peu de contenus numériques, aucun outil de traitement
+  automatique librement disponible, et dix caractères qui ne figurent pas sur
+  un clavier ordinaire. Un moteur généraliste interrogé avec le mot
+  <code>koom</code> ne rend rien d'utile, non parce qu'il serait mauvais, mais
+  parce que ce mot ne lui dit rien. La question s'est donc déplacée : elle
+  n'est pas de savoir comment chercher sur le Web, mais comment faire franchir
+  à une requête mooré la barrière qui la sépare d'un Web francophone et
+  anglophone.
 </p>
 <p>
-  La réponse retenue est d'utiliser un dictionnaire vectoriel comme
-  <b>pont de traduction</b> plutôt que comme destination. Le document décrit
-  cette architecture, la conception de la base vectorielle, le traitement de la
-  langue, la recherche Web, puis les spécifications de mise en œuvre. Les
-  chiffres cités proviennent tous de mesures effectuées sur le corpus livré et
+  Notre réponse tient dans une inversion de rôle. Nous disposions du
+  dictionnaire <i>Webonary Moore</i>, soit 10 566 entrées mooré avec leurs
+  définitions française et anglaise, et nous avions d'abord conçu le projet
+  comme un moteur de recherche <i>dans</i> ce dictionnaire. Le cahier des
+  charges fonctionnel dit pourtant explicitement que le système doit dépasser
+  « une application limitée à un dictionnaire ». Nous avons donc changé la
+  place du corpus : de destination, il est devenu <b>pont</b>. Une requête
+  mooré est traduite avant d'être envoyée aux sources francophones, et une
+  requête française est rapprochée de son équivalent mooré pour interroger les
+  sources rédigées en mooré.
+</p>
+
+<h3>Notre démarche de travail</h3>
+<p>
+  Nous avons travaillé par itérations courtes, en gardant une règle : ne rien
+  décider sur une impression. Chaque fois qu'un choix se présentait, nous avons
+  cherché à le mesurer avant de trancher. Cette discipline nous a coûté du
+  temps, et elle nous a évité plusieurs erreurs que nous aurions autrement
+  livrées sans les voir.
+</p>
+<p>
+  Le cas le plus net concerne les plongements lexicaux. Remplacer notre
+  représentation TF-IDF par un modèle pré-entraîné paraissait l'amélioration
+  évidente, et c'est d'ailleurs ce que nous avions annoncé dans une première
+  version du <i>README</i>. La mesure a montré que ce modèle obtient
+  <b>0,0 %</b> de réussite sur une requête en mooré, langue qu'il ne connaît
+  pas. Le remplacement aurait amélioré une moitié du moteur en détruisant
+  l'autre. Nous avons conservé les deux représentations.
+</p>
+<p>
+  Nous avons ensuite fait la même erreur à plus petite échelle, en prenant la
+  fusion des deux index comme réglage par défaut. Là encore, la mesure a
+  tranché contre nous : la fusion gagne nettement en français et perd en
+  mooré. C'est de ce second constat qu'est né l'aiguillage par langue décrit
+  en section 2.6.
+</p>
+<p>
+  Un troisième épisode mérite d'être rapporté parce qu'il porte sur la mesure
+  elle-même. Notre banc d'essai indiquait 100 % de réussite pour tous les index
+  sur la recherche d'un mot mooré. Ce résultat était trop beau : nous avions
+  écrit un raccourci qui fait passer les correspondances exactes avant les
+  vecteurs, et le test interrogeait le moteur avec le mot exact. Il ne mesurait
+  donc plus que notre propre raccourci. Nous l'avons remplacé par une requête
+  volontairement mal orthographiée, ce qui force le passage par les vecteurs.
+  Le score est tombé à 16,6 %, et c'est ce chiffre honnête qui nous a conduits
+  à construire un index dédié aux en-têtes.
+</p>
+<p>
+  La suite du document présente l'architecture générale, la conception de la
+  base vectorielle, le traitement de la langue, la recherche Web, la qualité
+  des données, puis les spécifications de mise en œuvre. Une section est
+  consacrée aux solutions que nous avons envisagées puis écartées, avec la
+  mesure qui a motivé chaque arbitrage. Tous les chiffres cités sont
   reproductibles par la commande <code>python3 benchmark.py</code>.
 </p>
 
@@ -806,8 +868,20 @@ score(document) =  Σ  ───────────────────
 <div class="saut"></div>
 <h2>7. Choix techniques et alternatives écartées</h2>
 <p>
-  Cette section consigne les décisions qui auraient pu être prises autrement,
-  avec la raison de l'arbitrage. Chaque écartement s'appuie sur une mesure.
+  Cette section consigne les décisions qui auraient pu être prises autrement.
+  Nous la faisons figurer parce qu'un choix technique ne se juge pas seulement
+  sur ce qu'il apporte, mais sur ce qu'il écarte et pour quelle raison. Chaque
+  arbitrage rapporté ici s'appuie sur une mesure, et plusieurs d'entre eux vont
+  contre notre intuition de départ.
+</p>
+<p>
+  Nous avons remarqué en écrivant cette section que les quatre premières lignes
+  du tableau ont un point commun : dans les quatre cas, la solution écartée
+  était celle qui paraissait la plus moderne ou la plus élégante. Le modèle
+  pré-entraîné, la fusion systématique, la normalisation des scores et le
+  recours à un moteur commercial sont tous des choix défendables ailleurs. Ils
+  ne conviennent pas ici parce que notre langue de travail est peu dotée, et
+  c'est cette contrainte, plus que la technique elle-même, qui a décidé.
 </p>
 <table>
   <caption><b>Tableau 7.1</b> : Alternatives envisagées puis écartées.</caption>
@@ -841,6 +915,58 @@ score(document) =  Σ  ───────────────────
     <td>Le corpus doit rester identique à sa source pour rester vérifiable. Les corrections sont appliquées à la lecture, et documentées.</td>
   </tr>
 </table>
+
+
+<!-- ============ CONCLUSION ============ -->
+<div class="saut"></div>
+<h2>Conclusion</h2>
+<p>
+  Ce cahier des charges technique a précisé les choix retenus pour la
+  conception du moteur de recherche mooré. Il a présenté l'architecture en
+  couches, la conception de la base vectorielle, le traitement automatique
+  appliqué au français et au mooré, la recherche sur le Web, ainsi que les
+  éléments de mise en œuvre : interface de programmation, sécurité, mesures de
+  performance et validation.
+</p>
+<p>
+  Le principe qui organise l'ensemble est l'inversion du rôle du corpus.
+  Employé comme destination, le dictionnaire aurait produit une application de
+  consultation, ce que le cahier des charges fonctionnel écarte explicitement.
+  Employé comme pont, il permet à une requête mooré d'atteindre des contenus
+  qui ne sont pas rédigés dans cette langue. C'est cette bascule qui rend le
+  moteur multilingue plutôt que littéral, et c'est elle que nous
+  présenterions en premier si une seule idée devait être retenue de ce travail.
+</p>
+<p>
+  La mesure a occupé une place que nous n'avions pas prévue. Trois décisions
+  importantes ont été prises contre notre intuition initiale, et dans les trois
+  cas c'est un chiffre qui a tranché : le modèle pré-entraîné qui échoue
+  totalement sur le mooré, la fusion des index qui dégrade ce qu'elle devait
+  améliorer, et un banc d'essai qui affichait un résultat parfait parce qu'il
+  ne mesurait plus rien. Nous retenons de ce projet que la difficulté d'une
+  langue peu dotée ne se traite pas en appliquant les méthodes habituelles avec
+  plus de soin, mais en vérifiant à chaque étape qu'elles s'appliquent encore.
+</p>
+<p>
+  Trois limites subsistent et sont assumées. Les sources Web se réduisent à
+  trois encyclopédies, faute d'accès à un moteur généraliste sans clé d'interface.
+  Le glossage d'une phrase produit un alignement mot à mot et non une phrase
+  mooré grammaticale, ce qu'un dictionnaire ne permet pas de reconstruire.
+  L'interface enfin n'existe qu'en français, alors que le public visé par le
+  cahier des charges fonctionnel comprend des locuteurs du mooré ne maîtrisant
+  pas nécessairement le français écrit ; c'est, de nos trois limites, celle qui
+  nous paraît la plus contradictoire avec l'esprit du projet, et la première à
+  traiter.
+</p>
+<p>
+  Les prolongements naturels sont l'ajout d'un moteur généraliste comme
+  quatrième source, la reconnaissance vocale prévue par le cahier des charges
+  fonctionnel en priorité basse, la traduction de l'interface en mooré, et
+  l'extension à d'autres langues nationales du Burkina Faso. L'architecture a
+  été conçue pour les accueillir : les sources Web et les index de recherche
+  sont enfichables, et ajouter l'un ou l'autre revient à déclarer une entrée
+  supplémentaire.
+</p>
 
 <!-- ============ ANNEXE A ============ -->
 <div class="saut"></div>

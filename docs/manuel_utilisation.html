@@ -242,18 +242,26 @@
 </p>
 <p>
   Le cœur du dispositif est un dictionnaire vectoriel construit sur le corpus
-  <i>Webonary Moore</i> (10 566 entrées). Ce dictionnaire ne sert pas seulement
-  à consulter des mots : il fait office de <b>pont de traduction</b>. Une
-  requête en mooré est traduite avant d'être envoyée aux sources francophones,
-  et une requête française est rapprochée de son équivalent mooré pour
-  interroger les sources en mooré. C'est ce qui rend le moteur réellement
-  multilingue plutôt que littéral.
+  <i>Webonary Moore</i>, qui compte 10 566 entrées. Ce dictionnaire ne sert pas
+  seulement à consulter des mots : il fait office de <b>pont de traduction</b>.
+</p>
+<p>
+  Ce point mérite une explication, car il commande tout le fonctionnement de
+  l'application. Un moteur de recherche ordinaire interrogé avec le mot mooré
+  <code>koom</code> ne rend rien d'utile : ce mot ne figure pas dans les pages
+  qu'il a indexées. Nous traduisons donc la requête avant de l'envoyer.
+  <code>koom</code> devient « eau », et c'est ce terme qui part vers les
+  sources francophones, pendant que le mot d'origine part vers les sources
+  rédigées en mooré. Une requête française suit le chemin inverse. C'est ce
+  passage par le dictionnaire qui rend le moteur réellement multilingue au lieu
+  de le laisser buter sur la langue de départ.
 </p>
 <div class="encadre">
   <b>Trois usages, trois onglets.</b> <b>Web</b> cherche des pages sur
   Internet ; <b>Dictionnaire</b> explore le corpus mooré (définitions,
   synonymes, domaines) ; <b>Traduction</b> glose une phrase française entière
-  en mooré.
+  en mooré. L'onglet Web est actif au démarrage, les deux autres restent
+  accessibles à tout moment et fonctionnent sans connexion.
 </div>
 
 <h3>1.2 Architecture technique</h3>
@@ -681,8 +689,9 @@ python benchmark.py</pre>
 <!-- ================= 7. LIMITES ================= -->
 <h2>7. Limites connues</h2>
 <p>
-  Cette section recense honnêtement ce que l'application ne fait pas, afin
-  qu'aucun utilisateur ne s'attende à davantage.
+  Cette section recense ce que l'application ne fait pas. Nous préférons
+  l'écrire ici plutôt que de laisser un utilisateur le découvrir en se fiant à
+  un résultat qu'il aurait cru plus solide qu'il ne l'est.
 </p>
 <ul>
   <li><b>Les sources Web sont au nombre de trois</b> : Wikipédia en mooré,
@@ -709,23 +718,34 @@ python benchmark.py</pre>
 <!-- ================= 8. CONCLUSION ================= -->
 <h2>8. Conclusion</h2>
 <p>
-  L'application est autonome : une fois les dépendances installées, la commande
+  L'application est autonome. Une fois les dépendances installées, la commande
   <code>python api.py</code> suffit à la démarrer, et l'interface est
   immédiatement disponible sur <b>http://127.0.0.1:5000/</b>. Aucun serveur de
-  données externe n'est à configurer, la base vectorielle étant fournie
-  construite dans le dépôt.
+  données externe n'est à configurer : la base vectorielle est fournie
+  construite dans le dépôt, et les index lexicaux fonctionnent sans aucune
+  installation supplémentaire.
 </p>
 <p>
   Le moteur répond à une requête formulée en mooré, en français ou en anglais,
   et rend des pages Web avec leur titre, un extrait et un lien. Le corpus
-  Webonary sert de pont entre les langues, et un reclassement sémantique
-  améliore la pertinence des pages proposées. Deux onglets complémentaires
+  Webonary sert de pont entre les langues, et un reclassement par proximité de
+  sens améliore la pertinence des pages proposées. Deux onglets complémentaires
   donnent accès au dictionnaire lui-même et au glossage de phrases.
 </p>
 <p>
-  Les évolutions naturelles sont l'ajout d'un moteur de recherche généraliste
-  comme quatrième source, la reconnaissance vocale, et l'extension à d'autres
-  langues nationales du Burkina Faso.
+  Nous avons cherché, dans ce manuel, à ne pas présenter l'application comme
+  plus capable qu'elle ne l'est. Les résultats du mode Traduction sont des
+  gloses et non des phrases mooré ; les suggestions de tournures idiomatiques
+  demandent d'être validées par un locuteur ; les sources Web se limitent à
+  trois encyclopédies. Ces réserves figurent dans la section 7 plutôt qu'en
+  note de bas de page, parce qu'un utilisateur qui les ignore se méprendra sur
+  ce qu'il lit à l'écran.
+</p>
+<p>
+  Les évolutions envisagées sont l'ajout d'un moteur de recherche généraliste
+  comme quatrième source, la reconnaissance vocale, la traduction de
+  l'interface en mooré, et l'extension à d'autres langues nationales du
+  Burkina Faso.
 </p>
 
 <!-- ================= ANNEXE A ================= -->

@@ -1,0 +1,817 @@
+<meta charset="utf-8">
+<title>Manuel d'utilisation — Moteur de recherche sémantique pour le mooré</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 18mm 18mm; }
+
+  :root{
+    --encre:#1a1a1a;
+    --gris:#555;
+    --gris-clair:#888;
+    --filet:#c9c9c9;
+    --titre:#1f3864;
+    --accent:#c1552f;
+    --fond-code:#f4f4f4;
+  }
+
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family: "Cambria", "Georgia", "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.5;
+    color: var(--encre);
+  }
+  p{ margin: 0 0 .7em; text-align: justify; }
+  a{ color:#0f4c81; text-decoration:none; }
+  code, .mono{
+    font-family:"Consolas","DejaVu Sans Mono",monospace;
+    font-size: 9.4pt;
+  }
+  code{ background:var(--fond-code); padding:1px 3px; border-radius:2px; }
+  pre{
+    background:var(--fond-code); border:1px solid var(--filet);
+    padding:8px 10px; border-radius:3px; overflow:hidden;
+    font-family:"Consolas","DejaVu Sans Mono",monospace; font-size:9pt;
+    line-height:1.4; white-space:pre-wrap; margin:.6em 0 1em;
+  }
+
+  h1,h2,h3,h4{ font-family:"Calibri","Helvetica",sans-serif; color:var(--titre); }
+  h1{ font-size:20pt; margin:0 0 .2em; }
+  h2{
+    font-size:15pt; margin:1.6em 0 .5em; padding-bottom:.15em;
+    border-bottom:1.5px solid var(--titre);
+  }
+  h3{ font-size:12.2pt; margin:1.2em 0 .35em; }
+  h3.serre{ margin:.9em 0 .25em; }
+  h4{ font-size:10.8pt; margin:1em 0 .3em; color:var(--encre); }
+
+  .saut{ page-break-before: always; }
+  .ensemble{ page-break-inside: avoid; }
+
+  /* --- page de garde --- */
+  .garde{ text-align:center; page-break-after:always; padding-top:6mm; }
+  .garde .etab{ font-size:13pt; font-weight:bold; letter-spacing:.02em; }
+  .garde .sous{ font-size:11pt; }
+  .garde .etoiles{ color:var(--accent); letter-spacing:.5em; margin:.5em 0 1.2em; }
+  .garde .cours{ margin-top:1.4em; font-size:11pt; font-style:italic; }
+  .garde .type{
+    margin-top:2.4em; font-family:"Calibri",sans-serif; font-size:22pt;
+    font-weight:bold; color:var(--titre); letter-spacing:.04em;
+  }
+  .garde .theme{ margin-top:.6em; font-size:13.5pt; font-weight:bold; }
+  .garde .lot{ font-size:11pt; color:var(--gris); margin-top:.2em; }
+  .garde .equipe{
+    margin:3em auto 0; width:74%; border:1px solid var(--filet);
+    border-radius:4px; padding:14px 18px; text-align:left; font-size:10.5pt;
+  }
+  .garde .equipe b{ color:var(--titre); }
+  .garde .equipe table{ width:100%; border:none; margin:.3em 0 0; }
+  .garde .equipe td{ border:none; padding:1px 0; }
+  .garde .equipe td.opt{ text-align:right; color:var(--gris); font-style:italic; }
+  .garde .date{ margin-top:2.6em; font-size:10.5pt; }
+
+  /* --- tableaux --- */
+  table{ width:100%; border-collapse:collapse; margin:.5em 0 1.2em; font-size:9.8pt; }
+  caption{
+    caption-side:top; text-align:center; font-size:9.4pt; color:var(--gris);
+    padding-bottom:.35em;
+  }
+  caption b{ color:var(--encre); }
+  th{
+    background:var(--titre); color:#fff; text-align:left;
+    padding:5px 8px; font-family:"Calibri",sans-serif; font-weight:600;
+  }
+  td{ border-bottom:1px solid var(--filet); padding:4px 8px; vertical-align:top; }
+  tr:nth-child(even) td{ background:#fafafa; }
+  td.ok{ color:#1d6f42; font-weight:bold; }
+  td.non{ color:#a12b2b; font-weight:bold; }
+  td.part{ color:#9a6b00; font-weight:bold; }
+
+  /* --- figures --- */
+  figure{ margin:1em 0 1.3em; text-align:center; page-break-inside:avoid; }
+  figure img{ max-width:100%; border:1px solid var(--filet); border-radius:3px; }
+  figcaption{
+    font-size:9.2pt; color:var(--gris); margin-top:.4em; text-align:justify;
+    padding:0 4%;
+  }
+  figcaption b{ color:var(--encre); }
+  figure.etroite img{ max-width:76%; }
+
+  /* --- sommaire --- */
+  .toc{ font-size:10.2pt; }
+  .toc div{ display:flex; align-items:baseline; margin:.08em 0; }
+  .toc .t{ white-space:nowrap; }
+  .toc .pointille{
+    flex:1; border-bottom:1.2px dotted var(--filet); margin:0 .4em;
+    transform:translateY(-3px);
+  }
+  .toc .n{ color:var(--gris); }
+  .toc .n2{ padding-left:1.4em; }
+  .toc .n3{ padding-left:2.8em; font-size:10pt; }
+
+  .encadre{
+    border-left:3px solid var(--accent); background:#fdf6f3;
+    padding:8px 12px; margin:.8em 0 1.1em; font-size:10.2pt;
+  }
+  .encadre b{ color:var(--accent); }
+  .note{
+    border-left:3px solid var(--titre); background:#f5f7fb;
+    padding:8px 12px; margin:.8em 0 1.1em; font-size:10.2pt;
+  }
+  ul,ol{ margin:.2em 0 .8em; padding-left:1.4em; }
+  li{ margin:.15em 0; }
+  .petit{ font-size:9.6pt; color:var(--gris); }
+</style>
+
+<!-- ================= PAGE DE GARDE ================= -->
+<div class="garde">
+  <div class="etab">UNIVERSITÉ JOSEPH KI-ZERBO</div>
+  <div class="sous">(UJKZ)</div>
+  <div class="etoiles">★ ★ ★ ★ ★</div>
+  <div class="etab">INSTITUT BURKINABÈ DES ARTS ET MÉTIERS</div>
+  <div class="sous">(IBAM)</div>
+
+  <div class="cours">Cours : Web Sémantique et Web de Données</div>
+
+  <div class="type">MANUEL D'UTILISATION</div>
+  <div class="theme">Moteur de recherche sémantique pour le mooré</div>
+  <div class="lot">Recherche Web multilingue mooré – français – anglais</div>
+
+  <div class="equipe">
+    <b>Groupe N° 9</b>
+    <table>
+      <tr><td>SAVADOGO Adjaratou</td></tr>
+      <tr><td>KOMPAORE Malick</td></tr>
+      <tr><td>OUEDRAOGO Abdoul Razack</td></tr>
+      <tr><td>KABORE Olivier</td></tr>
+    </table>
+    <div style="margin-top:.9em"><b>Encadré par</b><br>Dr. GUINKO T. Ferdinand</div>
+  </div>
+
+  <div class="date">
+    Année universitaire 2025–2026
+  </div>
+</div>
+
+<!-- ================= SOMMAIRE ================= -->
+<h2 style="margin-top:0">Sommaire</h2>
+<div class="toc">
+  <div><span class="t">Liste des sigles et abréviations</span><span class="pointille"></span><span class="n">3</span></div>
+  <div><span class="t"><b>1. Introduction</b></span><span class="pointille"></span><span class="n">3</span></div>
+  <div class="n2"><span class="t">1.1 Présentation de l'application</span><span class="pointille"></span><span class="n">3</span></div>
+  <div class="n2"><span class="t">1.2 Architecture technique</span><span class="pointille"></span><span class="n">3</span></div>
+  <div class="n2"><span class="t">1.3 Contenu du dossier livré</span><span class="pointille"></span><span class="n">4</span></div>
+  <div><span class="t"><b>2. Prérequis</b></span><span class="pointille"></span><span class="n">5</span></div>
+  <div><span class="t"><b>3. Installation</b></span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">3.1 Récupérer le projet</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">3.2 Environnement virtuel et dépendances</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">3.3 (Optionnel) Index sémantique</span><span class="pointille"></span><span class="n">6</span></div>
+  <div class="n2"><span class="t">3.4 Vérifier l'installation</span><span class="pointille"></span><span class="n">6</span></div>
+  <div><span class="t"><b>4. Lancement de l'application</b></span><span class="pointille"></span><span class="n">6</span></div>
+  <div><span class="t"><b>5. Guide d'utilisation</b></span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">5.1 L'écran de recherche</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">5.2 Onglet « Web » — chercher des pages</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">5.3 Onglet « Dictionnaire »</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">5.4 Onglet « Traduction FR → mooré »</span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">5.5 Utilisation en ligne de commande</span><span class="pointille"></span><span class="n">13</span></div>
+  <div><span class="t"><b>6. Résolution des problèmes</b></span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t"><b>7. Limites connues</b></span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t"><b>8. Conclusion</b></span><span class="pointille"></span><span class="n">15</span></div>
+  <div><span class="t"><b>Annexe A — Arborescence et adresses</b></span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t"><b>Annexe B — Conformité au cahier des charges</b></span><span class="pointille"></span><span class="n">17</span></div>
+</div>
+
+<h3 class="serre">Liste des figures</h3>
+<div class="toc petit">
+  <div><span class="t">5.1 Le panneau de recherche et ses trois onglets</span><span class="pointille"></span><span class="n">8</span></div>
+  <div><span class="t">5.2 Le pont de traduction affiché au-dessus des résultats</span><span class="pointille"></span><span class="n">8</span></div>
+  <div><span class="t">5.3 Pages Web trouvées pour la requête mooré « koom »</span><span class="pointille"></span><span class="n">9</span></div>
+  <div><span class="t">5.4 L'onglet Dictionnaire : filtres et sélecteur d'index</span><span class="pointille"></span><span class="n">10</span></div>
+  <div><span class="t">5.5 Une entrée et ses renvois</span><span class="pointille"></span><span class="n">10</span></div>
+  <div><span class="t">5.6 Le compteur rappelle le filtre de domaine actif</span><span class="pointille"></span><span class="n">10</span></div>
+  <div><span class="t">5.7 Avertissement lorsque l'index choisi ne convient pas</span><span class="pointille"></span><span class="n">11</span></div>
+  <div><span class="t">5.8 Ressources externes proposées pour un mot</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t">5.9 Glose d'une phrase française</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t">5.10 Tournures idiomatiques proposées</span><span class="pointille"></span><span class="n">13</span></div>
+</div>
+
+<h3 class="serre">Liste des tableaux</h3>
+<div class="toc petit">
+  <div><span class="t">1 Sigles et abréviations</span><span class="pointille"></span><span class="n">3</span></div>
+  <div><span class="t">1.1 Contenu du dossier livré</span><span class="pointille"></span><span class="n">4</span></div>
+  <div><span class="t">2.1 Prérequis matériels et logiciels</span><span class="pointille"></span><span class="n">5</span></div>
+  <div><span class="t">5.1 Les cinq index de recherche</span><span class="pointille"></span><span class="n">11</span></div>
+  <div><span class="t">6.1 Problèmes fréquents et solutions</span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t">A.1 Récapitulatif des adresses</span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t">B.1 Conformité aux exigences fonctionnelles</span><span class="pointille"></span><span class="n">17</span></div>
+</div>
+
+<!-- ================= SIGLES ================= -->
+<div class="saut"></div>
+<h2>Liste des sigles et abréviations</h2>
+<table>
+  <caption><b>Tableau 1</b> — Sigles et abréviations employés dans ce manuel.</caption>
+  <tr><th style="width:22%">Sigle</th><th>Signification</th></tr>
+  <tr><td>API</td><td><i>Application Programming Interface</i> — interface de programmation</td></tr>
+  <tr><td>CORS</td><td><i>Cross-Origin Resource Sharing</i> — règle du navigateur autorisant ou non un site à interroger un autre</td></tr>
+  <tr><td>FAISS</td><td><i>Facebook AI Similarity Search</i> — bibliothèque de recherche de vecteurs proches</td></tr>
+  <tr><td>Flask</td><td>Micro-framework web Python utilisé pour l'API</td></tr>
+  <tr><td>JSON</td><td><i>JavaScript Object Notation</i> — format d'échange de données</td></tr>
+  <tr><td>LSA</td><td><i>Latent Semantic Analysis</i> — réduction de dimension appliquée au TF-IDF</td></tr>
+  <tr><td>MediaWiki</td><td>Moteur des sites Wikipédia et Wiktionnaire, doté d'une API publique</td></tr>
+  <tr><td>RRF</td><td><i>Reciprocal Rank Fusion</i> — fusion de deux classements par les rangs</td></tr>
+  <tr><td>SVD</td><td><i>Singular Value Decomposition</i> — décomposition employée par la LSA</td></tr>
+  <tr><td>TF-IDF</td><td><i>Term Frequency – Inverse Document Frequency</i> — pondération des mots d'un document</td></tr>
+  <tr><td>UTF-8</td><td>Encodage de caractères, nécessaire aux diacritiques du mooré</td></tr>
+</table>
+
+<!-- ================= 1. INTRODUCTION ================= -->
+<h2>1. Introduction</h2>
+
+<h3>1.1 Présentation de l'application</h3>
+<p>
+  <b>Gʋls-n bao</b> est un moteur de recherche Web multilingue conçu pour le
+  mooré. L'utilisateur formule une requête en <b>mooré</b>, en <b>français</b>
+  ou en <b>anglais</b>, et l'application lui rend des pages Web accompagnées de
+  leur titre, d'un extrait et d'un lien direct.
+</p>
+<p>
+  Le cœur du dispositif est un dictionnaire vectoriel construit sur le corpus
+  <i>Webonary Moore</i> (10 566 entrées). Ce dictionnaire ne sert pas seulement
+  à consulter des mots : il fait office de <b>pont de traduction</b>. Une
+  requête en mooré est traduite avant d'être envoyée aux sources francophones,
+  et une requête française est rapprochée de son équivalent mooré pour
+  interroger les sources en mooré. C'est ce qui rend le moteur réellement
+  multilingue plutôt que littéral.
+</p>
+<div class="encadre">
+  <b>Trois usages, trois onglets.</b> <b>Web</b> cherche des pages sur
+  Internet ; <b>Dictionnaire</b> explore le corpus mooré (définitions,
+  synonymes, domaines) ; <b>Traduction</b> glose une phrase française entière
+  en mooré.
+</div>
+
+<h3>1.2 Architecture technique</h3>
+<ul>
+  <li><b>Corpus</b> : <code>data/corpus_moore_webonary.csv</code>, 10 566 entrées
+      mooré avec définitions française et anglaise, catégorie grammaticale,
+      prononciation, domaine, synonymes, antonymes, variantes et pluriel.</li>
+  <li><b>Index vectoriels</b> : cinq index complémentaires (voir § 5.3), fondés
+      sur TF-IDF/LSA, sur des n-grammes de caractères et — en option — sur des
+      embeddings multilingues pré-entraînés. La recherche des voisins est
+      assurée par <b>FAISS</b>.</li>
+  <li><b>Sources Web</b> : les API publiques de <b>Wikipédia en mooré</b>,
+      <b>Wikipédia en français</b> et du <b>Wiktionnaire</b>. Aucune clé d'API
+      n'est nécessaire.</li>
+  <li><b>Back-end</b> : une application <b>Flask</b> (Python) qui expose des
+      API JSON et sert l'interface.</li>
+  <li><b>Front-end</b> : une page HTML/CSS/JavaScript sans framework, incluant
+      un clavier virtuel pour les caractères propres au mooré.</li>
+</ul>
+
+<h3>1.3 Contenu du dossier livré</h3>
+<table>
+  <caption><b>Tableau 1.1</b> — Fichiers et dossiers du projet.</caption>
+  <tr><th style="width:34%">Élément</th><th>Rôle</th></tr>
+  <tr><td class="mono">api.py</td><td>Point d'entrée : API Flask et service de l'interface</td></tr>
+  <tr><td class="mono">search.py</td><td>Recherche dans le corpus ; les cinq index et leur routage</td></tr>
+  <tr><td class="mono">recherche_web.py</td><td>Recherche sur le Web et pont de traduction</td></tr>
+  <tr><td class="mono">translate.py</td><td>Glossage d'une phrase française en mooré</td></tr>
+  <tr><td class="mono">liens.py</td><td>Ressources externes proposées pour un mot</td></tr>
+  <tr><td class="mono">embeddings.py</td><td>Modèle d'embeddings pré-entraîné (optionnel)</td></tr>
+  <tr><td class="mono">build_index.py</td><td>Construit l'index TF-IDF/LSA à partir du corpus</td></tr>
+  <tr><td class="mono">build_st_index.py</td><td>Construit l'index sémantique (optionnel)</td></tr>
+  <tr><td class="mono">benchmark.py</td><td>Compare les index sur trois tâches, chiffres à l'appui</td></tr>
+  <tr><td class="mono">test_moteur.py</td><td>66 tests de non-régression</td></tr>
+  <tr><td class="mono">moteur_recherche_moore_live.html</td><td>Interface web</td></tr>
+  <tr><td class="mono">data/</td><td>Le corpus source au format CSV</td></tr>
+  <tr><td class="mono">vectors.index, vectorizers.pkl,<br>corpus_meta.pkl</td>
+      <td>Base vectorielle déjà construite, fournie prête à l'emploi</td></tr>
+  <tr><td class="mono">requirements.txt</td><td>Dépendances Python</td></tr>
+  <tr><td class="mono">README.md</td><td>Documentation technique détaillée</td></tr>
+</table>
+
+<!-- ================= 2. PRÉREQUIS ================= -->
+<div class="saut"></div>
+<h2>2. Prérequis</h2>
+<p>
+  L'application est multiplateforme : elle s'installe de la même manière sous
+  Windows, Linux et macOS.
+</p>
+<table>
+  <caption><b>Tableau 2.1</b> — Prérequis matériels et logiciels.</caption>
+  <tr><th style="width:26%">Logiciel</th><th style="width:26%">Version</th><th>Utilité</th></tr>
+  <tr><td>Python</td><td>3.9 ou plus <span class="petit">(testé sur 3.11)</span></td><td>Exécuter l'application</td></tr>
+  <tr><td>pip</td><td>fourni avec Python</td><td>Installer les dépendances</td></tr>
+  <tr><td>Navigateur web</td><td>récent (Chrome, Edge, Firefox)</td><td>Consulter l'interface</td></tr>
+  <tr><td>Connexion Internet</td><td>requise pour l'onglet Web</td><td>Interroger Wikipédia et le Wiktionnaire</td></tr>
+  <tr><td>Espace disque</td><td>≈ 100 Mo <span class="petit">(1,2 Go avec l'index sémantique)</span></td><td>Corpus et index</td></tr>
+</table>
+<p>Vérifier la version de Python dans un terminal :</p>
+<pre>python --version</pre>
+<p>
+  Si <code>python</code> n'est pas reconnu sous Windows, réinstaller Python en
+  cochant l'option <b>« Add Python to PATH »</b>, ou utiliser <code>py</code> à
+  la place.
+</p>
+<div class="note">
+  <b>Les onglets Dictionnaire et Traduction fonctionnent hors ligne.</b> Seul
+  l'onglet Web a besoin d'une connexion, puisqu'il interroge des sites externes.
+</div>
+
+<!-- ================= 3. INSTALLATION ================= -->
+<h2>3. Installation</h2>
+
+<h3>3.1 Récupérer le projet</h3>
+<pre>git clone https://github.com/malickabdoul/codebydarknet.git
+cd codebydarknet
+git checkout feature/base-vectorielle</pre>
+<p>
+  Vérifier la présence de <code>api.py</code>, <code>requirements.txt</code>,
+  du dossier <code>data/</code> et des trois fichiers de la base vectorielle
+  (<code>vectors.index</code>, <code>vectorizers.pkl</code>,
+  <code>corpus_meta.pkl</code>).
+</p>
+<div class="note">
+  <b>La base vectorielle est fournie construite.</b> Il n'est pas nécessaire de
+  la reconstruire pour utiliser l'application. Ne relancer
+  <code>build_index.py</code> qu'après avoir modifié le corpus.
+</div>
+
+<h3>3.2 Environnement virtuel et dépendances</h3>
+<p>L'environnement virtuel évite les conflits avec les autres projets Python.</p>
+<h4>Windows</h4>
+<pre>python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt</pre>
+<h4>Linux / macOS</h4>
+<pre>python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt</pre>
+<p>
+  Le préfixe <code>(.venv)</code> doit apparaître au début de la ligne de
+  commande. Sont installés : <code>pandas</code>, <code>numpy</code>,
+  <code>scipy</code>, <code>scikit-learn</code>, <code>faiss-cpu</code>,
+  <code>flask</code> et <code>flask-cors</code>.
+</p>
+
+<h3>3.3 (Optionnel) Index sémantique</h3>
+<p>
+  Un index supplémentaire, fondé sur un modèle d'embeddings multilingue,
+  améliore nettement les requêtes en français et en anglais. Il est
+  <b>facultatif</b> : sans lui, l'application se rabat automatiquement sur les
+  index lexicaux et rien ne cesse de fonctionner.
+</p>
+<pre>pip install sentence-transformers
+python build_st_index.py</pre>
+<p>
+  Cette étape télécharge environ 1 Go (la bibliothèque <code>torch</code> puis
+  le modèle) et l'encodage du corpus prend deux à trois minutes. Elle ne se
+  fait qu'une seule fois.
+</p>
+
+<h3>3.4 Vérifier l'installation</h3>
+<pre>python test_moteur.py</pre>
+<p>
+  La suite compte <b>66 tests</b> et s'exécute en moins de deux minutes. Le
+  message final doit être <code>OK</code>. Les tests qui exigent l'index
+  sémantique se sautent d'eux-mêmes s'il n'a pas été construit ; ceux qui
+  interrogent le Web se sautent en l'absence de connexion.
+</p>
+
+<!-- ================= 4. LANCEMENT ================= -->
+<h2>4. Lancement de l'application</h2>
+<p>Dans le terminal, environnement virtuel activé :</p>
+<pre>python api.py</pre>
+<p>Le démarrage affiche :</p>
+<pre>Chargement de la base vectorielle...
+  -> 10566 entrées, 52 domaines
+  -> interface : http://127.0.0.1:5000/</pre>
+<p>
+  <b>Laisser ce terminal ouvert.</b> Ouvrir ensuite un navigateur à l'adresse
+  <b>http://127.0.0.1:5000/</b>. L'interface s'affiche.
+</p>
+<p>
+  Pour arrêter l'application, appuyer sur <b>Ctrl+C</b> dans son terminal.
+</p>
+<div class="note">
+  <b>Deux façons d'ouvrir l'interface.</b> La méthode ci-dessus est
+  recommandée : tout est servi par la même adresse. Il reste possible de
+  double-cliquer le fichier <code>moteur_recherche_moore_live.html</code> ; la
+  page détecte alors qu'elle est ouverte depuis le disque et interroge
+  <code>http://127.0.0.1:5000</code>, que l'API autorise explicitement.
+</div>
+
+<!-- ================= 5. GUIDE D'UTILISATION ================= -->
+<div class="saut"></div>
+<h2>5. Guide d'utilisation</h2>
+
+<h3>5.1 L'écran de recherche</h3>
+<p>
+  L'écran se compose d'un panneau unique : les trois onglets, la barre de
+  recherche, le clavier des caractères mooré, et — selon l'onglet — les filtres
+  par domaine.
+</p>
+<figure>
+  <img src="captures/01-panneau.png" alt="Panneau de recherche">
+  <figcaption>
+    <b>Figure 5.1</b> — Le panneau de recherche. Les trois onglets en haut à
+    gauche commutent entre la recherche Web, le dictionnaire et la traduction.
+    Le clavier virtuel insère les dix caractères du mooré absents des claviers
+    standards.
+  </figcaption>
+</figure>
+<h4>Le clavier mooré</h4>
+<p>
+  Les caractères <b>ã ẽ ĩ õ ũ ɛ ɩ ʋ ŋ ɲ</b> ne figurent pas sur un clavier
+  ordinaire. Cliquer sur une touche l'insère à la position du curseur et relance
+  la recherche. Le bouton <b>Effacer</b> vide le champ.
+</p>
+<div class="note">
+  <b>Ces caractères ne sont pas obligatoires.</b> La recherche tolère leur
+  absence : taper <code>bag-teoko</code> retrouve <b>bãg-tẽoko</b>.
+</div>
+
+<h3>5.2 Onglet « Web » — chercher des pages</h3>
+<p>
+  C'est l'onglet actif au démarrage. Saisir un mot en mooré, en français ou en
+  anglais : l'application détecte la langue, traduit la requête à l'aide du
+  corpus, interroge les sources Web, puis affiche les pages trouvées.
+</p>
+<p>
+  Un bandeau explique le <b>pont de traduction</b> employé, afin que
+  l'utilisateur sache toujours sur quel terme la recherche a réellement porté.
+</p>
+<figure>
+  <img src="captures/02-web-pont.png" alt="Bandeau du pont de traduction">
+  <figcaption>
+    <b>Figure 5.2</b> — Le pont de traduction. Le mot mooré <b>koom</b> a été
+    traduit en <b>« eau »</b> par le corpus ; c'est ce terme qui a été soumis
+    aux sources francophones, tandis que <b>koom</b> était soumis au Wikipédia
+    en mooré.
+  </figcaption>
+</figure>
+<p>Chaque résultat comporte trois éléments :</p>
+<ul>
+  <li>le <b>titre</b> de la page, cliquable — il ouvre la page dans un nouvel
+      onglet ;</li>
+  <li>un <b>extrait</b> situant le contenu ;</li>
+  <li>la <b>source</b> et le terme sur lequel la recherche a porté.</li>
+</ul>
+<p>
+  Les pages en mooré sont signalées par un liseré rouge et réparties parmi les
+  résultats. Cette précaution est délibérée : le modèle sémantique ne connaît
+  pas le mooré et, laissé libre, reléguait systématiquement ces pages en fin de
+  liste — un contresens dans un moteur destiné à des locuteurs du mooré.
+</p>
+<figure>
+  <img src="captures/03-web-resultats.png" alt="Résultats Web" style="max-height:210mm;width:auto">
+  <figcaption>
+    <b>Figure 5.3</b> — Pages trouvées pour la requête mooré <b>koom</b>. Les
+    résultats mêlent le Wikipédia en mooré (liseré rouge), le Wikipédia en
+    français et le Wiktionnaire. L'indication « proximité » est le score de
+    reclassement sémantique.
+  </figcaption>
+</figure>
+
+<h3>5.3 Onglet « Dictionnaire »</h3>
+<p>
+  Cet onglet interroge le corpus mooré, sans connexion Internet. Il affiche les
+  entrées les plus proches du terme saisi, avec leurs définitions française et
+  anglaise, leur catégorie grammaticale, leur prononciation et leur domaine.
+</p>
+<figure>
+  <img src="captures/05-dico-panneau.png" alt="Panneau du dictionnaire">
+  <figcaption>
+    <b>Figure 5.4</b> — L'onglet Dictionnaire ajoute deux commandes : le
+    sélecteur <b>Index</b> en haut à droite, et les <b>puces de domaine</b> qui
+    restreignent la recherche à un champ sémantique (Water, Bird, Disease…).
+    Ces 52 domaines sont déduits du corpus.
+  </figcaption>
+</figure>
+
+<h4>Les renvois</h4>
+<p>
+  Chaque entrée affiche, lorsqu'ils existent, ses <b>synonymes</b>, son
+  <b>contraire</b>, ses <b>variantes</b>, son <b>pluriel</b> et le nombre
+  d'<b>autres sens</b> du même mot. Tous ces renvois sont cliquables et
+  relancent la recherche.
+</p>
+<figure class="etroite">
+  <img src="captures/04-dico-renvois.png" alt="Renvois d'une entrée">
+  <figcaption>
+    <b>Figure 5.5</b> — L'entrée <b>ba</b> (« père ») et ses renvois : le
+    synonyme <i>saamba</i>, le contraire <i>ma</i> (« mère »), la variante
+    <i>baaba</i>, le pluriel <i>ba-rãmba</i> et cinq autres sens du mot.
+  </figcaption>
+</figure>
+
+<h4>Filtrer par domaine</h4>
+<p>
+  Cliquer sur une puce restreint les résultats à ce domaine ; recliquer la
+  désactive. Le filtrage est effectué côté serveur, avant la sélection des
+  meilleurs résultats — sans quoi un filtre renverrait souvent une liste vide.
+</p>
+<figure class="etroite">
+  <img src="captures/06-filtre-domaine.png" alt="Compteur de résultats filtrés">
+  <figcaption>
+    <b>Figure 5.6</b> — Le compteur rappelle le filtre actif.
+  </figcaption>
+</figure>
+
+<h4>Choisir l'index</h4>
+<p>
+  Le sélecteur <b>Index</b> permet de choisir la méthode de recherche. Le mode
+  <b>Auto</b>, actif par défaut, choisit lui-même selon la langue de la requête ;
+  les autres valeurs servent surtout à comparer les méthodes.
+</p>
+<table>
+  <caption><b>Tableau 5.1</b> — Les cinq index et leur usage.</caption>
+  <tr><th style="width:22%">Index</th><th>Ce qu'il fait</th></tr>
+  <tr><td><b>Auto</b></td><td>Choisit selon la langue détectée. <b>Recommandé.</b></td></tr>
+  <tr><td>Mots mooré</td><td>N-grammes de caractères sur les entrées ; retrouve un mot mooré même mal orthographié</td></tr>
+  <tr><td>TF-IDF seul</td><td>L'index d'origine : entrées et définitions mélangées</td></tr>
+  <tr><td>Sémantique seul</td><td>Embeddings pré-entraînés ; comprend le sens en français et en anglais</td></tr>
+  <tr><td>Hybride (RRF)</td><td>Fusion des deux précédents par les rangs</td></tr>
+</table>
+<p>
+  Forcer un index inadapté à la requête produit du bruit. L'application le
+  détecte et le signale, avec un bouton de retour au mode automatique.
+</p>
+<figure>
+  <img src="captures/07-avertissement.png" alt="Avertissement d'index inadapté">
+  <figcaption>
+    <b>Figure 5.7</b> — Avertissement affiché lorsqu'on soumet un mot mooré à
+    l'index sémantique. Le modèle employé couvre une cinquantaine de langues
+    parmi lesquelles le mooré ne figure pas.
+  </figcaption>
+</figure>
+
+<h4>Consulter le mot ailleurs</h4>
+<p>
+  Sous les résultats, la rubrique <b>« Sur le web »</b> propose des ressources
+  externes pour le premier mot trouvé. Ces pages ne font pas partie du corpus,
+  et l'interface le précise.
+</p>
+<figure>
+  <img src="captures/10-liens.png" alt="Liens externes">
+  <figcaption>
+    <b>Figure 5.8</b> — Ressources externes. Deux sources portent un
+    avertissement : le Wiktionnaire annonce parfois un code d'erreur alors que
+    la page s'affiche, et Webonary — la source du corpus — est protégé par un
+    dispositif anti-robot.
+  </figcaption>
+</figure>
+
+<h3>5.4 Onglet « Traduction FR → mooré »</h3>
+<p>
+  Cet onglet traite une <b>phrase entière</b>. La phrase est découpée, et
+  chaque segment reçoit son équivalent mooré. Les expressions figées connues du
+  corpus sont reconnues d'un seul bloc plutôt que mot à mot.
+</p>
+<figure>
+  <img src="captures/08-traduction.png" alt="Glose d'une phrase">
+  <figcaption>
+    <b>Figure 5.9</b> — Glose de « je veux boire de l'eau ». Chaque segment
+    montre son équivalent et ses variantes. <i>veux</i> a été ramené à
+    <i>vouloir</i> ; <i>de</i> et <i>l'</i> sont marqués « non traduit », le
+    mooré n'ayant ni articles ni cette préposition.
+  </figcaption>
+</figure>
+<div class="encadre">
+  <b>Ce résultat est une glose, pas une traduction.</b> C'est le meilleur
+  équivalent mooré de chaque segment, dans l'ordre du français. Le mooré a son
+  propre ordre des mots, ses postpositions et ses marques d'aspect, qu'un
+  dictionnaire ne permet pas de reconstruire. La glose est un support pour un
+  locuteur, pas une phrase à publier telle quelle — et l'interface l'indique
+  sous chaque résultat.
+</div>
+<h4>Tournures idiomatiques</h4>
+<p>
+  Une glose littérale ne peut pas deviner qu'une expression se dit autrement.
+  L'application interroge donc aussi la base vectorielle sur la phrase entière
+  et propose les tournures figées qui s'en rapprochent par le sens.
+</p>
+<figure>
+  <img src="captures/09-idiomes.png" alt="Tournures idiomatiques">
+  <figcaption>
+    <b>Figure 5.10</b> — Pour « tu vas bien », la glose donne <i>f kɩbe
+    neere</i> (mot à mot), mais la base vectorielle propose <b>laafɩ bala</b>,
+    la tournure réellement employée. Aucun mot ne coïncide : seule une
+    comparaison de sens pouvait la trouver.
+  </figcaption>
+</figure>
+<p class="petit">
+  Ces suggestions sont affichées avec leur score de proximité et présentées
+  comme <b>à valider par un locuteur</b>. Elles sont fiables sur les formules
+  courantes, bruitées sur les phrases descriptives.
+</p>
+
+<h3>5.5 Utilisation en ligne de commande</h3>
+<p>Toutes les fonctions sont accessibles sans interface :</p>
+<pre># chercher des pages sur le Web
+python recherche_web.py "koom"
+
+# consulter le dictionnaire
+python search.py "eau"
+python search.py "eau" --domaine Water
+python search.py "koom" --backend entrees
+
+# gloser une phrase
+python translate.py "je veux boire de l'eau"
+
+# comparer les index, chiffres à l'appui
+python benchmark.py</pre>
+
+<!-- ================= 6. PROBLÈMES ================= -->
+<div class="saut"></div>
+<h2>6. Résolution des problèmes</h2>
+<table>
+  <caption><b>Tableau 6.1</b> — Problèmes fréquents et solutions.</caption>
+  <tr><th style="width:28%">Symptôme</th><th style="width:32%">Cause probable</th><th>Solution</th></tr>
+  <tr>
+    <td><code>python</code> n'est pas reconnu</td>
+    <td>Python absent ou hors du PATH</td>
+    <td>Réinstaller Python en cochant <b>Add Python to PATH</b>, ou utiliser <code>py</code></td>
+  </tr>
+  <tr>
+    <td><code>ModuleNotFoundError: faiss</code></td>
+    <td>Dépendances non installées</td>
+    <td>Activer l'environnement virtuel puis <code>pip install -r requirements.txt</code></td>
+  </tr>
+  <tr>
+    <td>« Impossible de joindre l'API »</td>
+    <td><code>api.py</code> n'est pas lancé</td>
+    <td>Relancer <code>python api.py</code> et laisser le terminal ouvert</td>
+  </tr>
+  <tr>
+    <td>« Port 5000 déjà utilisé »</td>
+    <td>Une autre instance tourne déjà</td>
+    <td>Fermer l'ancien terminal, ou changer le port dans <code>api.py</code></td>
+  </tr>
+  <tr>
+    <td>L'onglet Web ne rend rien</td>
+    <td>Pas de connexion Internet</td>
+    <td>Vérifier la connexion. Les onglets Dictionnaire et Traduction restent utilisables hors ligne</td>
+  </tr>
+  <tr>
+    <td>Le sélecteur d'index est absent</td>
+    <td>L'index sémantique n'est pas construit</td>
+    <td>Comportement normal : un seul index est disponible. Voir § 3.3</td>
+  </tr>
+  <tr>
+    <td>Résultats manifestement hors sujet</td>
+    <td>Un index inadapté a été forcé</td>
+    <td>Repasser sur <b>Auto</b> ; l'application affiche un avertissement dans ce cas</td>
+  </tr>
+  <tr>
+    <td>Une définition finit par <code>[…]</code></td>
+    <td>Le texte est coupé dans le corpus source</td>
+    <td>Rien à faire : le marqueur signale une donnée incomplète, pas une erreur d'affichage</td>
+  </tr>
+  <tr>
+    <td>Recherche sans résultat</td>
+    <td>Mot trop rare ou absent du corpus</td>
+    <td>Essayer un synonyme, ou passer par l'onglet Web</td>
+  </tr>
+</table>
+
+<!-- ================= 7. LIMITES ================= -->
+<h2>7. Limites connues</h2>
+<p>
+  Cette section recense honnêtement ce que l'application ne fait pas, afin
+  qu'aucun utilisateur ne s'attende à davantage.
+</p>
+<ul>
+  <li><b>Les sources Web sont au nombre de trois</b> — Wikipédia en mooré,
+      Wikipédia en français et le Wiktionnaire. Il ne s'agit pas d'une
+      exploration de tout le Web. Ces trois sources ont été retenues parce
+      qu'elles offrent une API publique, sans clé ni quota. L'architecture
+      prévoit l'ajout d'un moteur généraliste, qui exigerait une clé d'API.</li>
+  <li><b>Le Wikipédia en mooré est petit</b> : 1 326 articles. Certaines
+      requêtes n'y trouveront rien, et seuls les résultats francophones
+      s'afficheront.</li>
+  <li><b>La traduction est une glose</b>, pas une phrase mooré grammaticale
+      (voir § 5.4).</li>
+  <li><b>La recherche vocale n'est pas implémentée.</b> Le cahier des charges
+      la classe en priorité basse et la range parmi les évolutions futures.</li>
+  <li><b>Le corpus comporte des défauts</b> hérités de sa source : 74
+      définitions coupées, une ligne aux colonnes décalées, quelques doublons.
+      Ceux qui pouvaient l'être sont corrigés à l'affichage ; les autres sont
+      documentés dans le <code>README.md</code>.</li>
+  <li><b>L'interface est en français.</b> Le public visé comprend des locuteurs
+      du mooré ne maîtrisant pas nécessairement le français écrit : une
+      traduction de l'interface reste à faire.</li>
+</ul>
+
+<!-- ================= 8. CONCLUSION ================= -->
+<h2>8. Conclusion</h2>
+<p>
+  L'application est autonome : une fois les dépendances installées, la commande
+  <code>python api.py</code> suffit à la démarrer, et l'interface est
+  immédiatement disponible sur <b>http://127.0.0.1:5000/</b>. Aucun serveur de
+  données externe n'est à configurer, la base vectorielle étant fournie
+  construite dans le dépôt.
+</p>
+<p>
+  Le moteur répond à une requête formulée en mooré, en français ou en anglais,
+  et rend des pages Web avec leur titre, un extrait et un lien. Le corpus
+  Webonary sert de pont entre les langues, et un reclassement sémantique
+  améliore la pertinence des pages proposées. Deux onglets complémentaires
+  donnent accès au dictionnaire lui-même et au glossage de phrases.
+</p>
+<p>
+  Les évolutions naturelles sont l'ajout d'un moteur de recherche généraliste
+  comme quatrième source, la reconnaissance vocale, et l'extension à d'autres
+  langues nationales du Burkina Faso.
+</p>
+
+<!-- ================= ANNEXE A ================= -->
+<div class="saut"></div>
+<h2>Annexe A — Arborescence et adresses</h2>
+<pre>codebydarknet/
+|-- api.py                            # API Flask, sert aussi l'interface
+|-- search.py                         # recherche dans le corpus, 5 index
+|-- recherche_web.py                  # recherche Web + pont de traduction
+|-- translate.py                      # glossage d'une phrase
+|-- liens.py                          # ressources externes
+|-- embeddings.py                     # modele pre-entraine (optionnel)
+|-- build_index.py                    # construit l'index TF-IDF/LSA
+|-- build_st_index.py                 # construit l'index semantique
+|-- benchmark.py                      # comparaison chiffree des index
+|-- test_moteur.py                    # 66 tests de non-regression
+|-- moteur_recherche_moore_live.html  # interface web
+|-- requirements.txt
+|-- README.md
+|-- data/
+|   '-- corpus_moore_webonary.csv     # 10 566 entrees
+|-- vectors.index                     # index FAISS (fourni)
+|-- vectorizers.pkl                   # vectoriseurs entraines (fourni)
+|-- corpus_meta.pkl                   # metadonnees alignees (fourni)
+'-- docs/
+    |-- manuel_utilisation.pdf        # le present manuel
+    '-- captures/                     # captures d'ecran</pre>
+
+<table>
+  <caption><b>Tableau A.1</b> — Récapitulatif des adresses.</caption>
+  <tr><th style="width:38%">Élément</th><th>Adresse</th></tr>
+  <tr><td>Interface</td><td class="mono">http://127.0.0.1:5000/</td></tr>
+  <tr><td>Recherche Web</td><td class="mono">/api/web?q=koom&amp;k=8</td></tr>
+  <tr><td>Dictionnaire</td><td class="mono">/api/search?q=eau&amp;k=10[&amp;domaine=Water][&amp;backend=auto]</td></tr>
+  <tr><td>Traduction</td><td class="mono">/api/translate?q=je veux boire de l'eau</td></tr>
+  <tr><td>Ressources externes</td><td class="mono">/api/liens?q=koom[&amp;fr=eau]</td></tr>
+  <tr><td>Liste des domaines</td><td class="mono">/api/domaines</td></tr>
+  <tr><td>État du service</td><td class="mono">/api/health</td></tr>
+  <tr><td>Dépôt du projet</td><td class="mono">github.com/malickabdoul/codebydarknet</td></tr>
+  <tr><td>Branche de travail</td><td class="mono">feature/base-vectorielle</td></tr>
+</table>
+
+<!-- ================= ANNEXE B ================= -->
+<div class="saut"></div>
+<h2>Annexe B — Conformité au cahier des charges</h2>
+<p>
+  Ce tableau reprend les quinze exigences fonctionnelles du cahier des charges
+  et indique l'état de chacune.
+</p>
+<table>
+  <caption><b>Tableau B.1</b> — Conformité aux exigences fonctionnelles.</caption>
+  <tr>
+    <th style="width:9%">Réf.</th><th style="width:47%">Exigence</th>
+    <th style="width:13%">Priorité</th><th style="width:11%">État</th><th>Où</th>
+  </tr>
+  <tr><td>EF01</td><td>Saisir un mot ou une expression</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2, 5.4</td></tr>
+  <tr><td>EF02</td><td>Requêtes en mooré</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2, 5.3</td></tr>
+  <tr><td>EF03</td><td>Requêtes en français</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2, 5.3</td></tr>
+  <tr><td>EF04</td><td>Requêtes en anglais</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2, 5.3</td></tr>
+  <tr><td>EF05</td><td>Caractères spécifiques du mooré</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.1</td></tr>
+  <tr><td>EF06</td><td>Traiter la requête de l'utilisateur</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2</td></tr>
+  <tr><td>EF07</td><td>Effectuer une recherche sur le Web</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2</td></tr>
+  <tr><td>EF08</td><td>Récupérer les résultats correspondants</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2</td></tr>
+  <tr><td>EF09</td><td>Afficher les résultats sous forme de liste</td><td>Haute</td><td class="ok">Satisfaite</td><td>Figure 5.3</td></tr>
+  <tr><td>EF10</td><td>Afficher le titre et l'extrait de chaque résultat</td><td>Haute</td><td class="ok">Satisfaite</td><td>Figure 5.3</td></tr>
+  <tr><td>EF11</td><td>Fournir un lien vers la page Web</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2</td></tr>
+  <tr><td>EF12</td><td>Consulter directement les pages correspondantes</td><td>Haute</td><td class="ok">Satisfaite</td><td>§ 5.2</td></tr>
+  <tr><td>EF13</td><td>Améliorer la pertinence par une approche sémantique</td><td>Moyenne</td><td class="ok">Satisfaite</td><td>§ 5.2, 5.3</td></tr>
+  <tr><td>EF14</td><td>Recherche vocale</td><td>Basse</td><td class="non">Non traitée</td><td>§ 7</td></tr>
+  <tr><td>EF15</td><td>Prise en charge de nouvelles langues</td><td>Basse</td><td class="non">Non traitée</td><td>§ 7</td></tr>
+</table>
+<p>
+  Les douze exigences de priorité haute et l'exigence de priorité moyenne sont
+  satisfaites. Les deux exigences restantes sont de priorité basse et rangées
+  par le cahier des charges lui-même parmi les <i>perspectives d'évolution</i>.
+</p>
+<h3>Exigences non fonctionnelles</h3>
+<ul>
+  <li><b>Ergonomie et accessibilité</b> — interface à panneau unique, barre de
+      recherche identifiable, résultats lisibles, clavier virtuel pour les
+      caractères absents du clavier. Réserve : l'interface n'existe qu'en
+      français (§ 7).</li>
+  <li><b>Performance</b> — la recherche dans le dictionnaire prend de 20 à
+      500 ms selon l'index. La recherche Web dépend des sources externes,
+      interrogées en parallèle, et les réponses sont mises en cache.</li>
+  <li><b>Qualité des données</b> — les défauts du corpus source ont été
+      recensés et, lorsque c'était possible, corrigés à l'affichage. Le
+      reclassement sémantique améliore la pertinence des pages proposées.</li>
+  <li><b>Évolutivité</b> — les sources Web et les index de recherche sont
+      enfichables : ajouter un moteur généraliste ou une nouvelle langue
+      revient à déclarer une entrée supplémentaire.</li>
+</ul>

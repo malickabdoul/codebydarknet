@@ -15,6 +15,8 @@ Endpoints :
         -> [{"mot_moore": "...", "definition_francais": "...", ...}, ...]
     GET /api/domaines
         -> ["Agriculture", "Animal", ...]  (déduits du corpus)
+    GET /api/web?q=koom&k=8
+        -> {"pont": "...", "resultats": [{"titre", "extrait", "url", ...}]}
     GET /api/liens?q=koom[&fr=eau]
         -> [{"nom": "...", "url": "...", "description": "..."}, ...]
     GET /api/translate?q=je veux boire de l'eau
@@ -30,6 +32,7 @@ from flask_cors import CORS
 
 import embeddings
 from liens import liens_externes
+from recherche_web import rechercher_web
 from search import BACKENDS, backend_par_defaut, list_domaines, load_all, search
 from translate import traduire
 
@@ -110,6 +113,26 @@ def api_translate():
     if len(q) > 500:
         return jsonify({"error": "phrase trop longue (500 caractères maxi)"}), 400
     return jsonify(traduire(q))
+
+
+@app.route("/api/web")
+def api_web():
+    """EF07-EF12 : cherche sur le Web et rend titre, extrait et lien.
+
+    Le corpus sert de pont : une requête mooré est traduite avant d'être
+    envoyée aux sources francophones, et inversement.
+    """
+    q = request.args.get("q", "").strip()
+    if not q:
+        return jsonify({"requete": "", "resultats": [], "sources": [], "pont": ""})
+    if len(q) > 200:
+        return jsonify({"error": "requête trop longue (200 caractères maxi)"}), 400
+
+    k = _parse_k(request.args.get("k", 8))
+    if k is None:
+        return jsonify({"error": f"paramètre k invalide (entier entre 1 et {MAX_K})"}), 400
+
+    return jsonify(rechercher_web(q, k=min(k, 20)))
 
 
 @app.route("/api/liens")

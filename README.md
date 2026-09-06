@@ -1,8 +1,16 @@
-# Moteur de recherche sémantique mooré — Base vectorielle (Groupe 9)
+# Moteur de recherche Web multilingue pour le mooré (Groupe 9)
 
-Projet de web sémantique : moteur de recherche mooré ↔ français ↔ anglais,
-basé sur une base de données vectorielle (embeddings TF-IDF/LSA + index
-FAISS) construite sur le corpus Webonary Moore (10 566 entrées).
+Projet de web sémantique : l'utilisateur formule une requête en **mooré**, en
+**français** ou en **anglais**, et le moteur lui rend des **pages Web** avec
+leur titre, un extrait et un lien.
+
+Le corpus Webonary Moore (10 566 entrées), indexé dans une base vectorielle
+(FAISS), sert de **pont de traduction** entre les langues : « koom » devient
+« eau » avant d'interroger les sources francophones. Deux modes
+complémentaires donnent accès au dictionnaire lui-même et au glossage de
+phrases.
+
+**Manuel d'utilisation** : [`docs/manuel_utilisation.pdf`](docs/manuel_utilisation.pdf)
 
 ---
 
@@ -17,6 +25,7 @@ FAISS) construite sur le corpus Webonary Moore (10 566 entrées).
 ├── build_index.py                  # construit l'index TF-IDF/LSA à partir du corpus
 ├── build_st_index.py               # construit l'index sémantique (optionnel)
 ├── embeddings.py                   # modèle d'embeddings pré-entraîné (optionnel)
+├── recherche_web.py                # recherche Web + pont de traduction
 ├── search.py                       # interroge la base en ligne de commande
 ├── liens.py                        # ressources web externes par mot
 ├── translate.py                    # glose une PHRASE française en mooré
@@ -105,6 +114,62 @@ Sauvegarde...
 Terminé. Fichiers générés : vectors.index, vectorizers.pkl, corpus_meta.pkl
 ```
 Ça prend environ 30 secondes à 1 minute selon la machine.
+
+---
+
+## 4 bis. Recherche Web : ce que fait le moteur
+
+C'est la fonction principale, celle que décrit le cahier des charges (EF07 à
+EF12). Le corpus n'est pas la destination, c'est le **pont** :
+
+```
+requête mooré  ->  corpus  ->  terme français
+                                    |
+                               sources Web
+                                    |
+    titre + extrait + lien  <-  reclassement sémantique
+```
+
+```bash
+python3 recherche_web.py "koom"
+```
+
+```
+Requête : « koom »
+Pont     : « koom » traduit en « eau » par le corpus
+Sources  : Wikipédia en mooré, Wikipédia, Wiktionnaire
+Résultats reclassés par proximité de sens.
+
+1. Eau  [0.65]
+   précise : eau minérale, eau de Seltz, eau de source, eau de mer…
+   https://fr.wikipedia.org/wiki/Eau
+   — Wikipédia
+```
+
+### Les sources
+Trois encyclopédies MediaWiki, **sans clé d'API ni quota** : Wikipédia en
+mooré, Wikipédia en français et le Wiktionnaire. Elles rendent exactement les
+trois champs exigés — titre, extrait, lien.
+
+L'architecture est enfichable : ajouter un moteur généraliste (Bing, Brave,
+Google Custom Search) revient à ajouter une entrée dans `SOURCES` et une
+fonction d'interrogation. Ces moteurs demandent une clé, raison pour laquelle
+ils ne sont pas activés par défaut.
+
+### Deux précautions apprises en chemin
+
+**Le pont refuse les approximations.** Un mot absent du corpus obtenait quand
+même une « traduction » : `zzzqxwv` devenait « presque totalité », et le Web
+était interrogé sur cette invention. Un seuil de 0,45 sur le score de
+correspondance y met fin — mesuré : un mot exact obtient 1,000, une faute de
+frappe plausible 0,551, du charabia 0,256.
+
+**Le reclassement épargne le mooré.** Le modèle d'embeddings ne connaît pas la
+langue : reclasser tous les résultats enterrait systématiquement les pages du
+Wikipédia mooré — sur « koom », aucune ne subsistait dans les quinze
+premières. Seules les pages en langue connue du modèle sont donc reclassées,
+et les pages en mooré, gardées dans l'ordre de leur source, sont intercalées
+une sur trois.
 
 ---
 

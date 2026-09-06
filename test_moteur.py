@@ -22,6 +22,7 @@ import unittest
 
 import embeddings
 import liens
+import recherche_web
 import search
 import translate
 
@@ -295,6 +296,63 @@ class TestLiens(unittest.TestCase):
         self.assertEqual(liens.liens_externes(""), [])
 
 
+class TestRechercheWeb(unittest.TestCase):
+    """EF07-EF12. La logique est testée sans réseau ; un seul test sort."""
+
+    def test_nettoyage_du_balisage_mediawiki(self):
+        brut = 'Une <span class="searchmatch">eau</span> dite &laquo;&nbsp;potable&nbsp;&raquo;'
+        propre = recherche_web._nettoyer(brut)
+        self.assertNotIn("<", propre)
+        self.assertNotIn("&laquo;", propre)
+        self.assertIn("eau", propre)
+
+    def test_pont_traduit_le_moore(self):
+        moore, francais, explication = recherche_web.traduire_requete("koom")
+        self.assertEqual(moore, "koom")
+        self.assertEqual(francais, "eau")
+        self.assertIn("corpus", explication)
+
+    def test_pont_refuse_le_charabia(self):
+        # Sans garde-fou, « zzzqxwv » était traduit en « presque totalité »
+        # et le Web interrogé sur cette invention.
+        moore, francais, _ = recherche_web.traduire_requete("zzzqxwv")
+        self.assertEqual(francais, "zzzqxwv")
+
+    def test_pont_depuis_le_francais(self):
+        moore, francais, _ = recherche_web.traduire_requete("eau")
+        self.assertEqual(francais, "eau")
+        self.assertTrue(moore)
+
+    def test_requete_vide(self):
+        self.assertEqual(recherche_web.traduire_requete(""), ("", "", ""))
+
+    def test_entrelacement_expose_le_moore(self):
+        # Le modèle ne connaît pas le mooré et enterrait ces pages.
+        moore = [{"id": f"m{i}"} for i in range(4)]
+        autres = [{"id": f"a{i}"} for i in range(9)]
+        melange = recherche_web._entrelacer(moore, autres)
+        self.assertEqual(len(melange), 13)
+        self.assertEqual(melange[0]["id"], "m0")
+        dans_le_top6 = sum(1 for x in melange[:6] if x["id"].startswith("m"))
+        self.assertGreaterEqual(dans_le_top6, 2)
+
+    def test_entrelacement_sans_moore(self):
+        autres = [{"id": f"a{i}"} for i in range(3)]
+        self.assertEqual(recherche_web._entrelacer([], autres), autres)
+
+    def test_recherche_reelle(self):
+        """Seul test qui sort sur le réseau ; toléré s'il n'y a pas d'accès."""
+        reponse = recherche_web.rechercher_web("koom", k=5)
+        if not reponse["resultats"]:
+            self.skipTest("pas d'accès réseau")
+        self.assertIn("eau", reponse["terme_francais"])
+        for resultat in reponse["resultats"]:
+            for champ in ("titre", "extrait", "url", "source"):  # EF10, EF11
+                self.assertIn(champ, resultat)
+            self.assertTrue(resultat["url"].startswith("https://"))
+            self.assertTrue(resultat["titre"])
+
+
 class TestApi(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -340,6 +398,13 @@ class TestApi(unittest.TestCase):
     def test_phrase_trop_longue(self):
         r = self.client.get("/api/translate?q=" + "a" * 600)
         self.assertEqual(r.status_code, 400)
+
+    def test_web(self):
+        r = self.client.get("/api/web?q=koom&k=3")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("resultats", r.get_json())
+        self.assertEqual(self.client.get("/api/web?q=eau&k=0").status_code, 400)
+        self.assertEqual(self.client.get("/api/web?q=" + "a" * 300).status_code, 400)
 
     def test_liens(self):
         self.assertTrue(self.client.get("/api/liens?q=koom").get_json())

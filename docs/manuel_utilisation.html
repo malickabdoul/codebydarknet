@@ -164,12 +164,15 @@
   <div class="n2"><span class="t">1.2 Architecture technique</span><span class="pointille"></span><span class="n">6</span></div>
   <div class="n2"><span class="t">1.3 Contenu du dossier livré</span><span class="pointille"></span><span class="n">6</span></div>
   <div><span class="t"><b>2. Prérequis</b></span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.1 Matériel et logiciels</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.2 Installer Python</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.3 Vérifier les versions installées</span><span class="pointille"></span><span class="n">8</span></div>
   <div><span class="t"><b>3. Installation</b></span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">3.1 Récupérer le projet</span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">3.2 Environnement virtuel et dépendances</span><span class="pointille"></span><span class="n">8</span></div>
-  <div class="n2"><span class="t">3.3 (Optionnel) Index sémantique</span><span class="pointille"></span><span class="n">9</span></div>
-  <div class="n2"><span class="t">3.4 Vérifier l'installation</span><span class="pointille"></span><span class="n">9</span></div>
-  <div><span class="t"><b>4. Lancement de l'application</b></span><span class="pointille"></span><span class="n">9</span></div>
+  <div class="n2"><span class="t">3.1 Récupérer le projet</span><span class="pointille"></span><span class="n">9</span></div>
+  <div class="n2"><span class="t">3.2 Environnement virtuel et dépendances</span><span class="pointille"></span><span class="n">9</span></div>
+  <div class="n2"><span class="t">3.3 (Optionnel) Index sémantique</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.4 Vérifier l'installation</span><span class="pointille"></span><span class="n">10</span></div>
+  <div><span class="t"><b>4. Lancement de l'application</b></span><span class="pointille"></span><span class="n">10</span></div>
   <div><span class="t"><b>5. Guide d'utilisation</b></span><span class="pointille"></span><span class="n">11</span></div>
   <div class="n2"><span class="t">5.1 L'écran de recherche</span><span class="pointille"></span><span class="n">11</span></div>
   <div class="n2"><span class="t">5.2 Onglet « Web » : chercher des pages</span><span class="pointille"></span><span class="n">11</span></div>
@@ -178,7 +181,7 @@
   <div class="n2"><span class="t">5.5 Utilisation en ligne de commande</span><span class="pointille"></span><span class="n">15</span></div>
   <div><span class="t"><b>6. Résolution des problèmes</b></span><span class="pointille"></span><span class="n">17</span></div>
   <div><span class="t"><b>7. Limites connues</b></span><span class="pointille"></span><span class="n">17</span></div>
-  <div><span class="t"><b>8. Conclusion</b></span><span class="pointille"></span><span class="n">17</span></div>
+  <div><span class="t"><b>8. Conclusion</b></span><span class="pointille"></span><span class="n">18</span></div>
   <div><span class="t"><b>Annexe A : Arborescence et adresses</b></span><span class="pointille"></span><span class="n">19</span></div>
   <div><span class="t"><b>Annexe B : Conformité au cahier des charges</b></span><span class="pointille"></span><span class="n">20</span></div>
 </div>
@@ -306,9 +309,11 @@
 <!-- ================= 2. PRÉREQUIS ================= -->
 <div class="saut"></div>
 <h2>2. Prérequis</h2>
+<h3>2.1 Matériel et logiciels</h3>
 <p>
   L'application est multiplateforme : elle s'installe de la même manière sous
-  Windows, Linux et macOS.
+  Windows, Linux et macOS. Elle ne nécessite ni serveur de base de données, ni
+  service externe, ni compte à créer.
 </p>
 <table>
   <caption><b>Tableau 2.1</b> : Prérequis matériels et logiciels.</caption>
@@ -319,13 +324,37 @@
   <tr><td>Connexion Internet</td><td>requise pour l'onglet Web</td><td>Interroger Wikipédia et le Wiktionnaire</td></tr>
   <tr><td>Espace disque</td><td>≈ 100 Mo <span class="petit">(1,2 Go avec l'index sémantique)</span></td><td>Corpus et index</td></tr>
 </table>
-<p>Vérifier la version de Python dans un terminal :</p>
-<pre>python --version</pre>
+<h3>2.2 Installer Python</h3>
 <p>
-  Si <code>python</code> n'est pas reconnu sous Windows, réinstaller Python en
-  cochant l'option <b>« Add Python to PATH »</b>, ou utiliser <code>py</code> à
-  la place.
+  Si Python n'est pas déjà présent, le télécharger sur
+  <b>https://www.python.org/downloads/</b> et l'installer. Sous Windows,
+  <b>cocher impérativement la case « Add Python to PATH »</b> sur le premier
+  écran de l'installateur : sans elle, la commande <code>python</code> ne sera
+  pas reconnue dans le terminal.
 </p>
+<p>
+  Sous Linux, Python est en général déjà installé ; sinon
+  <code>sudo apt install python3 python3-venv python3-pip</code> sous Debian
+  ou Ubuntu. Sous macOS, <code>brew install python</code> avec Homebrew.
+</p>
+
+<h3>2.3 Vérifier les versions installées</h3>
+<p>Ouvrir un terminal et exécuter :</p>
+<pre>python --version
+pip --version</pre>
+<p>
+  La version affichée doit être 3.9 ou supérieure. Si <code>python</code>
+  n'est pas reconnu sous Windows, essayer <code>py --version</code>. Sous
+  Linux et macOS, les commandes sont souvent <code>python3</code> et
+  <code>pip3</code>.
+</p>
+<div class="note">
+  <b>Quelle commande employer dans la suite du manuel ?</b> Les exemples sont
+  écrits avec <code>python</code>. Si cette commande n'existe pas sur votre
+  machine, remplacer <code>python</code> par <code>python3</code> (Linux,
+  macOS) ou par <code>py</code> (Windows) dans toutes les commandes qui
+  suivent.
+</div>
 <div class="note">
   <b>Les onglets Dictionnaire et Traduction fonctionnent hors ligne.</b> Seul
   l'onglet Web a besoin d'une connexion, puisqu'il interroge des sites externes.
@@ -335,14 +364,37 @@
 <h2>3. Installation</h2>
 
 <h3>3.1 Récupérer le projet</h3>
+<p>Deux voies, au choix. Le résultat est le même.</p>
+
+<h4>Avec Git</h4>
 <pre>git clone https://github.com/malickabdoul/codebydarknet.git
-cd codebydarknet
-git checkout feature/base-vectorielle</pre>
+cd codebydarknet</pre>
 <p>
-  Vérifier la présence de <code>api.py</code>, <code>requirements.txt</code>,
-  du dossier <code>data/</code> et des trois fichiers de la base vectorielle
-  (<code>vectors.index</code>, <code>vectorizers.pkl</code>,
-  <code>corpus_meta.pkl</code>).
+  Le projet se trouve sur la branche principale : aucun changement de branche
+  n'est nécessaire.
+</p>
+
+<h4>Sans Git, par téléchargement direct</h4>
+<p>
+  Ouvrir <b>https://github.com/malickabdoul/codebydarknet</b> dans un
+  navigateur, cliquer sur le bouton vert <b>« Code »</b> puis sur
+  <b>« Download ZIP »</b>. Décompresser l'archive, et ouvrir un terminal dans
+  le dossier obtenu.
+</p>
+<p>
+  Sous Windows, le plus simple est d'ouvrir le dossier dans l'explorateur,
+  puis de taper <code>cmd</code> dans la barre d'adresse et de valider : un
+  terminal s'ouvre directement au bon endroit.
+</p>
+
+<h4>Vérifier que le dossier est complet</h4>
+<p>
+  Le dossier doit contenir <code>api.py</code>, <code>requirements.txt</code>,
+  le sous-dossier <code>data/</code> et les trois fichiers de la base
+  vectorielle : <code>vectors.index</code>, <code>vectorizers.pkl</code> et
+  <code>corpus_meta.pkl</code>. Ces trois derniers pèsent environ 70 Mo à eux
+  seuls ; s'ils sont absents ou de très petite taille, le téléchargement est
+  incomplet.
 </p>
 <div class="note">
   <b>La base vectorielle est fournie construite.</b> Il n'est pas nécessaire de
@@ -366,6 +418,20 @@ pip install -r requirements.txt</pre>
   <code>scipy</code>, <code>scikit-learn</code>, <code>faiss-cpu</code>,
   <code>flask</code> et <code>flask-cors</code>.
 </p>
+<div class="note">
+  <b>Sous Windows, si l'activation est refusée.</b> PowerShell interdit par
+  défaut l'exécution de scripts et affiche « l'exécution de scripts est
+  désactivée sur ce système ». Deux solutions : ouvrir un terminal
+  <code>cmd</code> plutôt que PowerShell, ou autoriser les scripts pour la
+  session en cours avec
+  <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code>.
+</div>
+<div class="note">
+  <b>L'environnement virtuel n'est pas obligatoire.</b> Il évite les conflits
+  avec d'autres projets Python. Pour aller au plus court, la commande
+  <code>pip install -r requirements.txt</code> seule suffit à installer les
+  dépendances sur l'installation Python du système.
+</div>
 
 <h3>3.3 (Optionnel) Index sémantique</h3>
 <p>
@@ -639,6 +705,35 @@ python benchmark.py</pre>
 <table>
   <caption><b>Tableau 6.1</b> : Problèmes fréquents et solutions.</caption>
   <tr><th style="width:28%">Symptôme</th><th style="width:32%">Cause probable</th><th>Solution</th></tr>
+  <tr>
+    <td><code>git</code> n'est pas reconnu</td>
+    <td>Git n'est pas installé</td>
+    <td>Inutile de l'installer : télécharger le projet en archive ZIP depuis GitHub (§ 3.1)</td>
+  </tr>
+  <tr>
+    <td>« L'exécution de scripts est désactivée sur ce système »</td>
+    <td>PowerShell bloque l'activation de l'environnement virtuel</td>
+    <td>Ouvrir un terminal <code>cmd</code> au lieu de PowerShell, ou exécuter
+        <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code></td>
+  </tr>
+  <tr>
+    <td><code>pip</code> n'est pas reconnu</td>
+    <td>pip n'est pas dans le PATH</td>
+    <td>Employer <code>python -m pip install -r requirements.txt</code></td>
+  </tr>
+  <tr>
+    <td>L'installation de <code>faiss-cpu</code> échoue</td>
+    <td>pip trop ancien, ou version de Python non prise en charge</td>
+    <td>Mettre pip à jour avec <code>python -m pip install --upgrade pip</code>, puis réessayer.
+        Vérifier que Python est en version 3.9 ou plus</td>
+  </tr>
+  <tr>
+    <td><code>FileNotFoundError</code> sur <code>vectors.index</code></td>
+    <td>Téléchargement incomplet, ou terminal ouvert dans le mauvais dossier</td>
+    <td>Vérifier que les trois fichiers de la base vectorielle sont présents et
+        pèsent environ 70 Mo au total (§ 3.1), et que le terminal se trouve
+        dans le dossier contenant <code>api.py</code></td>
+  </tr>
   <tr>
     <td><code>python</code> n'est pas reconnu</td>
     <td>Python absent ou hors du PATH</td>

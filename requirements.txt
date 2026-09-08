@@ -1,0 +1,13 @@
+# Versions testées le 2026-09-05 sous Python 3.11.
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10          # utilisé par hstack dans build_index.py et search.py
+scikit-learn>=1.3
+faiss-cpu>=1.7
+flask>=3.0
+flask-cors>=4.0
+
+# --- optionnel : recherche semantique (section 9 du README) ---
+# Non requis. Sans ces paquets, le moteur tourne sur l'index TF-IDF fourni.
+# Tire torch (~550 Mo) puis telecharge un modele (~470 Mo).
+# sentence-transformers>=3.0

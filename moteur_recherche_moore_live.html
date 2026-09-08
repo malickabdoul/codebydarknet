@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gʋlsg — Moteur de recherche sémantique mooré</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#221912;
+    --ink-soft:#3a2c20;
+    --sand:#f2e8d5;
+    --sand-dim:#e6d8bd;
+    --rust:#c1552f;
+    --rust-dim:#9c4325;
+    --millet:#e3a857;
+    --sage:#7c8459;
+    --paper:#f7f0e2;
+    --line: rgba(34,25,18,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--ink);
+    color: var(--paper);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  /* subtle bogolan-inspired line texture */
+  .texture{
+    position:fixed; inset:0; pointer-events:none; opacity:0.05; z-index:0;
+    background-image:
+      repeating-linear-gradient(115deg, var(--rust) 0px, var(--rust) 1px, transparent 1px, transparent 42px),
+      repeating-linear-gradient(25deg, var(--millet) 0px, var(--millet) 1px, transparent 1px, transparent 58px);
+  }
+  .wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding: 48px 24px 90px;}
+
+  header{margin-bottom:44px;}
+  .eyebrow{
+    font-family:'Noto Sans', sans-serif; font-weight:600; font-size:12.5px;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--millet);
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--millet);}
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(34px,5.5vw,54px);
+    line-height:1.04; margin:0 0 14px; color:var(--paper);
+  }
+  h1 em{ font-style:italic; font-weight:500; color:var(--rust); }
+  .sub{
+    font-size:16.5px; line-height:1.6; color:rgba(247,240,226,0.72); max-width:56ch;
+  }
+
+  /* SEARCH — the signature / hero element */
+  .search-card{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 30px 30px 26px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    border: 1px solid rgba(34,25,18,0.06);
+  }
+  .search-row{
+    display:flex; align-items:center; gap:12px;
+    background: white;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 6px 8px 6px 18px;
+  }
+  .search-row:focus-within{ border-color: var(--rust); }
+  .search-row input{
+    flex:1; border:none; outline:none; background:transparent;
+    font-family:'Noto Sans', sans-serif; font-size:19px; font-weight:600;
+    color: var(--ink); padding: 12px 0;
+  }
+  .search-row input::placeholder{ color:#8c7f6d; font-weight:400; }
+  .search-row .lang-pill{
+    font-family:'Work Sans'; font-size:12px; font-weight:600; color:#8c7f6d;
+    border:1px solid var(--line); padding:6px 10px; border-radius:100px; white-space:nowrap;
+  }
+  .go-btn{
+    background: var(--rust); color:white; border:none; border-radius:9px;
+    padding: 12px 20px; font-family:'Work Sans'; font-weight:600; font-size:14.5px;
+    cursor:pointer; transition: background .15s ease;
+  }
+  .go-btn:hover{ background: var(--rust-dim); }
+
+  /* virtual keyboard */
+  .kb-label{
+    margin-top:22px; margin-bottom:10px; font-size:12.5px; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase; color:#8c7f6d;
+    display:flex; align-items:center; gap:8px;
+  }
+  .kb-label .hint{ font-weight:400; text-transform:none; letter-spacing:0; color:#a89a83; }
+  .keyboard{
+    display:flex; flex-wrap:wrap; gap:7px;
+  }
+  .key{
+    font-family:'Noto Sans', sans-serif; font-size:18px; font-weight:600;
+    background: var(--sand); border:1px solid var(--line); color: var(--ink-soft);
+    width:42px; height:42px; border-radius:9px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .1s ease, background .1s ease, color .1s ease;
+  }
+  .key:hover{ background: var(--rust); color:white; transform: translateY(-2px); border-color:var(--rust); }
+  .key.wide{ width:auto; padding:0 16px; font-size:13px; font-family:'Work Sans'; font-weight:600; }
+
+  /* domain filter chips */
+  .filters{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  /* display:flex l'emporte sur le style navigateur de [hidden] : il faut
+     neutraliser explicitement, sinon les puces restent visibles. */
+  .filters[hidden], .mode-note[hidden]{ display:none; }
+  .chip{
+    font-family:'Work Sans'; font-size:12.5px; font-weight:500; color:var(--ink-soft);
+    background:transparent; border:1px solid var(--line); border-radius:100px;
+    padding:6px 13px; cursor:pointer; transition:.12s ease;
+  }
+  .chip.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  /* results */
+  .results-meta{
+    margin-top:36px; margin-bottom:16px; font-size:13px; color:rgba(247,240,226,0.55);
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;
+  }
+  .results-meta strong{ color: var(--millet); font-weight:600; }
+  .results{ display:flex; flex-direction:column; gap:10px; }
+  .card{
+    background: var(--paper); color: var(--ink); border-radius:14px;
+    padding: 18px 22px; display:flex; gap:20px; align-items:flex-start;
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  .card .mot-col{ min-width:160px; }
+  .mot{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:20px; color:var(--rust-dim); }
+  .pron{ font-size:12.5px; color:#a89a83; margin-top:2px; }
+  .cat{
+    display:inline-block; margin-top:8px; font-size:10.5px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.05em; color:var(--sage);
+    background: rgba(124,132,89,0.12); padding:3px 8px; border-radius:5px;
+  }
+  .defs{ flex:1; }
+  .defs .fr{ font-size:15.5px; line-height:1.5; color:var(--ink); }
+  .defs .en{ font-size:13.5px; line-height:1.5; color:#8c7f6d; margin-top:4px; font-style:italic; }
+  .domaine-tag{
+    margin-top:9px; font-size:11px; color:var(--millet); font-weight:600;
+    display: inline-flex; align-items:center; gap:5px;
+  }
+  .domaine-tag::before{ content:"◆"; font-size:8px; }
+
+  .empty{
+    text-align:center; padding: 50px 20px; color:rgba(247,240,226,0.45); font-size:14.5px;
+  }
+
+  footer{
+    margin-top:56px; padding-top:24px; border-top:1px solid rgba(247,240,226,0.12);
+    font-size:12.5px; line-height:1.7; color:rgba(247,240,226,0.45);
+  }
+  footer b{ color:rgba(247,240,226,0.7); }
+
+
+  /* mode tabs */
+  .modes{ display:flex; gap:6px; margin-bottom:16px; }
+  .mode{
+    font-family:'Work Sans'; font-size:13px; font-weight:600; color:#8c7f6d;
+    background:transparent; border:1px solid var(--line); border-radius:8px;
+    padding:8px 14px; cursor:pointer; transition:.12s ease;
+  }
+  .mode:hover{ border-color:var(--rust); color:var(--rust); }
+  .mode.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .mode-note{ margin-top:14px; font-size:12.5px; color:#8c7f6d; line-height:1.5; }
+
+  /* glose */
+  .glose-card{
+    background:var(--paper); color:var(--ink); border-radius:14px;
+    padding:22px; border:1px solid rgba(0,0,0,0.04);
+  }
+  .glose-line{
+    font-family:'Noto Sans', sans-serif; font-weight:700; font-size:22px;
+    color:var(--rust-dim); line-height:1.45; margin-bottom:4px;
+  }
+  .glose-cov{ font-size:12.5px; color:#8c7f6d; margin-bottom:18px; }
+  .seg-table{ display:flex; flex-wrap:wrap; gap:8px; }
+  .seg{
+    border:1px solid var(--line); border-radius:10px; padding:9px 12px;
+    min-width:120px; background:white;
+  }
+  .seg.expr{ border-color:var(--sage); background:rgba(124,132,89,0.07); }
+  .seg.ignore{ opacity:.5; }
+  .seg.inconnu{ border-color:var(--rust); background:rgba(193,85,47,0.06); }
+  .seg .src{ font-size:12px; color:#8c7f6d; }
+  .seg .dst{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:16px; color:var(--ink); }
+  .seg .alt{ font-size:11.5px; color:#a89a83; margin-top:3px; }
+  .seg .badge{
+    display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--sage); margin-bottom:3px;
+  }
+  .seg.inconnu .badge{ color:var(--rust); }
+  .avert{
+    margin-top:18px; padding-top:14px; border-top:1px solid var(--line);
+    font-size:12px; line-height:1.55; color:#8c7f6d;
+  }
+
+
+  /* tournures idiomatiques */
+  .idiomes{
+    margin-top:18px; padding-top:16px; border-top:1px dashed var(--line);
+  }
+  .idiomes h4{
+    margin:0 0 4px; font-family:'Work Sans'; font-size:11.5px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--sage);
+  }
+  .idiomes .hint2{ font-size:11.5px; color:#a89a83; margin-bottom:10px; }
+  .idiome{
+    display:flex; align-items:baseline; gap:10px; padding:7px 0;
+    border-bottom:1px solid rgba(34,25,18,0.06);
+  }
+  .idiome:last-child{ border-bottom:none; }
+  .idiome .sc{
+    font-family:'Work Sans'; font-size:11px; font-weight:600; color:var(--millet);
+    min-width:34px;
+  }
+  .idiome .mo{ font-family:'Noto Sans', sans-serif; font-weight:700; font-size:15px; color:var(--rust-dim); }
+  .idiome .df{ font-size:13px; color:#8c7f6d; }
+
+
+  /* selecteur d'index */
+  .modes{ align-items:center; }
+  .backend-box{ margin-left:auto; display:flex; align-items:center; gap:7px; }
+  .backend-box[hidden]{ display:none; }
+  .backend-box label{
+    font-family:'Work Sans'; font-size:11px; font-weight:600; letter-spacing:.06em;
+    text-transform:uppercase; color:#a89a83;
+  }
+  .backend-box select{
+    font-family:'Work Sans'; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+    background:white; border:1px solid var(--line); border-radius:8px;
+    padding:7px 9px; cursor:pointer;
+  }
+
+
+  /* renvois : synonymes, antonymes, variantes, autres sens */
+  .renvois{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; align-items:center; }
+  .renvoi-label{
+    font-family:'Work Sans'; font-size:10.5px; font-weight:600; letter-spacing:.05em;
+    text-transform:uppercase; color:#a89a83; margin-right:2px;
+  }
+  .renvoi{
+    font-family:'Noto Sans', sans-serif; font-size:13px; font-weight:600;
+    background:var(--sand); border:1px solid var(--line); color:var(--ink-soft);
+    border-radius:100px; padding:3px 10px; cursor:pointer; transition:.12s ease;
+  }
+  .renvoi:hover{ background:var(--rust); color:white; border-color:var(--rust); }
+  .renvoi.ant{ background:transparent; border-style:dashed; }
+  .renvoi.sens{ background:transparent; color:var(--sage); border-color:var(--sage); }
+  .renvoi-fixe{
+    font-family:'Noto Sans', sans-serif; font-size:12.5px; color:#8c7f6d;
+    padding:3px 0;
+  }
+
+  /* liens externes, facon page de resultats */
+  .web{ margin-top:34px; }
+  .web h3{
+    font-family:'Work Sans'; font-size:12.5px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--millet); margin:0 0 4px;
+  }
+  .web .web-hint{ font-size:12.5px; color:rgba(247,240,226,0.45); margin-bottom:16px; }
+  .lien{ margin-bottom:18px; max-width:70ch; }
+  .lien .src{ font-size:12px; color:rgba(247,240,226,0.45); margin-bottom:2px; }
+  .lien a{
+    font-family:'Fraunces', serif; font-size:19px; color:var(--millet);
+    text-decoration:none; line-height:1.3;
+  }
+  .lien a:hover{ text-decoration:underline; }
+  .lien .desc{ font-size:13.5px; line-height:1.5; color:rgba(247,240,226,0.62); margin-top:3px; }
+  .lien .note{
+    font-size:12px; color:var(--rust); margin-top:4px;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .lien .note::before{ content:"!"; font-weight:700; }
+
+
+  /* avertissement quand l'index choisi ne convient pas a la requete */
+  .mismatch{
+    background: rgba(193,85,47,0.14); border:1px solid var(--rust);
+    border-radius:10px; padding:12px 15px; margin-bottom:14px;
+    font-size:13.5px; line-height:1.55; color:var(--paper);
+  }
+  .mismatch b{ color:var(--millet); }
+  .mismatch button{
+    background:var(--rust); color:white; border:none; border-radius:7px;
+    padding:5px 11px; font-family:'Work Sans'; font-weight:600; font-size:12.5px;
+    cursor:pointer; margin-left:8px;
+  }
+  .mismatch button:hover{ background:var(--rust-dim); }
+
+
+  /* resultats Web */
+  .pont{
+    background: rgba(124,132,89,0.16); border:1px solid var(--sage);
+    border-radius:10px; padding:11px 15px; margin-bottom:20px;
+    font-size:13.5px; line-height:1.5; color:var(--paper);
+  }
+  .pont b{ color:var(--millet); }
+  .pont .srcs{ display:block; margin-top:4px; font-size:12px; color:rgba(247,240,226,0.5); }
+  .wresult{ margin-bottom:22px; max-width:74ch; }
+  .wresult .wsrc{ font-size:12px; color:rgba(247,240,226,0.45); margin-bottom:3px; }
+  .wresult a{
+    font-family:'Fraunces', serif; font-size:20px; color:var(--millet);
+    text-decoration:none; line-height:1.3;
+  }
+  .wresult a:hover{ text-decoration:underline; }
+  .wresult .wextract{ font-size:14px; line-height:1.55; color:rgba(247,240,226,0.68); margin-top:4px; }
+  .wresult .wmeta{ font-size:11.5px; color:rgba(247,240,226,0.38); margin-top:5px; }
+  .wresult.moore{ border-left:2px solid var(--rust); padding-left:14px; }
+
+  @media (max-width: 560px){
+    .card{ flex-direction:column; gap:8px; }
+    .search-row{ flex-wrap:wrap; }
+    .key{ width:38px; height:38px; font-size:16px; }
+  }
+</style>
+</head>
+<body>
+<div class="texture"></div>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Projet IBAM · Web sémantique</div>
+    <h1>Gʋls-n bao <em>rat woto</em></h1>
+    <p class="sub">Moteur de recherche sémantique pour le mooré. Tapez un mot en mooré, en français ou en anglais — le moteur cherche par sens, pas seulement par orthographe exacte.</p>
+  </header>
+
+  <div class="search-card">
+    <div class="modes" id="modes">
+      <button class="mode active" data-mode="web">Web</button>
+      <button class="mode" data-mode="recherche">Dictionnaire</button>
+      <button class="mode" data-mode="traduction">Traduction FR &rarr; mooré</button>
+      <span class="backend-box" id="backendBox" hidden>
+        <label for="backendSel">Index</label>
+        <select id="backendSel"></select>
+      </span>
+    </div>
+    <div class="search-row">
+      <input id="searchInput" type="text" placeholder="Gʋls f gomd la f bao a võorem…" autocomplete="off" oninput="debouncedLancer()" onkeydown="if(event.key==='Enter') lancer()">
+      <span class="lang-pill">moore · fr · en</span>
+      <button class="go-btn" onclick="lancer()">Baoo</button>
+    </div>
+
+    <div class="kb-label">Caractères mooré <span class="hint">— cliquez pour insérer, absents du clavier standard</span></div>
+    <div class="keyboard" id="keyboard"></div>
+
+    <div class="filters" id="filters"></div>
+    <div class="mode-note" id="modeNote">Tapez un mot en mooré, en français ou en anglais. Le dictionnaire traduit la requête, puis le moteur interroge le Web et affiche les pages trouvées.</div>
+  </div>
+
+  <div class="results-meta">
+    <span id="resultsCount">Base vectorielle connectée — 10 566 entrées</span>
+    <span>Corpus complet : <strong id="corpusCount">10 566 entrées</strong> · Webonary Moore</span>
+  </div>
+
+  <div class="mismatch" id="mismatch" hidden></div>
+  <div class="results" id="results"></div>
+
+  <div class="web" id="web" hidden></div>
+
+  <footer>
+    <b>À propos de cette page.</b> Interface branchée sur l'API locale (<code>api.py</code>), qui interroge une vraie base de données vectorielle (index FAISS + vecteurs TF-IDF/LSA) construite sur les 10 566 entrées du corpus Webonary Moore. La recherche se fait par proximité de sens, pas seulement par correspondance de texte exact. Lancez <code>python3 api.py</code> avant d'ouvrir cette page.
+  </footer>
+</div>
+
+<script>
+// L'interface marche dans les deux cas : servie par api.py (même origine) ou
+// ouverte en double-clic depuis le disque (file:// -> API locale).
+const API_BASE = location.protocol === 'file:' ? 'http://127.0.0.1:5000' : '';
+const API_SEARCH   = API_BASE + '/api/search';
+const API_DOMAINES = API_BASE + '/api/domaines';
+const API_HEALTH   = API_BASE + '/api/health';
+
+// Les définitions viennent du corpus et peuvent contenir des caractères qui
+// cassent le HTML (le corpus contient déjà « Copyright & Contact »).
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+const specialChars = ["ã","ẽ","ĩ","õ","ũ","ɛ","ɩ","ʋ","ŋ","ɲ"];
+const kb = document.getElementById('keyboard');
+specialChars.forEach(ch=>{
+  const b = document.createElement('button');
+  b.className='key'; b.textContent=ch; b.type='button';
+  b.onclick=()=>{
+    const input = document.getElementById('searchInput');
+    const start = input.selectionStart ?? input.value.length;
+    const end = input.selectionEnd ?? input.value.length;
+    input.value = input.value.slice(0,start) + ch + input.value.slice(end);
+    input.focus();
+    input.selectionStart = input.selectionEnd = start + ch.length;
+    lancer();
+  };
+  kb.appendChild(b);
+});
+const clearBtn = document.createElement('button');
+clearBtn.className='key wide'; clearBtn.textContent='Effacer'; clearBtn.type='button';
+clearBtn.onclick=()=>{ document.getElementById('searchInput').value=''; lancer(); };
+kb.appendChild(clearBtn);
+
+// Puces de domaine : la liste est déduite du corpus par l'API (/api/domaines),
+// et le filtrage est fait côté serveur avant le top-k. Une liste figée côté
+// client ratait 109 des 130 valeurs du corpus, et filtrer après coup les k
+// résultats déjà renvoyés affichait souvent 0 carte.
+let activeDomaine = null;
+let DOMAINES = [];
+const filtersEl = document.getElementById('filters');
+
+function renderChips(){
+  filtersEl.innerHTML='';
+  const allChip = document.createElement('button');
+  allChip.className = 'chip' + (activeDomaine===null?' active':'');
+  allChip.textContent = 'Tous les domaines';
+  allChip.onclick = ()=>{ activeDomaine=null; renderChips(); lancer(); };
+  filtersEl.appendChild(allChip);
+  DOMAINES.forEach(d=>{
+    const c = document.createElement('button');
+    c.className = 'chip' + (activeDomaine===d?' active':'');
+    c.textContent = d;
+    c.onclick = ()=>{ activeDomaine = (activeDomaine===d? null : d); renderChips(); lancer(); };
+    filtersEl.appendChild(c);
+  });
+}
+
+async function initFromApi(){
+  try{
+    const [dom, health] = await Promise.all([
+      fetch(API_DOMAINES).then(r=>r.ok?r.json():[]),
+      fetch(API_HEALTH).then(r=>r.ok?r.json():null)
+    ]);
+    DOMAINES = dom;
+    if(health && health.backends && health.backends.length > 1){
+      BACKEND = health.backend_defaut;
+      const sel = document.getElementById('backendSel');
+      const LIB = {auto:'Auto (selon la langue)', entrees:'Mots mooré (en-têtes)', tfidf:'TF-IDF seul', semantique:'Sémantique seul', hybride:'Hybride (RRF)'};
+      sel.innerHTML = health.backends
+        .map(b=>`<option value="${esc(b)}"${b===BACKEND?' selected':''}>${esc(LIB[b]||b)}</option>`)
+        .join('');
+      sel.onchange = ()=>{ BACKEND = sel.value; lancer(); };
+      document.getElementById('backendBox').hidden = (MODE !== 'recherche');
+    }
+    if(health && health.entrees){
+      const n = health.entrees.toLocaleString('fr-FR');
+      document.getElementById('resultsCount').textContent =
+        'Base vectorielle connectée — ' + n + ' entrées';
+      document.getElementById('corpusCount').textContent = n + ' entrées';
+    }
+  }catch(err){
+    document.getElementById('resultsCount').textContent = 'API non joignable';
+  }
+  renderChips();
+  appliquerMode();
+}
+
+let searchToken = 0; // évite d'afficher une réponse d'API arrivée en retard
+let debounceTimer = null;
+function debouncedLancer(){
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(lancer, 300);
+}
+
+async function runSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  const resultsEl = document.getElementById('results');
+  const countEl = document.getElementById('resultsCount');
+
+  if(!q){
+    document.getElementById('web').hidden = true;
+    document.getElementById('mismatch').hidden = true;
+    resultsEl.innerHTML = '<div class="empty">Tapez un mot en mooré, en français ou en anglais pour lancer la recherche par sens.</div>';
+    return;
+  }
+
+  const myToken = ++searchToken;
+  countEl.textContent = 'Recherche en cours…';
+
+  let url = `${API_SEARCH}?q=${encodeURIComponent(q)}&k=20`;
+  if(activeDomaine) url += `&domaine=${encodeURIComponent(activeDomaine)}`;
+  if(BACKEND) url += `&backend=${encodeURIComponent(BACKEND)}`;
+
+  let data;
+  try{
+    const resp = await fetch(url);
+    if(!resp.ok){
+      let msg = 'HTTP ' + resp.status;
+      try{ const j = await resp.json(); if(j && j.error) msg = j.error; }catch(_){}
+      throw new Error(msg);
+    }
+    data = await resp.json();
+  }catch(err){
+    if(myToken !== searchToken) return;
+    countEl.textContent = 'Erreur de recherche';
+    resultsEl.innerHTML = `<div class="empty">${esc(err.message)}<br>Vérifiez que <code>python3 api.py</code> tourne (${esc(API_BASE || location.origin)}), puis réessayez.</div>`;
+    return;
+  }
+  if(myToken !== searchToken) return;
+
+  const suffixe = activeDomaine ? ` dans « ${activeDomaine} »` : '';
+  countEl.textContent = data.length + ' résultat' + (data.length!==1?'s':'')
+    + ' pour « ' + q + ' »' + suffixe + ' (triés par proximité de sens)';
+
+  if(data.length===0){
+    document.getElementById('web').hidden = true;
+    document.getElementById('mismatch').hidden = true;
+    resultsEl.innerHTML = '<div class="empty">Aucun résultat proche trouvé dans la base vectorielle.</div>';
+    return;
+  }
+
+  resultsEl.innerHTML = data.map(d=>`
+    <div class="card">
+      <div class="mot-col">
+        <div class="mot">${esc(d.mot_moore)}</div>
+        ${d.prononciation ? `<div class="pron">/${esc(d.prononciation)}/</div>` : ''}
+        <div class="cat">${esc(d.categorie)}</div>
+      </div>
+      <div class="defs">
+        <div class="fr">${esc(d.definition_francais)}</div>
+        ${d.definition_english ? `<div class="en">${esc(d.definition_english)}</div>` : ''}
+        ${d.domaine ? `<div class="domaine-tag">${esc(d.domaine)}</div>` : ''}
+        ${renvois(d)}
+      </div>
+    </div>
+  `).join('');
+
+  avertirBackend(data[0]);
+  chargerLiens(data[0]);
+}
+
+// --- renvois et liens externes -------------------------------------------
+
+// Les colonnes synonymes / antonymes / variante / pluriel existaient dans le
+// corpus depuis le debut sans etre affichees : 2 600 entrees ont un synonyme,
+// 3 209 un pluriel. Les synonymes sont cliquables — ce sont des entrees du
+// corpus (96,7 % d'entre eux s'y resolvent).
+function renvois(d){
+  // data-mot plutot qu'un onclick inline : le navigateur HTML-decode les
+  // attributs avant d'evaluer le JS, donc un mot a apostrophe casserait la
+  // chaine. Et 14 en-tetes du corpus en contiennent une (fẽ', gũ', ha').
+  const puce = (mot, cls) =>
+    `<button class="renvoi ${cls}" data-mot="${esc(mot)}">${esc(mot)}</button>`;
+  const morceaux = [];
+
+  if(d.synonymes && d.synonymes.length)
+    morceaux.push(`<span class="renvoi-label">syn.</span>` + d.synonymes.map(m=>puce(m,'syn')).join(''));
+  if(d.antonymes && d.antonymes.length)
+    morceaux.push(`<span class="renvoi-label">contraire</span>` + d.antonymes.map(m=>puce(m,'ant')).join(''));
+  if(d.variantes && d.variantes.length)
+    morceaux.push(`<span class="renvoi-label">variante</span>` + d.variantes.map(m=>puce(m,'syn')).join(''));
+  if(d.pluriel)
+    morceaux.push(`<span class="renvoi-label">pluriel</span><span class="renvoi-fixe">${esc(d.pluriel)}</span>`);
+  if(d.autres_sens > 0)
+    morceaux.push(`<button class="renvoi sens" data-mot="${esc(d.mot_moore)}">`
+      + `${d.autres_sens} autre${d.autres_sens>1?'s':''} sens</button>`);
+
+  return morceaux.length ? `<div class="renvois">${morceaux.join('')}</div>` : '';
+}
+
+// Delegation : les puces sont recreees a chaque recherche.
+document.getElementById('results').addEventListener('click', e=>{
+  const btn = e.target.closest('.renvoi');
+  if(btn && btn.dataset.mot) chercherMot(btn.dataset.mot);
+});
+
+function chercherMot(mot){
+  MODE = 'recherche';
+  appliquerMode();
+  document.getElementById('searchInput').value = mot;
+  activeDomaine = null;
+  renderChips();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  lancer();
+}
+
+async function chargerLiens(premier){
+  const webEl = document.getElementById('web');
+  if(!premier || !premier.mot_moore){ webEl.hidden = true; return; }
+
+  const monToken = searchToken;
+  let url = `${API_BASE}/api/liens?q=${encodeURIComponent(premier.mot_moore)}`;
+  if(premier.definition_francais) url += `&fr=${encodeURIComponent(premier.definition_francais)}`;
+
+  let liens;
+  try{
+    const resp = await fetch(url);
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    liens = await resp.json();
+  }catch(err){ webEl.hidden = true; return; }
+  if(monToken !== searchToken || !Array.isArray(liens) || !liens.length){ webEl.hidden = true; return; }
+
+  webEl.innerHTML = `
+    <h3>Sur le web</h3>
+    <div class="web-hint">Ressources externes pour « ${esc(premier.mot_moore)} ». Ces pages ne font pas partie du corpus.</div>
+    ${liens.map(l=>`
+      <div class="lien">
+        <div class="src">${esc(l.source)}</div>
+        <a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.nom)}</a>
+        <div class="desc">${esc(l.description)}</div>
+        ${l.note ? `<div class="note">${esc(l.note)}</div>` : ''}
+      </div>`).join('')}`;
+  webEl.hidden = false;
+}
+
+// Le selecteur laisse forcer un index inadapte a la requete : « Semantique
+// seul » sur un mot moore donne 0,0 % au benchmark, parce que le modele ne
+// connait pas la langue. Plutot que de rendre du bruit sans rien dire, on
+// previent — et on propose le retour a « Auto » en un clic.
+const INADAPTE = {
+  moore: {
+    semantique: "l'index sémantique ne connaît pas le mooré",
+    hybride:    "l'index sémantique, qui pèse la moitié de la fusion, ne connaît pas le mooré"
+  },
+  fr_en: {
+    entrees:    "l'index des en-têtes ne regarde que les mots mooré, jamais les définitions"
+  }
+};
+
+function avertirBackend(premier){
+  const el = document.getElementById('mismatch');
+  const langue = premier && premier.langue_detectee;
+  const raison = (BACKEND && BACKEND !== 'auto' && langue)
+    ? (INADAPTE[langue] || {})[BACKEND] : null;
+
+  if(!raison){ el.hidden = true; return; }
+  const nom = langue === 'moore' ? 'mooré' : 'français / anglais';
+  el.innerHTML = `Requête détectée comme <b>${esc(nom)}</b> — mais ${esc(raison)}.`
+    + ` Au-delà des correspondances exactes, ces résultats ne veulent pas dire grand-chose.`
+    + `<button id="btnAuto">Repasser en Auto</button>`;
+  el.hidden = false;
+  document.getElementById('btnAuto').onclick = ()=>{
+    BACKEND = 'auto';
+    const sel = document.getElementById('backendSel');
+    if(sel) sel.value = 'auto';
+    lancer();
+  };
+}
+
+// --- modes ---------------------------------------------------------------
+// « Recherche » interroge la base vectorielle (un mot -> les entrées les plus
+// proches par le sens). « Traduction » découpe une phrase et glose segment
+// par segment : encoder une phrase entière en un seul vecteur n'a pas de sens.
+let MODE = 'web';
+// Backend de recherche. « hybride » fusionne l'index TF-IDF (qui gère le
+// mooré) et l'index d'embeddings (qui comprend le français) ; il n'existe que
+// si build_st_index.py a été lancé. Le sélecteur reste caché sinon.
+let BACKEND = null;
+const PLACEHOLDERS = {
+  web:        'Gʋls f gomd la f bao a võorem…',
+  recherche:  'Un mot en mooré, en français ou en anglais',
+  traduction: "Tapez une phrase en français : je veux boire de l'eau"
+};
+const NOTES = {
+  web:        "Tapez un mot en mooré, en français ou en anglais. Le dictionnaire traduit la requête, puis le moteur interroge le Web et affiche les pages trouvées.",
+  recherche:  "",
+  traduction: "Tapez une phrase entière : elle est découpée, et les expressions connues du corpus sont reconnues d'un bloc."
+};
+
+// Applique l'etat visuel du mode courant. Appele au demarrage ET a chaque
+// changement d'onglet : sans l'appel initial, les puces de domaine restaient
+// affichees en mode Web, ou elles n'ont rien a faire.
+function appliquerMode(){
+  document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active', b.dataset.mode === MODE));
+  document.getElementById('filters').hidden    = (MODE !== 'recherche');
+  document.getElementById('backendBox').hidden = (MODE !== 'recherche') || !BACKEND;
+  document.getElementById('modeNote').hidden   = !NOTES[MODE];
+  document.getElementById('modeNote').textContent = NOTES[MODE] || '';
+  document.getElementById('searchInput').placeholder = PLACEHOLDERS[MODE];
+}
+
+document.getElementById('modes').addEventListener('click', e=>{
+  const btn = e.target.closest('.mode');
+  if(!btn) return;
+  MODE = btn.dataset.mode;
+  appliquerMode();
+  lancer();
+});
+
+function lancer(){
+  if(MODE === 'traduction') return runTranslate();
+  if(MODE === 'web') return runWeb();
+  return runSearch();
+}
+
+// --- recherche Web (EF07-EF12) -------------------------------------------
+// Le corpus sert de pont : « koom » est traduit en « eau » avant d'interroger
+// les sources francophones, et une requête française est rapprochée de son
+// équivalent mooré pour interroger le Wikipédia en mooré.
+async function runWeb(){
+  const q = document.getElementById('searchInput').value.trim();
+  const resultsEl = document.getElementById('results');
+  const countEl = document.getElementById('resultsCount');
+  document.getElementById('mismatch').hidden = true;
+  document.getElementById('web').hidden = true;
+
+  if(!q){
+    resultsEl.innerHTML = '<div class="empty">Tapez un mot pour chercher des pages sur le Web.</div>';
+    return;
+  }
+
+  const myToken = ++searchToken;
+  countEl.textContent = 'Recherche sur le Web…';
+
+  let d;
+  try{
+    const resp = await fetch(`${API_BASE}/api/web?q=${encodeURIComponent(q)}&k=10`);
+    if(!resp.ok){
+      let msg = 'HTTP ' + resp.status;
+      try{ const j = await resp.json(); if(j && j.error) msg = j.error; }catch(_){}
+      throw new Error(msg);
+    }
+    d = await resp.json();
+  }catch(err){
+    if(myToken !== searchToken) return;
+    countEl.textContent = 'Erreur de recherche';
+    resultsEl.innerHTML = `<div class="empty">${esc(err.message)}<br>Vérifiez votre connexion Internet et que <code>python3 api.py</code> tourne.</div>`;
+    return;
+  }
+  if(myToken !== searchToken) return;
+
+  const n = d.resultats.length;
+  countEl.textContent = n + ' page' + (n!==1?'s':'') + ' trouvée' + (n!==1?'s':'') + ' sur le Web';
+
+  if(!n){
+    resultsEl.innerHTML = '<div class="empty">Aucune page trouvée. Essayez un autre terme, ou vérifiez votre connexion Internet.</div>';
+    return;
+  }
+
+  const pont = d.pont ? `<div class="pont"><b>Pont de traduction :</b> ${esc(d.pont)}.
+      ${d.reclasse_semantiquement ? 'Résultats reclassés par proximité de sens.' : ''}
+      <span class="srcs">Sources interrogées : ${esc(d.sources.join(', '))}</span></div>` : '';
+
+  resultsEl.innerHTML = pont + d.resultats.map(r=>`
+    <div class="wresult ${r.source_id === 'mos.wikipedia' ? 'moore' : ''}">
+      <div class="wsrc">${esc(r.source)}</div>
+      <a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${esc(r.titre)}</a>
+      <div class="wextract">${esc(r.extrait)}</div>
+      <div class="wmeta">recherché : « ${esc(r.terme_interroge)} »${r.score !== undefined ? ' · proximité ' + r.score.toFixed(2) : ''}</div>
+    </div>`).join('');
+}
+
+async function runTranslate(){
+  const q = document.getElementById('searchInput').value.trim();
+  const resultsEl = document.getElementById('results');
+  const countEl = document.getElementById('resultsCount');
+
+  if(!q){
+    document.getElementById('web').hidden = true;
+    resultsEl.innerHTML = '<div class="empty">Tapez une phrase en français pour la gloser en mooré.</div>';
+    return;
+  }
+
+  const myToken = ++searchToken;
+  document.getElementById('mismatch').hidden = true;  // sans objet en traduction
+  countEl.textContent = 'Analyse de la phrase…';
+
+  let d;
+  try{
+    const resp = await fetch(`${API_BASE}/api/translate?q=${encodeURIComponent(q)}`);
+    if(!resp.ok){
+      let msg = 'HTTP ' + resp.status;
+      try{ const j = await resp.json(); if(j && j.error) msg = j.error; }catch(_){}
+      throw new Error(msg);
+    }
+    d = await resp.json();
+  }catch(err){
+    if(myToken !== searchToken) return;
+    countEl.textContent = 'Erreur de traduction';
+    resultsEl.innerHTML = `<div class="empty">${esc(err.message)}<br>Vérifiez que <code>python3 api.py</code> tourne, puis réessayez.</div>`;
+    return;
+  }
+  if(myToken !== searchToken) return;
+
+  const expr = d.n_expressions;
+  countEl.textContent = Math.round(d.couverture*100) + ' % des mots reconnus'
+    + (expr ? ` · ${expr} expression${expr>1?'s':''} du corpus` : '');
+
+  const LIBELLE = {expression:'expression', mot:'', ignore:'non traduit', inconnu:'absent du corpus'};
+
+  const segs = d.segments.map(s=>{
+    const tete = s.candidats.length ? esc(s.candidats[0].mot_moore) : '—';
+    const alts = s.candidats.slice(1).map(c=>esc(c.mot_moore)).join(', ');
+    const badge = LIBELLE[s.type] ? `<div class="badge">${LIBELLE[s.type]}</div>` : '';
+    const lemme = s.lemme ? ` <span class="alt">via « ${esc(s.lemme)} »</span>` : '';
+    return `<div class="seg ${esc(s.type)}">
+      ${badge}
+      <div class="src">${esc(s.source)}${lemme}</div>
+      <div class="dst">${tete}</div>
+      ${alts ? `<div class="alt">ou ${alts}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Tournures toutes faites trouvées par proximité de sens dans la base
+  // vectorielle. La glose est littérale et ne peut pas les produire : « tu vas
+  // bien » se dit « laafɩ bala ». Les scores sont affichés parce qu'ils sont
+  // bruités sur les phrases descriptives — c'est à valider, pas une réponse.
+  const idiomes = (d.idiomes && d.idiomes.length) ? `
+    <div class="idiomes">
+      <h4>Tournures idiomatiques proches</h4>
+      <div class="hint2">Classées par accord entre les deux index ; le nombre est la proximité de sens (il n'est donc pas toujours décroissant). À valider par un locuteur.</div>
+      ${d.idiomes.map(i=>`
+        <div class="idiome">
+          <span class="sc">${i.score.toFixed(2)}</span>
+          <span class="mo">${esc(i.mot_moore)}</span>
+          <span class="df">${esc(i.definition_francais)}</span>
+        </div>`).join('')}
+    </div>` : '';
+
+  resultsEl.innerHTML = `
+    <div class="glose-card">
+      <div class="glose-line">${esc(d.glose) || '—'}</div>
+      <div class="glose-cov">Glose de « ${esc(d.phrase)} »</div>
+      <div class="seg-table">${segs}</div>
+      ${idiomes}
+      <div class="avert">${esc(d.avertissement)}</div>
+    </div>`;
+
+  // Liens externes aussi en traduction, sur le premier mot mooré trouvé.
+  const premier = d.segments.find(s=>s.candidats && s.candidats.length);
+  chargerLiens(premier ? {
+    mot_moore: premier.candidats[0].mot_moore,
+    definition_francais: premier.candidats[0].definition_francais
+  } : null);
+}
+
+document.getElementById('results').innerHTML = '<div class="empty">Tapez un mot pour chercher des pages sur le Web.</div>';
+initFromApi();
+</script>
+</body>
+</html>

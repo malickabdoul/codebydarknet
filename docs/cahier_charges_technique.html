@@ -1,0 +1,1147 @@
+<meta charset="utf-8">
+<title>Cahier des charges technique : Moteur de recherche sémantique pour le mooré</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 18mm 18mm; }
+
+  :root{
+    --encre:#1a1a1a; --gris:#555; --filet:#c9c9c9;
+    --titre:#1f3864; --accent:#c1552f; --fond-code:#f4f4f4;
+  }
+
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:"Times New Roman", Times, serif;
+    font-size:10.8pt; line-height:1.5; color:var(--encre);
+  }
+  p{ margin:0 0 .7em; text-align:justify; }
+  code,.mono{ font-family:"Consolas","DejaVu Sans Mono",monospace; font-size:9.4pt; }
+  code{ background:var(--fond-code); padding:1px 3px; border-radius:2px; }
+  pre{
+    background:var(--fond-code); border:1px solid var(--filet);
+    padding:8px 10px; border-radius:3px; overflow:hidden;
+    font-family:"Consolas","DejaVu Sans Mono",monospace; font-size:8.8pt;
+    line-height:1.4; white-space:pre-wrap; margin:.6em 0 1em;
+  }
+
+  h1,h2,h3,h4{ font-family:"Times New Roman", Times, serif; color:var(--titre); }
+  h2{ font-size:15pt; margin:1.6em 0 .5em; padding-bottom:.15em; border-bottom:1.5px solid var(--titre); }
+  h3{ font-size:12.2pt; margin:1.2em 0 .35em; }
+  h4{ font-size:10.8pt; margin:1em 0 .3em; color:var(--encre); }
+
+  .saut{ page-break-before:always; }
+
+  .garde{ text-align:center; page-break-after:always; padding-top:6mm; }
+  .garde .etab{ font-size:13pt; font-weight:bold; }
+  .garde .sous{ font-size:11pt; }
+  .garde .etab + .sous{ margin-bottom:1.1em; }
+  .garde .logo-ujkz{ width:26mm; margin-bottom:6px; }
+  .garde .logo-ibam{ width:38mm; margin-top:10px; }
+  .garde .cours{ margin-top:1.4em; font-size:11pt; font-style:italic; }
+  .garde .type{ margin-top:2.2em; font-size:21pt; font-weight:bold; color:var(--titre); letter-spacing:.03em; }
+  .garde .theme{ margin-top:.6em; font-size:13.5pt; font-weight:bold; }
+  .garde .lot{ font-size:11pt; color:var(--gris); margin-top:.2em; }
+  .garde .equipe{
+    margin:2.6em auto 0; width:74%; border:1px solid var(--filet);
+    border-radius:4px; padding:14px 18px; text-align:left; font-size:10.5pt;
+  }
+  .garde .equipe b{ color:var(--titre); }
+  .garde .equipe table{ width:100%; border:none; margin:.3em 0 0; }
+  .garde .equipe td{ border:none; padding:1px 0; }
+  .garde .date{ margin-top:2.4em; font-size:10.5pt; }
+
+  table{ width:100%; border-collapse:collapse; margin:.5em 0 1.2em; font-size:9.7pt; }
+  caption{ caption-side:top; text-align:center; font-size:9.4pt; color:var(--gris); padding-bottom:.35em; }
+  caption b{ color:var(--encre); }
+  th{ background:var(--titre); color:#fff; text-align:left; padding:5px 8px; font-weight:bold; }
+  td{ border-bottom:1px solid var(--filet); padding:4px 8px; vertical-align:top; }
+  tr:nth-child(even) td{ background:#fafafa; }
+  td.ok{ color:#1d6f42; font-weight:bold; }
+  td.non{ color:#a12b2b; font-weight:bold; }
+
+  .encadre{
+    border:1px solid var(--filet); background:#f7f7f7;
+    padding:9px 13px; margin:.8em 0 1.1em; font-size:10.4pt; border-radius:2px;
+  }
+  .encadre b{ color:var(--encre); }
+
+  .toc{ font-size:10.2pt; }
+  .toc div{ display:flex; align-items:baseline; margin:.08em 0; }
+  .toc .t{ white-space:nowrap; }
+  .toc .pointille{ flex:1; border-bottom:1.2px dotted var(--filet); margin:0 .4em; transform:translateY(-3px); }
+  .toc .n{ color:var(--gris); }
+  .toc .n2{ padding-left:1.4em; }
+
+  ul,ol{ margin:.2em 0 .8em; padding-left:1.4em; }
+  li{ margin:.15em 0; }
+  .petit{ font-size:9.6pt; color:var(--gris); }
+
+  /* schema en couches */
+  .couches{ margin:1em auto 1.3em; width:88%; page-break-inside:avoid; }
+  .couche{
+    border:1px solid var(--filet); background:#f7f7f7; border-radius:3px;
+    padding:8px 12px; margin-bottom:6px; font-size:10pt;
+  }
+  .couche .nom{ font-weight:bold; color:var(--titre); }
+  .couche .det{ color:var(--gris); font-size:9.5pt; }
+  .fleche{ text-align:center; color:var(--gris); font-size:11pt; margin:-2px 0 4px; }
+</style>
+
+<!-- ============ PAGE DE GARDE ============ -->
+<div class="garde">
+  <img class="logo-ujkz" src="logos/ujkz.jpg" alt="Armoiries de l'Université Joseph KI-ZERBO">
+  <div class="etab">UNIVERSITÉ JOSEPH KI-ZERBO</div>
+  <div class="sous">(UJKZ)</div>
+  <div class="etab">INSTITUT BURKINABÈ DES ARTS ET MÉTIERS</div>
+  <div class="sous">(IBAM)</div>
+  <img class="logo-ibam" src="logos/ibam.png" alt="Logo de l'IBAM">
+
+  <div class="cours">Cours : Web Sémantique et Web de Données</div>
+
+  <div class="type">CAHIER DES CHARGES TECHNIQUE</div>
+  <div class="theme">Moteur de recherche sémantique pour le mooré</div>
+  <div class="lot">Recherche Web multilingue : mooré, français, anglais</div>
+
+  <div class="equipe">
+    <b>Présenté par</b>
+    <table>
+      <tr><td>SAVADOGO Adjaratou</td></tr>
+      <tr><td>KOMPAORE Malick</td></tr>
+      <tr><td>OUEDRAOGO Abdoul Razack</td></tr>
+      <tr><td>KABORE Olivier</td></tr>
+    </table>
+    <div style="margin-top:.9em"><b>Encadré par</b><br>Dr. GUINKO T. Ferdinand</div>
+  </div>
+
+  <div class="date">Année universitaire 2025–2026</div>
+</div>
+
+<!-- ============ TABLE DES MATIÈRES ============ -->
+<h2 style="margin-top:0">Table des matières</h2>
+<div class="toc">
+  <div><span class="t"><b>Introduction générale</b></span><span class="pointille"></span><span class="n">3</span></div>
+  <div class="n2"><span class="t">Le problème n'était pas celui que nous pensions</span><span class="pointille"></span><span class="n">3</span></div>
+  <div class="n2"><span class="t">Notre démarche de travail</span><span class="pointille"></span><span class="n">3</span></div>
+  <div><span class="t"><b>1. Architecture générale de la plateforme</b></span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.1 Rappel du besoin et principe de conception</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.2 Architecture en couches</span><span class="pointille"></span><span class="n">5</span></div>
+  <div class="n2"><span class="t">1.3 Trajet d'une requête utilisateur</span><span class="pointille"></span><span class="n">5</span></div>
+  <div><span class="t"><b>2. Conception de la base vectorielle</b></span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.1 Glossaire des notions employées</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.2 Le corpus source et sa structure</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.3 Démarche de vectorisation</span><span class="pointille"></span><span class="n">7</span></div>
+  <div class="n2"><span class="t">2.4 Les cinq index et leur rôle</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.5 Fusion par les rangs</span><span class="pointille"></span><span class="n">8</span></div>
+  <div class="n2"><span class="t">2.6 Routage automatique selon la langue</span><span class="pointille"></span><span class="n">9</span></div>
+  <div class="n2"><span class="t">2.7 Priorité de la correspondance exacte</span><span class="pointille"></span><span class="n">9</span></div>
+  <div><span class="t"><b>3. Traitement automatique de la langue</b></span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.1 Normalisation du français</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.2 Index inverse et segmentation</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.3 Lemmatisation et mots-outils</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.4 Tournures idiomatiques</span><span class="pointille"></span><span class="n">10</span></div>
+  <div class="n2"><span class="t">3.5 Découpage des domaines</span><span class="pointille"></span><span class="n">11</span></div>
+  <div><span class="t"><b>4. Recherche sur le Web</b></span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">4.1 Sources retenues et critères de choix</span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">4.2 Le pont de traduction</span><span class="pointille"></span><span class="n">12</span></div>
+  <div class="n2"><span class="t">4.3 Reclassement et exposition du mooré</span><span class="pointille"></span><span class="n">12</span></div>
+  <div><span class="t"><b>5. Qualité des données du corpus</b></span><span class="pointille"></span><span class="n">14</span></div>
+  <div><span class="t"><b>6. Spécifications techniques de mise en œuvre</b></span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.1 Exposition par une API applicative</span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.2 Sécurité et droits d'accès</span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.3 Qualité, performance et compatibilité</span><span class="pointille"></span><span class="n">15</span></div>
+  <div class="n2"><span class="t">6.4 Tests et validation</span><span class="pointille"></span><span class="n">16</span></div>
+  <div class="n2"><span class="t">6.5 Gestion de versions et dépendances</span><span class="pointille"></span><span class="n">16</span></div>
+  <div><span class="t"><b>7. Choix techniques et alternatives écartées</b></span><span class="pointille"></span><span class="n">17</span></div>
+  <div><span class="t"><b>Conclusion</b></span><span class="pointille"></span><span class="n">18</span></div>
+  <div><span class="t"><b>Annexe A : Résultats du banc d'essai</b></span><span class="pointille"></span><span class="n">19</span></div>
+  <div><span class="t"><b>Annexe B : Contrats des points d'entrée</b></span><span class="pointille"></span><span class="n">20</span></div>
+  <div><span class="t"><b>Références bibliographiques</b></span><span class="pointille"></span><span class="n">22</span></div>
+</div>
+
+<!-- ============ INTRODUCTION ============ -->
+<div class="saut"></div>
+<h2>Introduction générale</h2>
+<p>
+  Le cahier des charges technique présente les choix retenus pour la
+  réalisation du projet. Il précise les technologies employées, l'organisation
+  du système, la structure des données et les éléments nécessaires à sa mise
+  en place.
+</p>
+<p>
+  Dans le cadre du cours de Web sémantique et web de données, ce document porte
+  sur le thème « Moteur de recherche sémantique pour le mooré ». Il s'agit de
+  permettre à un utilisateur de formuler une requête en mooré, en français ou
+  en anglais, et d'obtenir des pages Web accompagnées de leur titre, d'un
+  extrait et d'un lien.
+</p>
+
+<h3>Le problème n'était pas celui que nous pensions</h3>
+<p>
+  Nous avons abordé le sujet en croyant que la difficulté serait de chercher
+  sur le Web. Elle est ailleurs. Les moteurs de recherche existent, ils
+  fonctionnent bien, et rien ne justifierait d'en réécrire un pour un projet
+  d'étudiants.
+</p>
+<p>
+  La vraie difficulté vient de la langue. Le mooré est une langue à faibles
+  ressources : peu de contenus numériques, aucun outil de traitement
+  automatique librement disponible, et dix caractères qui ne figurent pas sur
+  un clavier ordinaire. Un moteur généraliste interrogé avec le mot
+  <code>koom</code> ne rend rien d'utile, non parce qu'il serait mauvais, mais
+  parce que ce mot ne lui dit rien. La question s'est donc déplacée : elle
+  n'est pas de savoir comment chercher sur le Web, mais comment faire franchir
+  à une requête mooré la barrière qui la sépare d'un Web francophone et
+  anglophone.
+</p>
+<p>
+  Notre réponse tient dans une inversion de rôle. Nous disposions du
+  dictionnaire <i>Webonary Moore</i>, soit 10 566 entrées mooré avec leurs
+  définitions française et anglaise, et nous avions d'abord conçu le projet
+  comme un moteur de recherche <i>dans</i> ce dictionnaire. Le cahier des
+  charges fonctionnel dit pourtant explicitement que le système doit dépasser
+  « une application limitée à un dictionnaire ». Nous avons donc changé la
+  place du corpus : de destination, il est devenu <b>pont</b>. Une requête
+  mooré est traduite avant d'être envoyée aux sources francophones, et une
+  requête française est rapprochée de son équivalent mooré pour interroger les
+  sources rédigées en mooré.
+</p>
+
+<h3>Notre démarche de travail</h3>
+<p>
+  Nous avons travaillé par itérations courtes, en gardant une règle : ne rien
+  décider sur une impression. Chaque fois qu'un choix se présentait, nous avons
+  cherché à le mesurer avant de trancher. Cette discipline nous a coûté du
+  temps, et elle nous a évité plusieurs erreurs que nous aurions autrement
+  livrées sans les voir.
+</p>
+<p>
+  Le cas le plus net concerne les plongements lexicaux. Remplacer notre
+  représentation TF-IDF par un modèle pré-entraîné paraissait l'amélioration
+  évidente, et c'est d'ailleurs ce que nous avions annoncé dans une première
+  version du <i>README</i>. La mesure a montré que ce modèle obtient
+  <b>0,0 %</b> de réussite sur une requête en mooré, langue qu'il ne connaît
+  pas. Le remplacement aurait amélioré une moitié du moteur en détruisant
+  l'autre. Nous avons conservé les deux représentations.
+</p>
+<p>
+  Nous avons ensuite fait la même erreur à plus petite échelle, en prenant la
+  fusion des deux index comme réglage par défaut. Là encore, la mesure a
+  tranché contre nous : la fusion gagne nettement en français et perd en
+  mooré. C'est de ce second constat qu'est né l'aiguillage par langue décrit
+  en section 2.6.
+</p>
+<p>
+  Un troisième épisode mérite d'être rapporté parce qu'il porte sur la mesure
+  elle-même. Notre banc d'essai indiquait 100 % de réussite pour tous les index
+  sur la recherche d'un mot mooré. Ce résultat était trop beau : nous avions
+  écrit un raccourci qui fait passer les correspondances exactes avant les
+  vecteurs, et le test interrogeait le moteur avec le mot exact. Il ne mesurait
+  donc plus que notre propre raccourci. Nous l'avons remplacé par une requête
+  volontairement mal orthographiée, ce qui force le passage par les vecteurs.
+  Le score est tombé à 16,6 %, et c'est ce chiffre honnête qui nous a conduits
+  à construire un index dédié aux en-têtes.
+</p>
+<p>
+  La suite du document présente l'architecture générale, la conception de la
+  base vectorielle, le traitement de la langue, la recherche Web, la qualité
+  des données, puis les spécifications de mise en œuvre. Une section est
+  consacrée aux solutions que nous avons envisagées puis écartées, avec la
+  mesure qui a motivé chaque arbitrage. Tous les chiffres cités sont
+  reproductibles par la commande <code>python3 benchmark.py</code>.
+</p>
+
+<!-- ============ 1. ARCHITECTURE ============ -->
+<div class="saut"></div>
+<h2>1. Architecture générale de la plateforme</h2>
+
+<h3>1.1 Rappel du besoin et principe de conception</h3>
+<p>
+  Le cahier des charges fonctionnel demande un moteur de recherche Web
+  multilingue : saisie en mooré, en français ou en anglais, résultats
+  provenant du Web, affichés sous forme de titres, d'extraits et de liens, avec
+  une amélioration progressive de la pertinence par une approche sémantique.
+</p>
+<p>
+  Le principe de conception qui structure toute la solution tient en une
+  phrase : <b>le corpus mooré n'est pas la destination de la recherche, il en
+  est le pont</b>. Interroger un moteur francophone avec le mot mooré
+  <code>koom</code> ne donne rien ; le traduire en « eau » avant de l'envoyer
+  change tout. Réciproquement, une requête française est rapprochée de son
+  équivalent mooré pour interroger les sources rédigées en mooré.
+</p>
+<div class="encadre">
+  <b>Conséquence de conception.</b> Le dictionnaire vectoriel n'est pas un
+  module annexe : il est placé sur le chemin critique de chaque requête Web.
+  Sa qualité conditionne directement la pertinence des pages rendues.
+</div>
+
+<h3>1.2 Architecture en couches</h3>
+<div class="couches">
+  <div class="couche">
+    <span class="nom">Couche présentation</span> : page HTML/CSS/JavaScript sans framework
+    <div class="det">Trois modes : recherche Web, consultation du dictionnaire, glossage de phrases.
+    Clavier virtuel pour les dix caractères propres au mooré.</div>
+  </div>
+  <div class="fleche">▲ JSON ▼</div>
+  <div class="couche">
+    <span class="nom">Couche service</span> : API Flask (<span class="mono">api.py</span>)
+    <div class="det">Validation des paramètres, restriction des origines, sérialisation JSON,
+    service de la page d'interface.</div>
+  </div>
+  <div class="fleche">▲ ▼</div>
+  <div class="couche">
+    <span class="nom">Couche métier</span> : quatre modules Python
+    <div class="det"><span class="mono">search.py</span> (cinq index et leur routage) ·
+    <span class="mono">translate.py</span> (segmentation et glossage) ·
+    <span class="mono">recherche_web.py</span> (pont et sources externes) ·
+    <span class="mono">liens.py</span> (ressources de consultation).</div>
+  </div>
+  <div class="fleche">▲ ▼</div>
+  <div class="couche">
+    <span class="nom">Couche données</span> : corpus et index
+    <div class="det">Corpus CSV (10 566 entrées) · index FAISS TF-IDF/LSA ·
+    index de caractères sur les en-têtes · index d'embeddings (optionnel).</div>
+  </div>
+  <div class="fleche">▲ HTTPS ▼</div>
+  <div class="couche">
+    <span class="nom">Sources externes</span> : API MediaWiki
+    <div class="det">Wikipédia en mooré · Wikipédia en français · Wiktionnaire.
+    Interrogées en parallèle, sans clé d'API.</div>
+  </div>
+</div>
+
+<h3>1.3 Trajet d'une requête utilisateur</h3>
+<p>
+  L'exemple ci-dessous suit la requête <code>koom</code> (« eau » en mooré)
+  depuis la saisie jusqu'à l'affichage.
+</p>
+<pre>1.  Saisie          l'utilisateur tape « koom » dans l'onglet Web
+2.  Requête HTTP    GET /api/web?q=koom&amp;k=10
+3.  Détection       search.detecter_langue("koom") -> « moore »
+                    (le mot figure dans le vocabulaire des en-têtes)
+4.  Pont            search.search("koom", backend="entrees") -> koom, score 1,000
+                    définition française retenue : « eau »
+                    seuil de confiance 0,45 respecté -> traduction acceptée
+5.  Interrogation   trois appels HTTPS parallèles :
+                      mos.wikipedia.org   srsearch=koom
+                      fr.wikipedia.org    srsearch=eau
+                      fr.wiktionary.org   srsearch=eau
+6.  Normalisation   suppression du balisage &lt;span class="searchmatch"&gt;,
+                    décodage des entités HTML, reconstruction des URL
+7.  Reclassement    encodage de « eau » et de chaque couple titre+extrait,
+                    tri par similarité cosinus, SAUF les pages en mooré
+8.  Entrelacement   une page en mooré toutes les trois positions
+9.  Réponse JSON    { pont, sources, resultats: [{titre, extrait, url, ...}] }
+10. Affichage       titre cliquable, extrait, source, terme interrogé</pre>
+<p>
+  Les étapes 3 et 4 constituent le pont : elles n'existent dans aucun moteur
+  généraliste et sont la contribution propre du projet.
+</p>
+
+<!-- ============ 2. BASE VECTORIELLE ============ -->
+<div class="saut"></div>
+<h2>2. Conception de la base vectorielle</h2>
+
+<h3>2.1 Glossaire des notions employées</h3>
+<table>
+  <caption><b>Tableau 2.1</b> : Notions techniques employées dans ce document.</caption>
+  <tr><th style="width:24%">Notion</th><th>Définition retenue</th></tr>
+  <tr><td>Vecteur</td><td>Représentation numérique d'un texte, permettant de mesurer une proximité entre textes</td></tr>
+  <tr><td>TF-IDF</td><td>Pondération donnant du poids aux termes fréquents dans un document et rares dans le corpus</td></tr>
+  <tr><td>n-gramme de caractères</td><td>Fragment de <i>n</i> caractères consécutifs ; capte la morphologie et tolère les fautes</td></tr>
+  <tr><td>LSA / SVD</td><td>Réduction du nombre de dimensions d'une matrice creuse, ici de 56 529 à 256</td></tr>
+  <tr><td>Embedding</td><td>Vecteur produit par un modèle pré-entraîné, porteur du sens et non de la forme</td></tr>
+  <tr><td>Similarité cosinus</td><td>Mesure de proximité entre deux vecteurs, comprise entre −1 et 1</td></tr>
+  <tr><td>Index FAISS</td><td>Structure de recherche des vecteurs les plus proches d'un vecteur donné</td></tr>
+  <tr><td>RRF</td><td>Fusion de plusieurs classements en n'utilisant que le rang, jamais le score</td></tr>
+  <tr><td>Glose</td><td>Équivalent mot à mot, sans reconstruction de la grammaire de la langue cible</td></tr>
+</table>
+
+<h3>2.2 Le corpus source et sa structure</h3>
+<p>
+  Le corpus provient du dictionnaire <i>Webonary Moore</i> (SIL). Il est livré
+  au format CSV, séparateur point-virgule, encodage UTF-8, et compte
+  <b>10 566 entrées</b> réparties en onze colonnes.
+</p>
+<table>
+  <caption><b>Tableau 2.2</b> : Colonnes du corpus et taux de remplissage mesurés.</caption>
+  <tr><th style="width:30%">Colonne</th><th style="width:18%">Remplissage</th><th>Usage dans le moteur</th></tr>
+  <tr><td class="mono">mot_moore</td><td>100 %</td><td>En-tête indexé ; sert de terme mooré au pont</td></tr>
+  <tr><td class="mono">definition_francais</td><td>100 %</td><td>Index inverse français ; terme envoyé au Web</td></tr>
+  <tr><td class="mono">definition_english</td><td>99,3 %</td><td>Index sémantique ; requêtes en anglais</td></tr>
+  <tr><td class="mono">categorie_grammaticale</td><td>100 %</td><td>Filtrage des mots-outils, catégories idiomatiques</td></tr>
+  <tr><td class="mono">prononciation</td><td>57,4 %</td><td>Affichage</td></tr>
+  <tr><td class="mono">domaine</td><td>35,4 %</td><td>Filtrage par champ sémantique (52 domaines)</td></tr>
+  <tr><td class="mono">pluriel</td><td>30,4 %</td><td>Affichage des renvois</td></tr>
+  <tr><td class="mono">synonymes</td><td>24,6 %</td><td>Renvois cliquables</td></tr>
+  <tr><td class="mono">variante</td><td>14,6 %</td><td>Renvois cliquables</td></tr>
+  <tr><td class="mono">sens_num</td><td>21,4 %</td><td>Distinction des sens multiples (947 mots concernés)</td></tr>
+  <tr><td class="mono">antonymes</td><td>1,5 %</td><td>Renvois cliquables</td></tr>
+</table>
+<p class="petit">
+  Le cahier des charges fonctionnel anticipait que les champs secondaires
+  seraient peu renseignés et proposait de traiter leur exploitation comme une
+  évolution. La mesure confirme le diagnostic (1,5 % pour les antonymes), mais ces champs ont malgré tout été exploités, l'interface se contentant de les
+  omettre lorsqu'ils sont vides.
+</p>
+
+<h3>2.3 Démarche de vectorisation</h3>
+<p>
+  Le programme <code>build_index.py</code> construit la représentation
+  vectorielle du corpus en quatre étapes.
+</p>
+<ol>
+  <li><b>Composition du document.</b> Pour chaque entrée, un texte unique est
+      formé en concaténant le mot mooré, ses définitions française et anglaise,
+      sa variante et son domaine.</li>
+  <li><b>Double vectorisation TF-IDF.</b> Un vectoriseur en n-grammes de
+      caractères (2 à 4, mode <code>char_wb</code>) capte la morphologie du
+      mooré et ses diacritiques ; un vectoriseur en mots (1 à 2) capte le sens
+      porté par les définitions. Les deux matrices sont concaténées avec une
+      pondération de 0,5 pour les caractères et 1,0 pour les mots.</li>
+  <li><b>Réduction LSA.</b> La matrice creuse obtenue (10 566 × 56 529) est
+      réduite à 256 dimensions par décomposition en valeurs singulières.</li>
+  <li><b>Normalisation et indexation.</b> Les vecteurs sont normalisés, ce qui
+      rend le produit scalaire égal à la similarité cosinus, puis chargés dans
+      un index FAISS de type <code>IndexFlatIP</code>.</li>
+</ol>
+<p>
+  La même transformation est appliquée à chaque requête, garantissant que
+  requête et documents vivent dans le même espace.
+</p>
+
+<h3>2.4 Les cinq index et leur rôle</h3>
+<p>
+  L'expérience a montré qu'aucun index unique ne convient aux deux langues du
+  projet. Cinq sont donc disponibles, dont un mode automatique.
+</p>
+<table>
+  <caption><b>Tableau 2.3</b> : Les cinq index de recherche.</caption>
+  <tr><th style="width:16%">Index</th><th style="width:32%">Ce qu'il indexe</th><th>Point fort / limite</th></tr>
+  <tr>
+    <td class="mono">entrees</td>
+    <td>Les en-têtes mooré seuls, n-grammes de caractères, construit à la volée</td>
+    <td>Retrouve un mot mooré même mal orthographié. Ignore les définitions.</td>
+  </tr>
+  <tr>
+    <td class="mono">tfidf</td>
+    <td>Document mixte : en-tête et définitions</td>
+    <td>Polyvalent, sans dépendance. Ne fait pas de sémantique.</td>
+  </tr>
+  <tr>
+    <td class="mono">semantique</td>
+    <td>Définitions fr/en, embeddings multilingues pré-entraînés</td>
+    <td>Comprend le sens en français et en anglais. <b>Ignore le mooré.</b></td>
+  </tr>
+  <tr>
+    <td class="mono">hybride</td>
+    <td>Fusion RRF de <span class="mono">tfidf</span> et <span class="mono">semantique</span></td>
+    <td>Meilleur résultat sur requête française. Dégrade le mooré.</td>
+  </tr>
+  <tr>
+    <td class="mono">auto</td>
+    <td>Aiguillage vers l'un des précédents selon la langue détectée</td>
+    <td><b>Mode par défaut.</b> Seul à bien traiter les deux langues.</td>
+  </tr>
+</table>
+<div class="encadre">
+  <b>Le modèle d'embeddings ne connaît pas le mooré.</b> Le modèle retenu,
+  <span class="mono">paraphrase-multilingual-MiniLM-L12-v2</span>, couvre une
+  cinquantaine de langues parmi lesquelles le mooré, langue gur à faibles
+  ressources, ne figure pas. Son tokenizer découpe les mots mooré en sous-mots
+  dépourvus de signification pour lui. Mesuré, l'index sémantique obtient
+  <b>0,0 %</b> de réussite sur une requête mooré. C'est la raison pour laquelle
+  le remplacement pur du TF-IDF par des embeddings, solution qui paraissait naturelle, a été écarté.
+</div>
+
+<h3>2.5 Fusion par les rangs</h3>
+<p>
+  Fusionner deux classements suppose de comparer leurs scores. Or un cosinus
+  TF-IDF/LSA et un cosinus d'embeddings ne vivent pas sur la même échelle, et
+  les normaliser demanderait une calibration arbitraire. La méthode retenue,
+  la <i>Reciprocal Rank Fusion</i>, n'utilise que le rang :
+</p>
+<pre>                    1
+score(document) =  Σ  ───────────────────────
+                   i   k + rang dans la liste i        avec k = 60</pre>
+<p>
+  Un document bien classé par les deux moteurs devance un document excellent
+  chez l'un et absent chez l'autre. La méthode ne comporte aucun paramètre à
+  ajuster sur les données, ce qui écarte tout risque de surapprentissage sur
+  un corpus de cette taille.
+</p>
+
+<h3>2.6 Routage automatique selon la langue</h3>
+<p>
+  Le mode <code>auto</code> choisit l'index d'après la langue de la requête.
+  La détection n'emploie aucune bibliothèque externe : sur des requêtes d'un ou
+  deux mots, elles sont peu fiables, alors que le corpus fournit directement la
+  réponse.
+</p>
+<ol>
+  <li>Si la requête contient l'un des caractères propres au mooré
+      (ã ẽ ĩ õ ũ ɛ ɩ ʋ ŋ ɲ), elle est mooré.</li>
+  <li>Sinon, les mots de la requête sont comptés dans deux vocabulaires
+      extraits du corpus : celui des en-têtes et variantes d'une part, celui
+      des définitions française et anglaise d'autre part.</li>
+  <li>Si aucun mot n'appartient à l'un ou l'autre, la requête est traitée
+      comme du mooré : un terme inconnu des deux côtés est le plus souvent une
+      entrée mooré mal orthographiée, cas où seul l'index lexical peut aider.</li>
+</ol>
+<p>
+  L'aiguillage envoie ensuite le mooré vers <code>entrees</code> et le français
+  ou l'anglais vers <code>hybride</code>, ou vers <code>tfidf</code> lorsque
+  l'index sémantique n'a pas été construit.
+</p>
+
+<h3>2.7 Priorité de la correspondance exacte</h3>
+<p>
+  Ni le TF-IDF ni les embeddings ne garantissent qu'une entrée cherchée mot pour
+  mot sorte en tête : les vecteurs sont compressés par la réduction LSA, et une
+  entrée courte comme <code>koom</code> se faisait dépasser par
+  <code>rʋʋd-koom</code> ou <code>koom gʋls moodo</code>, dont le document est
+  plus riche. Or ne pas rendre en premier le mot exactement demandé est le
+  défaut le plus visible qu'un moteur de dictionnaire puisse présenter.
+</p>
+<p>
+  Une table des en-têtes normalisés est donc consultée avant les vecteurs, et
+  ses résultats sont placés en tête quel que soit l'index actif. Elle tolère
+  l'absence de diacritiques : <code>bag-teoko</code> retrouve
+  <code>bãg-tẽoko</code>, ce qui compte pour un utilisateur dont le clavier ne
+  porte pas ces caractères.
+</p>
+
+<!-- ============ 3. LANGUE ============ -->
+<div class="saut"></div>
+<h2>3. Traitement automatique de la langue</h2>
+
+<h3>3.1 Normalisation du français</h3>
+<p>
+  Toute comparaison entre une requête française et le corpus passe par une
+  normalisation. Deux traitements se sont révélés indispensables, chacun après
+  constat d'une erreur.
+</p>
+<ul>
+  <li><b>Élision.</b> « l'eau » doit être découpé en « l' » et « eau », faute de
+      quoi le mot reste introuvable. Les élisions <code>c' d' j' l' m' n' s'
+      t' qu'</code> sont séparées.</li>
+  <li><b>Ligatures.</b> Les caractères « œ » et « æ » n'appartiennent pas à la
+      plage latine de base ; traités comme de la ponctuation, ils étaient
+      supprimés, et « œil » devenait « il ». Ils sont désormais convertis en
+      « oe » et « ae ».</li>
+</ul>
+<p>
+  Deux formes normalisées sont conservées : l'une avec accents, l'autre sans.
+  La première est essayée en premier, car les accents portent le sens :
+  « marché » désigne le lieu (<i>raaga</i>) et « marche » l'action
+  (<i>kẽnde</i>). La seconde sert de rattrapage.
+</p>
+
+<h3>3.2 Index inverse et segmentation</h3>
+<p>
+  Le glossage d'une phrase repose sur un index inverse construit à partir des
+  définitions françaises. Une définition comme « manger, consommer » donne deux
+  clés distinctes, afin que l'entrée soit retrouvée par l'un ou l'autre terme.
+</p>
+<div class="encadre">
+  <b>Tous les fragments ne sont pas des gloses.</b> Découper les définitions sur
+  les virgules produit les synonymes voulus, mais découpe aussi les définitions
+  descriptives en fragments qui n'en sont pas : « dispositif pour sécher ou
+  griller la viande, le poisson » produisait la clé « le poisson », et la
+  phrase « il a mangé le poisson » y tombait. Règle retenue : le premier
+  fragment est toujours une glose ; les suivants ne le sont que s'ils ne
+  commencent pas par un mot de liaison. <b>220 clés parasites</b> ont ainsi été
+  écartées.
+</div>
+<p>
+  La segmentation procède ensuite par correspondance la plus longue : sur une
+  suite de mots, les expressions figées sont cherchées avant les mots isolés.
+  Le corpus contient 504 expressions et 5 753 gloses françaises de plus d'un
+  mot, ce qui rend cette priorité déterminante : « n'importe comment » doit
+  rendre <i>a bal</i> d'un bloc et non « n'importe » suivi de « comment ».
+</p>
+
+<h3>3.3 Lemmatisation et mots-outils</h3>
+<p>
+  Les formes conjuguées sont ramenées à leur infinitif par une table des
+  irréguliers les plus fréquents complétée par un découpage des terminaisons
+  régulières : « veux » devient « vouloir », « mangé » devient « manger ».
+</p>
+<p>
+  Les articles et prépositions français sont volontairement laissés non
+  traduits. Le mooré n'a pas d'articles, et les rapports que le français rend
+  par une préposition y sont exprimés par postposition ou par simple
+  juxtaposition. Les chercher produit des faux amis : <b>« la » rendait
+  <i>ka</i>, qui est la particule de négation</b>. Un garde-fou complémentaire
+  filtre par catégorie grammaticale les mots-outils ambigus : sans lui, « pas »
+  rendait <i>kẽndre</i>, le nom « enjambée », et « est » rendait
+  <i>yaanga</i>, le point cardinal.
+</p>
+
+<h3>3.4 Tournures idiomatiques</h3>
+<p>
+  Une glose littérale ne peut pas deviner qu'une expression se dit autrement :
+  « tu vas bien » se dit <i>laafɩ bala</i>, littéralement « ça va », et aucun
+  mot ne coïncide. La base vectorielle est donc interrogée sur la phrase
+  entière, et les entrées de type expression ou interjection qui s'en
+  rapprochent sont proposées en complément de la glose.
+</p>
+<p>
+  Chaque index échouait ici d'une manière différente, ce qui a conduit à les
+  combiner :
+</p>
+<table>
+  <caption><b>Tableau 3.1</b> : Comportement des index sur la recherche de tournures.</caption>
+  <tr><th style="width:22%">Index</th><th>Comportement observé</th></tr>
+  <tr><td class="mono">tfidf</td>
+      <td>Classe bien (<i>laafɩ bala</i> au rang 1) mais invente sur les phrases descriptives : « la maison de mon père » lui inspirait une tournure sans rapport, à 0,72.</td></tr>
+  <tr><td class="mono">semantique</td>
+      <td>Ne propose rien sur ces mêmes phrases (le bruit y tombe entre 0,03 et 0,35), mais classe mal : les définitions d'un ou deux mots obtiennent des scores élevés partout, et <i>laafɩ bala</i> ne sortait qu'au rang 3.</td></tr>
+  <tr><td><b>retenu</b></td>
+      <td><b>Ordre par fusion RRF</b>, qui exige l'accord des deux index et remet <i>laafɩ bala</i> au rang 1, <b>et filtre par le cosinus sémantique</b> (seuil 0,55), qui élimine le bruit lexical. Le score affiché est ce cosinus, seul interprétable.</td></tr>
+</table>
+<p class="petit">
+  Ce seuil est calibré sur une poignée de phrases, faute de jeu de test annoté.
+  Les suggestions sont présentées à l'utilisateur comme étant à valider par un
+  locuteur ; elles sont fiables sur les formules courantes et bruitées sur les
+  phrases descriptives.
+</p>
+
+<h3>3.5 Découpage des domaines</h3>
+<p>
+  La colonne <code>domaine</code> mêle des valeurs simples (« Weather ») et des
+  valeurs composées (« Agriculture, Water »). Un découpage sur la virgule serait
+  faux, car certains domaines en contiennent une : « Bush, shrub », « Grass,
+  herb, vine ».
+</p>
+<p>
+  Le vocabulaire des <b>52 domaines atomiques</b> est donc construit à partir
+  du corpus, puis chaque valeur est découpée par correspondance la plus longue.
+  Le procédé a été validé sur les 130 valeurs distinctes : toutes se
+  reconstruisent à l'identique. Le filtrage est appliqué côté serveur avant la
+  sélection des meilleurs résultats ; il fait passer la proportion d'entrées
+  atteignables par un filtre de <b>63 % à 100 %</b>.
+</p>
+
+<!-- ============ 4. WEB ============ -->
+<div class="saut"></div>
+<h2>4. Recherche sur le Web</h2>
+
+<h3>4.1 Sources retenues et critères de choix</h3>
+<p>
+  Trois sources sont interrogées, toutes fondées sur le moteur MediaWiki.
+  Le critère déterminant a été la disponibilité d'une <b>API publique sans clé
+  ni quota</b>, condition pour que le projet reste exécutable par n'importe
+  quel membre du groupe ou par l'enseignant.
+</p>
+<table>
+  <caption><b>Tableau 4.1</b> : Sources Web interrogées.</caption>
+  <tr><th style="width:26%">Source</th><th style="width:18%">Langue interrogée</th><th>Apport</th></tr>
+  <tr><td>Wikipédia en mooré</td><td>mooré</td><td>Contenus rédigés en mooré (1 326 articles)</td></tr>
+  <tr><td>Wikipédia en français</td><td>français</td><td>Couverture encyclopédique large</td></tr>
+  <tr><td>Wiktionnaire</td><td>français</td><td>Définitions, étymologie, formes fléchies</td></tr>
+</table>
+<p>
+  Les trois appels sont émis <b>en parallèle</b> ; les réponses sont mises en
+  cache pour la durée du processus. Chaque appel est protégé : une source
+  indisponible ne fait pas échouer la recherche, elle est simplement absente du
+  résultat.
+</p>
+<p>
+  L'architecture est enfichable : ajouter un moteur généraliste (Bing, Brave,
+  Google Custom Search) consiste à déclarer une entrée supplémentaire dans la
+  liste des sources. Ces moteurs exigent une clé d'API, raison pour laquelle
+  ils ne sont pas activés par défaut. <b>La couverture actuelle se limite donc
+  à trois encyclopédies et n'est pas une exploration de tout le Web</b> ; cette
+  limite est également énoncée dans le manuel d'utilisation.
+</p>
+
+<h3>4.2 Le pont de traduction</h3>
+<p>
+  Le pont détermine, pour une requête donnée, le terme à envoyer aux sources
+  mooré et celui à envoyer aux sources francophones.
+</p>
+<ul>
+  <li><b>Requête mooré.</b> Le mot part tel quel vers le Wikipédia mooré ; sa
+      première glose française part vers les sources francophones.</li>
+  <li><b>Requête française ou anglaise.</b> Elle part telle quelle vers les
+      sources francophones, et son équivalent mooré le plus proche part vers le
+      Wikipédia mooré.</li>
+</ul>
+<div class="encadre">
+  <b>Le pont doit pouvoir refuser de traduire.</b> La recherche vectorielle
+  renvoie toujours un plus proche voisin, même mauvais : un mot inexistant
+  comme <code>zzzqxwv</code> recevait la « traduction » « presque totalité », et
+  le Web était interrogé sur cette invention. Un seuil de <b>0,45</b> sur le
+  score de correspondance y met fin. Il est calibré sur des mesures : un mot
+  exact obtient 1,000, une faute de frappe plausible 0,551, du charabia 0,256.
+  En dessous du seuil, le terme est envoyé tel quel et l'interface l'indique.
+</div>
+
+<h3>4.3 Reclassement et exposition du mooré</h3>
+<p>
+  Les résultats renvoyés par les sources sont classés par correspondance de
+  mots. Un reclassement sémantique leur est appliqué : la requête et chaque
+  couple titre-extrait sont encodés par le modèle d'embeddings, puis triés par
+  similarité cosinus. C'est l'exigence d'amélioration de la pertinence par une
+  approche sémantique, appliquée aux résultats Web.
+</p>
+<div class="encadre">
+  <b>Le reclassement ne doit pas s'appliquer au mooré.</b> Le modèle ignorant
+  cette langue, reclasser l'ensemble enterrait systématiquement les pages du
+  Wikipédia mooré : sur la requête <code>koom</code>, <b>aucune ne subsistait
+  parmi les quinze premiers résultats</b>. Dans un moteur destiné à des
+  locuteurs du mooré, c'est un contresens. Seules les pages en langue connue du
+  modèle sont donc reclassées ; les pages en mooré conservent l'ordre de
+  pertinence de leur propre source et sont intercalées à raison d'une position
+  sur trois.
+</div>
+<p>
+  Ce quota est un compromis : suffisant pour que la langue du projet reste
+  visible, assez mesuré pour ne pas évincer les résultats francophones lorsque
+  le Wikipédia mooré, avec ses 1 326 articles, n'a rien de pertinent à offrir.
+</p>
+
+<!-- ============ 5. QUALITÉ DES DONNÉES ============ -->
+<div class="saut"></div>
+<h2>5. Qualité des données du corpus</h2>
+<p>
+  Le corpus source comporte des défauts hérités de son extraction. Ils ont été
+  recensés puis, lorsque c'était possible sans inventer de données, corrigés à
+  l'affichage. Les corrections sont appliquées à la lecture et non dans le
+  fichier CSV, afin que celui-ci reste identique à sa source.
+</p>
+<table>
+  <caption><b>Tableau 5.1</b> : Défauts relevés et traitements appliqués.</caption>
+  <tr><th style="width:30%">Défaut</th><th style="width:12%">Ampleur</th><th>Traitement</th></tr>
+  <tr>
+    <td>En-têtes mêlant le mot mooré et sa traduction : <span class="mono">'Come! y'</span>, <span class="mono">'why? bõeedga'</span></td>
+    <td>7 entrées</td>
+    <td>Extraction du segment mooré. Le mot suit la dernière ponctuation, sauf si la chaîne se termine par « ! » ou « ? », auquel cas il la précède.</td>
+  </tr>
+  <tr>
+    <td>Colonnes synonymes et antonymes contaminées l'une par l'autre : <span class="mono">'saamba; antonyme: ma1'</span></td>
+    <td>57 entrées</td>
+    <td>Démêlage par étiquette et redistribution dans la bonne colonne</td>
+  </tr>
+  <tr>
+    <td>Renvois suffixés d'un numéro de sens : <span class="mono">ma1</span> pour <span class="mono">ma</span></td>
+    <td>647 renvois</td>
+    <td>Suppression du chiffre final ; le taux de résolution passe de 2 800 à 3 429 sur 3 545</td>
+  </tr>
+  <tr>
+    <td>Définitions tronquées après une abréviation : « têtu (lit », « tomber (ex »</td>
+    <td>74 définitions</td>
+    <td>Le texte manquant est absent du CSV, donc irrécupérable. Un marqueur « […] » signale la donnée incomplète.</td>
+  </tr>
+  <tr>
+    <td>Fragments de définition indexés comme gloses autonomes</td>
+    <td>220 clés</td>
+    <td>Règle du premier fragment (voir § 3.2)</td>
+  </tr>
+  <tr>
+    <td>Ligne aux colonnes décalées, avec résidu de scraping <span class="mono">Category:</span></td>
+    <td>1 ligne</td>
+    <td>Trop ambiguë pour une réparation automatique. Écartée des suggestions ; correction manuelle à prévoir dans le CSV.</td>
+  </tr>
+  <tr>
+    <td>Doublons d'entrées</td>
+    <td>quelques cas</td>
+    <td>Non traités : deux entrées identiques restent deux entrées valides du dictionnaire</td>
+  </tr>
+</table>
+
+<!-- ============ 6. MISE EN ŒUVRE ============ -->
+<div class="saut"></div>
+<h2>6. Spécifications techniques de mise en œuvre</h2>
+
+<h3>6.1 Exposition par une API applicative</h3>
+<p>
+  L'application Flask expose six points d'entrée en JSON et sert la page
+  d'interface. Les contrats détaillés figurent en annexe B.
+</p>
+<table>
+  <caption><b>Tableau 6.1</b> : Points d'entrée de l'API.</caption>
+  <tr><th style="width:34%">Route</th><th>Rôle</th></tr>
+  <tr><td class="mono">GET /</td><td>Sert l'interface web</td></tr>
+  <tr><td class="mono">GET /api/web</td><td>Recherche de pages sur le Web (pont, sources, reclassement)</td></tr>
+  <tr><td class="mono">GET /api/search</td><td>Recherche dans le corpus (index, domaine, k)</td></tr>
+  <tr><td class="mono">GET /api/translate</td><td>Glossage d'une phrase et tournures idiomatiques</td></tr>
+  <tr><td class="mono">GET /api/liens</td><td>Ressources externes de consultation pour un mot</td></tr>
+  <tr><td class="mono">GET /api/domaines</td><td>Liste des 52 domaines déduits du corpus</td></tr>
+  <tr><td class="mono">GET /api/health</td><td>État du service, index disponibles, taille du corpus</td></tr>
+</table>
+
+<h3>6.2 Sécurité et droits d'accès</h3>
+<p>
+  L'application est destinée à un usage local et ne comporte pas
+  d'authentification, aucune donnée personnelle n'étant manipulée. Quatre
+  mesures ont néanmoins été prises.
+</p>
+<ul>
+  <li><b>Origines restreintes.</b> Le partage entre origines est limité à
+      <code>null</code> (page ouverte depuis le disque) et aux adresses locales.
+      Sans cette restriction, tout site consulté pendant que l'API tourne
+      pourrait l'interroger.</li>
+  <li><b>Débogueur désactivé.</b> Le mode debug de Flask expose une console
+      d'exécution ; il est désactivé.</li>
+  <li><b>Validation des paramètres.</b> Le nombre de résultats demandé est
+      contrôlé et borné : les valeurs <code>0</code>, <code>-1</code> et
+      <code>abc</code> provoquaient une erreur 500 et rendent désormais une
+      erreur 400 explicite. Les longueurs de requête sont plafonnées.</li>
+  <li><b>Échappement du contenu.</b> Toutes les données issues du corpus et des
+      sources Web sont échappées avant insertion dans la page. Le corpus
+      contient déjà une entrée porteuse d'une esperluette, et les extraits Web
+      proviennent de sites tiers.</li>
+</ul>
+
+<h3>6.3 Qualité, performance et compatibilité</h3>
+<p>
+  Les index et vectoriseurs, qui représentent environ 70 Mo, sont chargés une
+  seule fois au démarrage du processus. Ils étaient auparavant relus à chaque
+  requête, ce qui coûtait plus d'une demi-seconde par recherche.
+</p>
+<table>
+  <caption><b>Tableau 6.2</b> : Latences mesurées, modèle chargé, k = 20.</caption>
+  <tr><th style="width:30%">Index</th><th style="width:24%">Latence</th><th>Observation</th></tr>
+  <tr><td class="mono">entrees</td><td>20 – 25 ms</td><td>Le plus rapide</td></tr>
+  <tr><td class="mono">semantique</td><td>96 – 115 ms</td><td>Plus rapide que TF-IDF</td></tr>
+  <tr><td class="mono">tfidf</td><td>200 – 530 ms</td><td>La transformation SVD est le goulot d'étranglement</td></tr>
+  <tr><td class="mono">hybride</td><td>300 – 530 ms</td><td>Deux recherches puis fusion</td></tr>
+  <tr><td class="mono">auto</td><td>400 – 540 ms</td><td>Détection de langue puis aiguillage</td></tr>
+  <tr><td>recherche Web</td><td>dépend des sources</td><td>Trois appels parallèles, réponses mises en cache</td></tr>
+</table>
+<p>
+  <b>Compatibilité.</b> Python 3.9 ou plus, testé sous Python 3.11 et Windows.
+  L'application est multiplateforme et ne requiert ni serveur de base de
+  données ni service externe. L'index sémantique est optionnel : en son
+  absence, le mode automatique se limite aux index lexicaux et aucune
+  fonctionnalité ne cesse d'opérer, hormis le reclassement sémantique.
+</p>
+
+<h3>6.4 Tests et validation</h3>
+<p>
+  La validation repose sur trois dispositifs complémentaires.
+</p>
+<ol>
+  <li><b>Tests de non-régression</b> : <code>test_moteur.py</code>, 66 tests,
+      sans dépendance supplémentaire. Les tests exigeant l'index sémantique ou
+      un accès réseau se sautent d'eux-mêmes. Ils couvrent les points où le
+      corpus piège : domaines composés, en-têtes corrompus, colonnes
+      contaminées, élisions et ligatures, fragments de définition, bornes des
+      paramètres, restriction des origines.</li>
+  <li><b>Validation par mutation</b> : cinq régressions ont été introduites
+      volontairement dans le code pour vérifier que la suite les détecte :
+      découpage naïf des domaines, arrêt du démêlage des renvois, article « la »
+      de nouveau traduit, fragments réindexés, en-tête corrompu mal réparé.
+      <b>Les cinq ont été détectées.</b> Une suite verte ne prouvant rien par
+      elle-même, cette étape établit qu'elle mesure bien quelque chose.</li>
+  <li><b>Banc d'essai chiffré</b> : <code>benchmark.py</code> compare les cinq
+      index sur trois tâches, le corpus servant de vérité terrain. Les résultats
+      figurent en annexe A.</li>
+</ol>
+
+<h3>6.5 Gestion de versions et dépendances</h3>
+<p>
+  Le code est versionné sous Git, sur la branche
+  <code>feature/base-vectorielle</code> du dépôt du groupe. Les contributions
+  passent par cette branche puis par une <i>pull request</i> vers
+  <code>main</code>, afin que le groupe puisse relire.
+</p>
+<table>
+  <caption><b>Tableau 6.3</b> : Dépendances.</caption>
+  <tr><th style="width:30%">Bibliothèque</th><th style="width:18%">Statut</th><th>Rôle</th></tr>
+  <tr><td>pandas, numpy, scipy</td><td>requise</td><td>Manipulation du corpus et des matrices</td></tr>
+  <tr><td>scikit-learn</td><td>requise</td><td>TF-IDF et réduction LSA</td></tr>
+  <tr><td>faiss-cpu</td><td>requise</td><td>Recherche des plus proches voisins</td></tr>
+  <tr><td>flask, flask-cors</td><td>requise</td><td>API et service de l'interface</td></tr>
+  <tr><td>sentence-transformers</td><td><b>optionnelle</b></td><td>Index sémantique et reclassement</td></tr>
+</table>
+<p class="petit">
+  L'index sémantique construit (15,5 Mo) n'est pas versionné : il est
+  inutilisable sans la bibliothèque qui permet d'encoder la requête, et se
+  reconstruit par une commande. Les index lexicaux, eux, sont fournis
+  construits dans le dépôt afin que l'application soit utilisable
+  immédiatement.
+</p>
+
+<!-- ============ 7. CHOIX ============ -->
+<div class="saut"></div>
+<h2>7. Choix techniques et alternatives écartées</h2>
+<p>
+  Cette section consigne les décisions qui auraient pu être prises autrement.
+  Nous la faisons figurer parce qu'un choix technique ne se juge pas seulement
+  sur ce qu'il apporte, mais sur ce qu'il écarte et pour quelle raison. Chaque
+  arbitrage rapporté ici s'appuie sur une mesure, et plusieurs d'entre eux vont
+  contre notre intuition de départ.
+</p>
+<p>
+  Nous avons remarqué en écrivant cette section que les quatre premières lignes
+  du tableau ont un point commun : dans les quatre cas, la solution écartée
+  était celle qui paraissait la plus moderne ou la plus élégante. Le modèle
+  pré-entraîné, la fusion systématique, la normalisation des scores et le
+  recours à un moteur commercial sont tous des choix défendables ailleurs. Ils
+  ne conviennent pas ici parce que notre langue de travail est peu dotée, et
+  c'est cette contrainte, plus que la technique elle-même, qui a décidé.
+</p>
+<table>
+  <caption><b>Tableau 7.1</b> : Alternatives envisagées puis écartées.</caption>
+  <tr><th style="width:32%">Alternative</th><th>Raison de l'écartement</th></tr>
+  <tr>
+    <td>Remplacer le TF-IDF par des embeddings pré-entraînés</td>
+    <td>Le modèle ignore le mooré : 0,0 % de réussite sur une requête mooré contre 6,4 % pour le TF-IDF et 59,1 % pour l'index des en-têtes. Le remplacement aurait amélioré une moitié du moteur en détruisant l'autre.</td>
+  </tr>
+  <tr>
+    <td>Utiliser l'index hybride comme mode par défaut</td>
+    <td>Il gagne nettement en français (77,5 % contre 52,3 %) mais dégrade le mooré (13,2 % contre 16,6 % en top-5). Un défaut unique ne convenait pas ; d'où le routage par langue.</td>
+  </tr>
+  <tr>
+    <td>Fusionner les classements par combinaison des scores</td>
+    <td>Les échelles ne sont pas comparables et leur normalisation aurait exigé une calibration arbitraire sur un corpus réduit. La fusion par les rangs n'a aucun paramètre à ajuster.</td>
+  </tr>
+  <tr>
+    <td>Employer un moteur de recherche généraliste</td>
+    <td>Bing, Brave et Google Custom Search exigent une clé d'API et imposent des quotas. Le projet devait rester exécutable sans inscription. L'architecture prévoit leur ajout ultérieur.</td>
+  </tr>
+  <tr>
+    <td>Utiliser une bibliothèque de détection de langue</td>
+    <td>Peu fiables sur des requêtes d'un ou deux mots, et aucune ne connaît le mooré. Le vocabulaire du corpus fournit directement la réponse.</td>
+  </tr>
+  <tr>
+    <td>Reconstruire une phrase mooré grammaticale</td>
+    <td>Le mooré a son propre ordre des mots, ses postpositions et ses marques d'aspect. Un dictionnaire ne permet pas de les reconstruire. Le résultat est présenté comme une glose, et l'interface le précise.</td>
+  </tr>
+  <tr>
+    <td>Corriger les défauts directement dans le CSV</td>
+    <td>Le corpus doit rester identique à sa source pour rester vérifiable. Les corrections sont appliquées à la lecture, et documentées.</td>
+  </tr>
+</table>
+
+
+<!-- ============ CONCLUSION ============ -->
+<div class="saut"></div>
+<h2>Conclusion</h2>
+<p>
+  Ce cahier des charges technique a précisé les choix retenus pour la
+  conception du moteur de recherche mooré. Il a présenté l'architecture en
+  couches, la conception de la base vectorielle, le traitement automatique
+  appliqué au français et au mooré, la recherche sur le Web, ainsi que les
+  éléments de mise en œuvre : interface de programmation, sécurité, mesures de
+  performance et validation.
+</p>
+<p>
+  Le principe qui organise l'ensemble est l'inversion du rôle du corpus.
+  Employé comme destination, le dictionnaire aurait produit une application de
+  consultation, ce que le cahier des charges fonctionnel écarte explicitement.
+  Employé comme pont, il permet à une requête mooré d'atteindre des contenus
+  qui ne sont pas rédigés dans cette langue. C'est cette bascule qui rend le
+  moteur multilingue plutôt que littéral, et c'est elle que nous
+  présenterions en premier si une seule idée devait être retenue de ce travail.
+</p>
+<p>
+  La mesure a occupé une place que nous n'avions pas prévue. Trois décisions
+  importantes ont été prises contre notre intuition initiale, et dans les trois
+  cas c'est un chiffre qui a tranché : le modèle pré-entraîné qui échoue
+  totalement sur le mooré, la fusion des index qui dégrade ce qu'elle devait
+  améliorer, et un banc d'essai qui affichait un résultat parfait parce qu'il
+  ne mesurait plus rien. Nous retenons de ce projet que la difficulté d'une
+  langue peu dotée ne se traite pas en appliquant les méthodes habituelles avec
+  plus de soin, mais en vérifiant à chaque étape qu'elles s'appliquent encore.
+</p>
+<p>
+  Trois limites subsistent et sont assumées. Les sources Web se réduisent à
+  trois encyclopédies, faute d'accès à un moteur généraliste sans clé d'interface.
+  Le glossage d'une phrase produit un alignement mot à mot et non une phrase
+  mooré grammaticale, ce qu'un dictionnaire ne permet pas de reconstruire.
+  L'interface enfin n'existe qu'en français, alors que le public visé par le
+  cahier des charges fonctionnel comprend des locuteurs du mooré ne maîtrisant
+  pas nécessairement le français écrit ; c'est, de nos trois limites, celle qui
+  nous paraît la plus contradictoire avec l'esprit du projet, et la première à
+  traiter.
+</p>
+<p>
+  Les prolongements naturels sont l'ajout d'un moteur généraliste comme
+  quatrième source, la reconnaissance vocale prévue par le cahier des charges
+  fonctionnel en priorité basse, la traduction de l'interface en mooré, et
+  l'extension à d'autres langues nationales du Burkina Faso. L'architecture a
+  été conçue pour les accueillir : les sources Web et les index de recherche
+  sont enfichables, et ajouter l'un ou l'autre revient à déclarer une entrée
+  supplémentaire.
+</p>
+
+<!-- ============ ANNEXE A ============ -->
+<div class="saut"></div>
+<h2>Annexe A : Résultats du banc d'essai</h2>
+<p>
+  Mesures obtenues par <code>python3 benchmark.py</code>. La vérité terrain est
+  le corpus lui-même ; ces chiffres évaluent donc la qualité de
+  <b>récupération</b> et non la généralisation à des formulations inédites.
+</p>
+<table>
+  <caption><b>Tableau A.1</b> : Comparaison des cinq index sur deux tâches.</caption>
+  <tr>
+    <th style="width:20%">Index</th>
+    <th colspan="2">Expression retrouvée depuis sa définition française <span class="petit">(306 cas)</span></th>
+    <th colspan="2">Entrée mooré retrouvée malgré une faute de frappe <span class="petit">(235 cas)</span></th>
+  </tr>
+  <tr><th></th><th style="width:14%">top-1</th><th style="width:14%">top-5</th><th style="width:14%">top-1</th><th style="width:14%">top-5</th></tr>
+  <tr><td class="mono">entrees</td><td>0,7 %</td><td>2,9 %</td><td class="ok">59,1 %</td><td class="ok">77,0 %</td></tr>
+  <tr><td class="mono">tfidf</td><td>52,3 %</td><td>77,8 %</td><td>6,4 %</td><td>16,6 %</td></tr>
+  <tr><td class="mono">semantique</td><td>73,9 %</td><td>90,8 %</td><td class="non">0,0 %</td><td class="non">0,0 %</td></tr>
+  <tr><td class="mono">hybride</td><td class="ok">77,5 %</td><td class="ok">94,8 %</td><td>5,1 %</td><td>13,2 %</td></tr>
+  <tr><td class="mono"><b>auto</b></td><td class="ok">77,5 %</td><td class="ok">94,8 %</td><td class="ok">57,4 %</td><td class="ok">74,9 %</td></tr>
+</table>
+<p>
+  Lecture : chaque index est excellent d'un côté du tableau et faible de
+  l'autre. Le mode <code>auto</code> est le seul à obtenir de bons résultats
+  dans les deux colonnes, ce qui justifie le routage par langue plutôt que le
+  choix d'un index unique. L'écart entre <code>auto</code> et
+  <code>entrees</code> sur le mooré (57,4 % contre 59,1 %) est le coût des
+  requêtes mal aiguillées : un mot déformé ressemble parfois assez à du
+  français pour partir du mauvais côté.
+</p>
+<h3>Gain apporté par la segmentation</h3>
+<table>
+  <caption><b>Tableau A.2</b> : Retrouver une expression mooré depuis sa définition (306 cas).</caption>
+  <tr><th style="width:46%">Méthode</th><th style="width:22%">top-1</th><th>top-3</th></tr>
+  <tr><td>Vecteur unique sur la phrase entière</td><td>52,3 %</td><td>72,9 %</td></tr>
+  <tr><td><b>Segmentation, expressions d'abord</b></td><td class="ok">82,4 %</td><td class="ok">93,5 %</td></tr>
+</table>
+<p class="petit">
+  L'index de gloses étant construit sur ces mêmes définitions, cette mesure
+  évalue la qualité de la segmentation et non la généralisation à des tournures
+  inédites.
+</p>
+
+<!-- ============ ANNEXE B ============ -->
+<div class="saut"></div>
+<h2>Annexe B : Contrats des points d'entrée</h2>
+
+<h4>GET /api/web</h4>
+<pre>Paramètres  q  requête (obligatoire, 200 caractères maxi)
+            k  nombre de résultats (1 à 20, défaut 8)
+
+Réponse     {
+              "requete": "koom",
+              "terme_moore": "koom",
+              "terme_francais": "eau",
+              "pont": "« koom » traduit en « eau » par le corpus",
+              "sources": ["Wikipédia en mooré", "Wikipédia", "Wiktionnaire"],
+              "reclasse_semantiquement": true,
+              "resultats": [
+                { "titre": "Eau",
+                  "extrait": "précise : eau minérale, eau de Seltz…",
+                  "url": "https://fr.wikipedia.org/wiki/Eau",
+                  "source": "Wikipédia",
+                  "source_id": "fr.wikipedia",
+                  "terme_interroge": "eau",
+                  "score": 0.65 }
+              ]
+            }
+
+Erreurs     400  requête trop longue, ou k invalide</pre>
+
+<h4>GET /api/search</h4>
+<pre>Paramètres  q        requête (obligatoire)
+            k        nombre de résultats (1 à 100, défaut 10)
+            domaine  restriction à un domaine (facultatif)
+            backend  entrees | tfidf | semantique | hybride | auto
+
+Réponse     [ { "mot_moore", "definition_francais", "definition_english",
+                "categorie", "prononciation", "domaine",
+                "synonymes": [], "antonymes": [], "variantes": [],
+                "pluriel", "autres_sens", "score",
+                "backend", "langue_detectee" } ]
+
+Erreurs     400  k invalide, domaine inconnu, backend inconnu
+            409  index sémantique demandé mais non construit</pre>
+
+<h4>GET /api/translate</h4>
+<pre>Paramètres  q  phrase à gloser (obligatoire, 500 caractères maxi)
+
+Réponse     {
+              "phrase", "glose", "couverture", "n_expressions",
+              "non_resolus": [],
+              "segments": [ { "source", "type", "n_mots", "confiance",
+                              "lemme", "candidats": [] } ],
+              "idiomes":  [ { "mot_moore", "definition_francais",
+                              "categorie", "score", "backend" } ],
+              "avertissement": "Glose mot-à-mot alignée sur le français…"
+            }
+
+Note        type vaut « expression », « mot », « ignore » ou « inconnu ».
+            « ignore » désigne un article ou une préposition sans
+            équivalent isolé en mooré.</pre>
+
+<h4>GET /api/health</h4>
+<pre>Réponse     { "status": "ok",
+              "entrees": 10566,
+              "backends": ["tfidf", "entrees", "semantique", "hybride", "auto"],
+              "backend_defaut": "auto",
+              "semantique_disponible": true }</pre>
+
+<!-- ============ RÉFÉRENCES ============ -->
+<div class="saut"></div>
+<h2>Références bibliographiques</h2>
+
+<h3>Ressources linguistiques</h3>
+<ol>
+  <li>SIL International. <i>Webonary Moore</i>, dictionnaire mooré, français et
+      anglais en ligne. Source du corpus employé dans ce projet.
+      <span class="mono">https://www.webonary.org/moore/</span></li>
+  <li>EBERHARD, D. M., SIMONS, G. F., FENNIG, C. D. (dir.).
+      <i>Ethnologue : Languages of the World</i>, notice « Mooré (mos) ».
+      SIL International.
+      <span class="mono">https://www.ethnologue.com/language/mos/</span></li>
+  <li>Wikimedia Foundation. <i>Wikipidiya</i>, Wikipédia en langue mooré.
+      <span class="mono">https://mos.wikipedia.org/</span></li>
+</ol>
+
+<h3>Recherche d'information et représentation vectorielle</h3>
+<ol start="4">
+  <li>SALTON, G., BUCKLEY, C. <i>Term-weighting approaches in automatic text
+      retrieval</i>. Information Processing and Management, vol. 24, n° 5,
+      1988, p. 513 à 523.</li>
+  <li>DEERWESTER, S., DUMAIS, S. T., FURNAS, G. W., LANDAUER, T. K.,
+      HARSHMAN, R. <i>Indexing by Latent Semantic Analysis</i>. Journal of the
+      American Society for Information Science, vol. 41, n° 6, 1990,
+      p. 391 à 407.</li>
+  <li>CORMACK, G. V., CLARKE, C. L. A., BUETTCHER, S. <i>Reciprocal Rank
+      Fusion outperforms Condorcet and individual rank learning methods</i>.
+      Actes de la conférence SIGIR, 2009, p. 758 à 759.</li>
+  <li>JOHNSON, J., DOUZE, M., JÉGOU, H. <i>Billion-scale similarity search with
+      GPUs</i>. IEEE Transactions on Big Data, 2019.
+      <span class="mono">https://arxiv.org/abs/1702.08734</span></li>
+</ol>
+
+<h3>Modèles de langue et plongements lexicaux</h3>
+<ol start="8">
+  <li>REIMERS, N., GUREVYCH, I. <i>Sentence-BERT : Sentence Embeddings using
+      Siamese BERT-Networks</i>. Actes de la conférence EMNLP-IJCNLP, 2019.
+      <span class="mono">https://arxiv.org/abs/1908.10084</span></li>
+  <li>REIMERS, N., GUREVYCH, I. <i>Making Monolingual Sentence Embeddings
+      Multilingual using Knowledge Distillation</i>. Actes de la conférence
+      EMNLP, 2020. Article décrivant la méthode dont est issu le modèle
+      <span class="mono">paraphrase-multilingual-MiniLM-L12-v2</span> employé
+      ici. <span class="mono">https://arxiv.org/abs/2004.09813</span></li>
+</ol>
+
+<h3>Outils et bibliothèques</h3>
+<ol start="10">
+  <li>PEDREGOSA, F. et coll. <i>Scikit-learn : Machine Learning in Python</i>.
+      Journal of Machine Learning Research, vol. 12, 2011, p. 2825 à 2830.
+      <span class="mono">https://jmlr.org/papers/v12/pedregosa11a.html</span></li>
+  <li>Facebook AI Research. <i>FAISS, a library for efficient similarity search
+      and clustering of dense vectors</i>.
+      <span class="mono">https://github.com/facebookresearch/faiss</span></li>
+  <li>Pallets. <i>Flask, documentation officielle</i>.
+      <span class="mono">https://flask.palletsprojects.com/</span></li>
+  <li>Wikimedia Foundation. <i>MediaWiki Action API : module de recherche</i>.
+      Interface employée pour interroger les trois sources Web du projet.
+      <span class="mono">https://www.mediawiki.org/wiki/API:Search</span></li>
+</ol>
+
+<p class="petit">
+  Les ressources en ligne ont été consultées le 6 septembre 2026. Le site
+  Webonary est protégé par un dispositif anti-robot : son accès est possible
+  depuis un navigateur ordinaire mais refusé aux requêtes automatisées.
+</p>

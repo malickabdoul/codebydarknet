@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+
+# Index semantique : 15,5 Mo, et inutilisable sans sentence-transformers
+# installe (il faut le modele pour encoder la requete). Se reconstruit avec
+# python3 build_st_index.py — voir section 9 du README.
+vectors_st.index

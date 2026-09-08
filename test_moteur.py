@@ -415,6 +415,32 @@ class TestApi(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertIn("text/html", r.headers.get("Content-Type", ""))
 
+    def test_api_sans_index_semantique(self):
+        """L'installation par defaut n'a pas l'index semantique.
+
+        Ce cas n'etait couvert par aucun test, parce qu'ils s'executaient tous
+        sur une machine ou l'index existe. L'API rejetait alors « auto » et
+        « entrees » avec une erreur 409, ce qui rendait la recherche dans le
+        corpus inutilisable sur toute machine fraichement installee.
+        """
+        vrai = embeddings.index_disponible
+        embeddings.index_disponible = lambda: False
+        try:
+            for backend in ("auto", "entrees", "tfidf", ""):
+                url = f"/api/search?q=koom&k=3&backend={backend}"
+                r = self.client.get(url)
+                self.assertEqual(r.status_code, 200, f"backend={backend!r}")
+                self.assertTrue(r.get_json(), f"backend={backend!r}")
+            # Ceux-la doivent bien etre refuses, avec un message explicite.
+            for backend in ("semantique", "hybride"):
+                r = self.client.get(f"/api/search?q=koom&backend={backend}")
+                self.assertEqual(r.status_code, 409, f"backend={backend!r}")
+            # Le glossage et la recherche Web ne dependent pas du modele.
+            self.assertEqual(self.client.get("/api/translate?q=je+veux+manger").status_code, 200)
+            self.assertEqual(self.client.get("/api/health").status_code, 200)
+        finally:
+            embeddings.index_disponible = vrai
+
     def test_cors_restreint(self):
         autorise = self.client.get("/api/search?q=eau&k=1", headers={"Origin": "null"})
         self.assertEqual(autorise.headers.get("Access-Control-Allow-Origin"), "null")

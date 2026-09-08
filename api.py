@@ -87,9 +87,15 @@ def api_search():
     if backend not in BACKENDS:
         return jsonify({"error": f"backend inconnu : {backend} "
                                  f"(attendu : {', '.join(BACKENDS)})"}), 400
-    if backend != "tfidf" and not embeddings.index_disponible():
-        return jsonify({"error": "index sémantique absent — lancez "
-                                 "python3 build_st_index.py"}), 409
+    # Seuls ces deux backends ont besoin du modèle. « entrees » et « auto » se
+    # passent très bien de lui : auto se rabat de lui-même sur les index
+    # lexicaux. Les refuser rendait la recherche dans le corpus inutilisable
+    # sur toute installation sans index sémantique, c'est-à-dire l'installation
+    # par défaut.
+    if backend in ("semantique", "hybride") and not embeddings.index_disponible():
+        return jsonify({"error": "index sémantique absent : lancez "
+                                 "python build_st_index.py, ou choisissez "
+                                 "un autre index"}), 409
 
     if not q:
         return jsonify([])

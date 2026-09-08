@@ -52,7 +52,15 @@ def disponible():
 
 
 def index_disponible():
-    return disponible() and os.path.exists(INDEX_ST_PATH)
+    """L'index sémantique est-il utilisable ?
+
+    L'ordre des deux conditions compte. Vérifier le fichier d'abord coûte une
+    microseconde ; vérifier la bibliothèque d'abord déclenche l'import de
+    torch, soit une minute au premier appel. Quand l'index n'a pas été
+    construit, ce qui est le cas d'une installation minimale, cet import ne
+    sert à rien.
+    """
+    return os.path.exists(INDEX_ST_PATH) and disponible()
 
 
 def modele():

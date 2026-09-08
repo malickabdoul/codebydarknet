@@ -11,8 +11,30 @@ complémentaires donnent accès au dictionnaire lui-même et au glossage de
 phrases.
 
 **Documents du projet**
-- [`docs/manuel_utilisation.pdf`](docs/manuel_utilisation.pdf) — manuel d'utilisation (20 pages)
-- [`docs/cahier_charges_technique.pdf`](docs/cahier_charges_technique.pdf) — cahier des charges technique (19 pages)
+- [`docs/manuel_utilisation.pdf`](docs/manuel_utilisation.pdf) : manuel d'utilisation (20 pages)
+- [`docs/cahier_charges_technique.pdf`](docs/cahier_charges_technique.pdf) : cahier des charges technique (22 pages)
+
+---
+
+## Démarrage rapide
+
+Trois commandes, Python 3.9 ou plus. Rien d'autre à installer : la base
+vectorielle est fournie construite dans le dépôt.
+
+```bash
+git clone https://github.com/malickabdoul/codebydarknet.git
+cd codebydarknet
+pip install -r requirements.txt
+python api.py
+```
+
+Ouvrir ensuite **http://127.0.0.1:5000/** dans un navigateur.
+
+Pour vérifier que tout est en ordre : `python test_moteur.py` (66 tests).
+
+Une connexion Internet est nécessaire pour l'onglet **Web**, qui interroge
+Wikipédia et le Wiktionnaire. Les onglets **Dictionnaire** et **Traduction**
+fonctionnent hors ligne.
 
 ---
 
@@ -62,12 +84,13 @@ python3 --version
 
 ## 3. Installation
 
-### 3.1. Cloner le repo (branche à utiliser : `feature/base-vectorielle`)
+### 3.1. Cloner le repo
 ```bash
-git clone <URL_DU_REPO>
-cd <nom_du_dossier>
-git checkout feature/base-vectorielle
+git clone https://github.com/malickabdoul/codebydarknet.git
+cd codebydarknet
 ```
+Le travail est sur la branche principale : aucun changement de branche n'est
+nécessaire.
 
 ### 3.2. Créer un environnement virtuel (recommandé, évite les conflits)
 ```bash
